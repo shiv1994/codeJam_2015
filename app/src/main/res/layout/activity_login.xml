@@ -18,7 +18,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="0dp"
         android:layout_marginTop="140dp"
-        android:labelFor="@+id/editText3"
+        android:labelFor="@+id/username"
         android:text="@string/txt_username"
         android:textColor="#000000"
         android:textSize="14sp" />
