@@ -1,9 +1,15 @@
 package com.example.shiva.ttplaces;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseUser;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -11,6 +17,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
 
     @Override
@@ -33,5 +40,12 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void logOut(View view){
+        ParseUser.logOut();
+        Intent i = new Intent(this , LoginRegisterActivity.class);
+        startActivity(i);
+        this.finish();
     }
 }

@@ -5,10 +5,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LoginActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +12,8 @@
         android:ems="10"
         android:id="@+id/editText"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Password" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -25,7 +22,8 @@
         android:ems="10"
         android:id="@+id/editText2"
         android:layout_above="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:layout_alignStart="@+id/editText"
+        android:text="Email" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -33,20 +31,29 @@
         android:layout_height="wrap_content"
         android:text="Login"
         android:id="@+id/button"
+        android:onClick="login"
         android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="109dp"
-        android:onClick="addUser"/>
+        android:layout_alignEnd="@+id/editText"
+        android:layout_marginTop="46dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="User Name"
         android:ems="10"
         android:id="@+id/editText3"
         android:layout_above="@+id/editText2"
         android:layout_alignStart="@+id/editText2"
         android:textAlignment="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:id="@+id/button3"
+        android:onClick="addUser"
+        android:layout_alignTop="@+id/button"
+        android:layout_alignStart="@+id/editText" />
 
 </RelativeLayout>
