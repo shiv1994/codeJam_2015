@@ -84,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
         ParseUser currentUser = ParseUser.getCurrentUser();
         Log.i("INSIDEEEE", "WEEEEEEE");
         if (currentUser != null) {
-            Log.i("INSIDEEEE","WEEEEEEE");
         } else {
             // show the signup or login screen
         }
