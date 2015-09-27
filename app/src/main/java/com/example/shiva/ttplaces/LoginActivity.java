@@ -24,9 +24,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Parse.initialize(this, "4SkJs9vZM7ev0Hpj02ZaC4fnQ6Sy6yyQEkJdnwsK", "ZmvXXAkbYBCdrzP8iAx5nqUUvuUIPHwgOmXhIbyC");
         checkUser();
-        userName = (EditText)findViewById(R.id.editText3);
-        pass = (EditText)findViewById(R.id.editText);
-        email = (EditText)findViewById(R.id.editText2);
+        userName = (EditText)findViewById(R.id.username);
+        pass = (EditText)findViewById(R.id.password);
+        email = (EditText)findViewById(R.id.email_address);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             runMainActivity();
         }
         else {
-            return;
+            //return;
         }
     }
 
