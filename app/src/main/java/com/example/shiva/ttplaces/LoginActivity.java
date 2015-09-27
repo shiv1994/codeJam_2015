@@ -1,5 +1,6 @@
 package com.example.shiva.ttplaces;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Parse.initialize(this, "4SkJs9vZM7ev0Hpj02ZaC4fnQ6Sy6yyQEkJdnwsK", "ZmvXXAkbYBCdrzP8iAx5nqUUvuUIPHwgOmXhIbyC");
+        checkUser();
         userName = (EditText)findViewById(R.id.editText3);
         pass = (EditText)findViewById(R.id.editText);
         email = (EditText)findViewById(R.id.editText2);
@@ -82,10 +84,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void checkUser(){
         ParseUser currentUser = ParseUser.getCurrentUser();
-        Log.i("INSIDEEEE", "WEEEEEEE");
         if (currentUser != null) {
-        } else {
-            // show the signup or login screen
+            runMainActivity();
+        }
+        else {
+            return;
         }
     }
 
@@ -106,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
     public void runMainActivity(){
         Intent i = new Intent(this , HomeActivity.class);
         startActivity(i);
+        this.finish();
     }
 
 
