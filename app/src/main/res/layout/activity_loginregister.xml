@@ -28,7 +28,7 @@
         android:layout_height="35dp"
         android:layout_alignStart="@+id/password"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="110dp"
         android:background="@drawable/textboxdesign"
         android:ems="10"
         android:gravity="center"
@@ -96,11 +96,11 @@
 
    <Button
        android:id="@+id/button3"
-       android:layout_width="match_parent"
+       android:layout_width="100dp"
        android:layout_height="50dp"
        android:layout_alignStart="@+id/password"
        android:layout_below="@+id/password"
-       android:layout_marginTop="50dp"
+       android:layout_marginTop="70dp"
        android:background="@drawable/btn_design2"
        android:gravity="center"
        android:onClick="addUser"
@@ -111,11 +111,11 @@
 
 <Button
        android:id="@+id/button"
-       android:layout_width="match_parent"
+       android:layout_width="100dp"
        android:layout_height="50dp"
-       android:layout_alignStart="@+id/password"
-       android:layout_below="@+id/button3"
-       android:layout_marginTop="20dp"
+       android:layout_alignEnd="@+id/password"
+       android:layout_below="@+id/password"
+       android:layout_marginTop="70dp"
        android:background="@drawable/btn_design2"
        android:gravity="center"
        android:onClick="login"
