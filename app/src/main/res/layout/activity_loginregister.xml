@@ -11,27 +11,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LoginActivity">
 
-   <!-- <TextView
-        android:id="@+id/txt_username"
-        android:layout_width="85dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="140dp"
-        android:labelFor="@+id/editText3"
-        android:text="@string/txt_username"
-        android:textColor="#000000"
-        android:textSize="14sp" />-->
-
-    <!--<TextView
-       android:id="@+id/txt_email"
-       android:layout_width="85dp"
-       android:layout_height="40dp"
-       android:layout_marginTop="20dp"
-       android:layout_below="@+id/txt_username"
-       android:labelFor="@+id/email_address"
-       android:text="@string/txt_email_address"
-       android:textColor="#000000"
-       android:textSize="18sp" /> -->
 
    <EditText
        android:id="@+id/email_address"
@@ -46,19 +25,7 @@
        android:textColorHint="#000000"
        android:layout_above="@+id/password"
        android:layout_alignParentStart="true"
-       android:layout_marginBottom="43dp" />
-
-   <!--<TextView
-       android:id="@+id/txt_password"
-       android:layout_width="85dp"
-       android:layout_height="35dp"
-       android:layout_alignStart="@+id/txt_email"
-       android:layout_below="@+id/txt_email"
-       android:layout_marginTop="20dp"
-       android:labelFor="@id/password"
-       android:text="@string/txt_password"
-       android:textColor="#000000"
-       android:textSize="18sp" /> -->
+       android:layout_marginBottom="59dp" />
 
    <EditText
        android:id="@+id/password"
@@ -71,16 +38,13 @@
        android:inputType="textPassword"
        android:textAlignment="center"
        android:textColorHint="#000000"
-       android:layout_above="@+id/button3"
-       android:layout_alignParentStart="true"
-       android:layout_marginBottom="74dp" />
-    <!--
-       android:layout_marginStart="100dp"
-       android:layout_alignStart="@+id/txt_password"-->
+       android:layout_centerVertical="true"
+       android:layout_alignParentStart="true" />
+
 
    <Button
        android:id="@+id/button3"
-       android:layout_width="match_parent"
+       android:layout_width="100dp"
        android:layout_height="50dp"
        android:background="@drawable/btn_design2"
        android:gravity="center"
@@ -89,13 +53,13 @@
        android:textColor="#FFFFFF"
        android:textSize="20sp"
        android:textStyle="normal"
-       android:layout_above="@+id/button"
+       android:layout_alignParentBottom="true"
        android:layout_alignParentStart="true"
-       android:layout_marginBottom="53dp" />
+       android:layout_marginBottom="97dp" />
 
 <Button
        android:id="@+id/button"
-       android:layout_width="match_parent"
+       android:layout_width="100dp"
        android:layout_height="50dp"
     android:background="@drawable/btn_design2"
        android:gravity="center"
@@ -104,8 +68,7 @@
        android:textColor="#FFFFFF"
        android:textSize="20sp"
        android:textStyle="normal"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentStart="true"
-    android:layout_marginBottom="84dp" />
+    android:layout_alignTop="@+id/button3"
+    android:layout_alignEnd="@+id/password" />
 
 </RelativeLayout>
