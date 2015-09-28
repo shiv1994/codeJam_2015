@@ -24,7 +24,7 @@
         android:id="@+id/button4"
         android:layout_below="@+id/button2"
         android:layout_centerHorizontal="true"
-        android:onclick="runSuggestions"
+        android:onClick="runSuggestions"
         android:layout_marginTop="61dp" />
 
     <Button
