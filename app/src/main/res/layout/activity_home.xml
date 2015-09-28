@@ -16,4 +16,16 @@
         android:onClick="logOut"
         android:text="LOG OUT"
         android:textColor="#FFFFFF" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Suggestions"
+        android:id="@+id/button4"
+        android:layout_below="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:onclick="runSuggestions"
+        android:layout_marginTop="61dp" />
+
+
 </RelativeLayout>
