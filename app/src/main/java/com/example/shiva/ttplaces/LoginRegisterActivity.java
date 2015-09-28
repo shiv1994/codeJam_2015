@@ -22,9 +22,9 @@ public class LoginRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loginregister);
         //Parse.initialize(this, "4SkJs9vZM7ev0Hpj02ZaC4fnQ6Sy6yyQEkJdnwsK", "ZmvXXAkbYBCdrzP8iAx5nqUUvuUIPHwgOmXhIbyC");
         checkUser();
-        userName = (EditText)findViewById(R.id.editText3);
-        pass = (EditText)findViewById(R.id.editText);
-        email = (EditText)findViewById(R.id.editText2);
+        userName = (EditText)findViewById(R.id.username);
+        pass = (EditText)findViewById(R.id.password);
+        email = (EditText)findViewById(R.id.email_address);
     }
 
     @Override
@@ -64,6 +64,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                     if (e == null) {
                         Toast toast = Toast.makeText(getApplicationContext(), "User Account Created Successfully!", Toast.LENGTH_SHORT);
                         toast.show();
+                        login(userName.getText().toString(),pass.getText().toString());
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
                         toast.show();
@@ -110,6 +111,20 @@ public class LoginRegisterActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(getApplicationContext(),"Required fields are missing (Username & Password)", Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    public void login(String userName, String password){
+            ParseUser.logInInBackground(userName, password, new LogInCallback() {
+                public void done(ParseUser user, ParseException e) {
+                    if (user != null) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Logged In Successfully!", Toast.LENGTH_SHORT);
+                        runMainActivity();
+                    } else {
+                        Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+            });
     }
 
     public void runMainActivity(){
