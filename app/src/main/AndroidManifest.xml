@@ -43,6 +43,11 @@
             android:label="@string/title_activity_map" >
         </activity>
 
+        <activity
+            android:name=".SuggestionActivity"
+            android:label="@string/hello_world" >
+        </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA0tbxiz3ayWc4Vx-nlZn0wRIccEElNz_w" />
