@@ -1,24 +1,30 @@
 package com.example.shiva.ttplaces;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 import android.content.Intent;
-import android.view.Menu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class SuggestionActivity extends AppCompatActivity  {
 
+    private SharedPreferences sharedPreferences;
+    private static final String sharedPreferenceName="userAnswers";
+    private static final String ANSWER1="ansKey1";
+    private static final String ANSWER2="ansKey2";
+    private static final String ANSWER3="ansKey3";
+
     String ans1="",ans2="",ans3="";
+
     Spinner answer1,answer2,answer3;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,19 +73,28 @@ public class SuggestionActivity extends AppCompatActivity  {
     public void runMainActivity(){
         Intent i = new Intent(this , HomeActivity.class);
         startActivity(i);
-       // this.finish();
+        this.finish();
     }
 
     public void notNow(View view){
         runMainActivity();
     }
 
-    public void finish(View view){
-        ans1=answer1.getSelectedItem().toString();
-        ans2=answer2.getSelectedItem().toString();
-        ans3=answer3.getSelectedItem().toString();
+    public void finish(View view) {
+        ans1 = answer1.getSelectedItem().toString();
+        ans2 = answer2.getSelectedItem().toString();
+        ans3 = answer3.getSelectedItem().toString();
+
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(ANSWER1, ans1);
+        editor.putString(ANSWER2, ans2);
+        editor.putString(ANSWER3, ans3);
+        editor.apply();
+
         runMainActivity();
     }
-
 }
 
