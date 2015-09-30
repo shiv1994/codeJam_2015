@@ -45,7 +45,7 @@
 
         <activity
             android:name=".SuggestionActivity"
-            android:label="@string/hello_world" >
+            android:label="@string/title_activity_suggestion" >
         </activity>
 
         <meta-data
