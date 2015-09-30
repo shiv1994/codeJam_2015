@@ -1,10 +1,8 @@
 package com.example.shiva.ttplaces;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,6 +73,19 @@ public class MapActivity extends AppCompatActivity implements GoogleApiClient.Co
     @Override
     public void onConnected(Bundle connectionHint) {
         // We are now connected!
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        // We are not connected anymore!
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        // We tried to connect but failed!
+    }
+
+    public void findMe(View view){
         try {
             PlacePicker.IntentBuilder intentBuilder =
                     new PlacePicker.IntentBuilder();
@@ -90,22 +101,13 @@ public class MapActivity extends AppCompatActivity implements GoogleApiClient.Co
         }
     }
 
-    @Override
-    public void onConnectionSuspended(int cause) {
-        // We are not connected anymore!
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        // We tried to connect but failed!
-    }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
                 String toastMsg = String.format("Place: %s", place.getName());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                this.finish();
             }
         }
     }
