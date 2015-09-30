@@ -53,8 +53,8 @@
         android:layout_alignStart="@+id/editText" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="200dp"
         android:id="@+id/imageView"
         android:layout_below="@+id/button7"
         android:layout_centerHorizontal="true"
