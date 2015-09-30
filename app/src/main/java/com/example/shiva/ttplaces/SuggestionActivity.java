@@ -12,19 +12,21 @@ import java.util.List;
 import android.content.Intent;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-public class SuggestionActivity extends AppCompatActivity implements OnClickListener {
+public class SuggestionActivity extends AppCompatActivity  {
 
-
+    String ans1="",ans2="",ans3="";
+    Spinner answer1,answer2,answer3;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggestion);
 
-        Spinner answer1 = (Spinner) findViewById(R.id.spinner1);
-        Spinner answer2 = (Spinner) findViewById(R.id.spinner2);
-        Spinner answer3 = (Spinner) findViewById(R.id.spinner3);
+        answer1 = (Spinner) findViewById(R.id.spinner1);
+        answer2 = (Spinner) findViewById(R.id.spinner2);
+        answer3 = (Spinner) findViewById(R.id.spinner3);
 
         //creates 3 arrays to hold answer values for each of the three spinners
         List<String> decision1 = new ArrayList<>();
@@ -60,16 +62,23 @@ public class SuggestionActivity extends AppCompatActivity implements OnClickList
         answer3.setAdapter(dataAdapter3);
 
 
-
-
-
-
-
     }
 
+    public void runMainActivity(){
+        Intent i = new Intent(this , HomeActivity.class);
+        startActivity(i);
+       // this.finish();
+    }
 
-    public void onClick(View v) {
+    public void notNow(View view){
+        runMainActivity();
+    }
 
+    public void finish(View view){
+        ans1=answer1.getSelectedItem().toString();
+        ans2=answer2.getSelectedItem().toString();
+        ans3=answer3.getSelectedItem().toString();
+        runMainActivity();
     }
 
 }
