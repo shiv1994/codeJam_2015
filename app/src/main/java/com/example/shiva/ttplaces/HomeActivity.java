@@ -1,5 +1,6 @@
 package com.example.shiva.ttplaces;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,8 @@ import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity{
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +43,21 @@ public class HomeActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void logOut(View view){
+     public void logOut(View view) {
         ParseUser.logOut();
-        Intent i = new Intent(this , LoginRegisterActivity.class);
+        Intent i = new Intent(this, LoginRegisterActivity.class);
         startActivity(i);
         this.finish();
     }
 
-    public void mapActivity(View view){
-        Intent i = new Intent(this , MapActivity.class);
+    public void mapActivity(View view) {
+        Intent i = new Intent(this, MapActivity.class);
         startActivity(i);
     }
+
+    public void runSuggestions(View view) {
+        Intent i = new Intent(this, SuggestionActivity.class);
+        startActivity(i);
+    }
+
 }

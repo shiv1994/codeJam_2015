@@ -14,4 +14,14 @@
     <string name="txt_submit">Submit</string>
     <string name="login">LOGIN</string>
     <string name="register">REGISTER</string>
+
+
+    <!--Suggestions String-->
+    <string name="question1">Do you like history?</string>
+    <string name="question2">Where would you rather be?</string>
+    <string name="question3">Which environment do you prefer?</string>
+
+    <string name="title">Help us make tour suggestions..</string>
+    <string name="btn">FINISH</string>
+    <string name="btn1">Not now</string>
 </resources>
