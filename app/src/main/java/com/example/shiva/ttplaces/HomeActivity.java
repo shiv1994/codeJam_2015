@@ -111,7 +111,8 @@ public class HomeActivity extends AppCompatActivity{
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater= (LayoutInflater) ctx.getSystemService(LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.view_suggested,parent,false);
+            if(convertView == null)
+                convertView = inflater.inflate(R.layout.view_suggested,parent,false);
             TextView name=(TextView) convertView.findViewById(R.id.tv_name);
             TextView type=(TextView) convertView.findViewById(R.id.tv_type);
             TextView distance=(TextView) convertView.findViewById(R.id.tv_distance);
@@ -125,7 +126,7 @@ public class HomeActivity extends AppCompatActivity{
             else   type.setText("Type:" + temp.getType());
 
 //           TODO: calculate distance from current location using latlng in MyPlace object
-              distance.setText("Distance: "+ (position+1) + "km away");
+              distance.setText("Distance: "+ (position+1) + "km");
 
             if(temp.getArea()==null) area.setText("Area");
             else   area.setText(temp.getArea());

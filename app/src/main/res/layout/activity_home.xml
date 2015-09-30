@@ -55,7 +55,9 @@
         android:id="@+id/lv_suggestions"
         android:layout_below="@+id/tv_suggestions"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/button2" />
+        android:layout_above="@+id/button2"
+        android:dividerHeight="0dp"
+        android:divider="@null"/>
 
 
 </RelativeLayout>
