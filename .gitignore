@@ -7,4 +7,5 @@
 /captures
 .idea/workspace.xml
 .idea/libraries
+/app/*iml
 *.iml
