@@ -1,6 +1,7 @@
 package com.example.shiva.ttplaces;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -136,9 +137,19 @@ public class LoginRegisterActivity extends AppCompatActivity {
     }
 
     public void runMainActivity(){
-        Intent i = new Intent(this , SuggestionActivity.class);
+
+        Intent i;
+        SharedPreferences preferences = getSharedPreferences("userAnswers", 0);
+        boolean value = preferences.contains("ansKey1");
+        if(value) {
+            i = new Intent(this, HomeActivity.class);
+        }
+        else {
+            i = new Intent(this, SuggestionActivity.class);
+        }
         startActivity(i);
         this.finish();
+
     }
 
 
