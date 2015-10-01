@@ -1,29 +1,20 @@
 package com.example.shiva.ttplaces;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.shiva.ttplaces.pojo.MyPlace;
-import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
-
 import java.util.ArrayList;
-import java.util.List;
 
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends NavDrawer {
     ListView listView;
 
     @Override
@@ -33,12 +24,13 @@ public class HomeActivity extends AppCompatActivity{
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         listView = (ListView) findViewById(R.id.lv_suggestions);
 //        TODO: this list need to be populated maybe by some service
-        ArrayList<MyPlace> list = new ArrayList<MyPlace>();
+        ArrayList<MyPlace> list = new ArrayList<>();
 
         loadTestPlaces(list);
         myAdapter adapter = new myAdapter(this,list);
         listView.setAdapter(adapter);
     }
+
 
 //    TODO: remove this function after testing
     private void loadTestPlaces(ArrayList<MyPlace> list){
@@ -49,27 +41,6 @@ public class HomeActivity extends AppCompatActivity{
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
      public void logOut(View view) {
         ParseUser.logOut();
         Intent i = new Intent(this, LoginRegisterActivity.class);
@@ -86,7 +57,6 @@ public class HomeActivity extends AppCompatActivity{
         Intent i = new Intent(this, SuggestionActivity.class);
         startActivity(i);
     }
-
 
     class myAdapter extends BaseAdapter {
         ArrayList<MyPlace> list;

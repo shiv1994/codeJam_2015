@@ -1,19 +1,17 @@
 package com.example.shiva.ttplaces;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
-import android.content.Intent;
-import android.widget.Toast;
 
 
-public class SuggestionActivity extends AppCompatActivity  {
+public class SuggestionActivity extends NavDrawer  {
 
     private SharedPreferences sharedPreferences;
     private static final String sharedPreferenceName="userAnswers";

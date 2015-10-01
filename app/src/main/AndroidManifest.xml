@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:name=".InitParse"
         android:allowBackup="true"
@@ -20,10 +19,9 @@
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="@string/parse_client_key" />
-
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".LoginRegisterActivity"
@@ -42,7 +40,6 @@
             android:name=".MapActivity"
             android:label="@string/title_activity_map" >
         </activity>
-
         <activity
             android:name=".SuggestionActivity"
             android:label="@string/title_activity_suggestion" >
@@ -52,6 +49,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA0tbxiz3ayWc4Vx-nlZn0wRIccEElNz_w" />
 
+        <activity
+            android:name=".NavDrawer"
+            android:label="@string/title_activity_nav_drawer" >
+        </activity>
     </application>
 
 </manifest>
