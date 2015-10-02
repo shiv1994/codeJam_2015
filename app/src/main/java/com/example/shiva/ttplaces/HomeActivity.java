@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.shiva.ttplaces.pojo.MyPlace;
+import com.example.shiva.ttplaces.pojo.NavDrawer;
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 import java.util.ArrayList;

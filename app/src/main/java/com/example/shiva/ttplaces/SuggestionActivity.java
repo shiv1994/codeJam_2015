@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import com.example.shiva.ttplaces.pojo.NavDrawer;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SuggestionActivity extends NavDrawer  {
+public class SuggestionActivity extends NavDrawer {
 
     private SharedPreferences sharedPreferences;
     private static final String sharedPreferenceName="userAnswers";

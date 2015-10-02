@@ -50,7 +50,7 @@
             android:value="AIzaSyA0tbxiz3ayWc4Vx-nlZn0wRIccEElNz_w" />
 
         <activity
-            android:name=".NavDrawer"
+            android:name=".pojo.NavDrawer"
             android:label="@string/title_activity_nav_drawer" >
         </activity>
     </application>

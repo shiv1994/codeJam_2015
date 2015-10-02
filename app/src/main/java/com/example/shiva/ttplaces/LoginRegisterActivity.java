@@ -120,7 +120,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
                         toast.show();
-                    }
+                    } 
                 }
             });
         }

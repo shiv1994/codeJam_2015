@@ -1,4 +1,4 @@
-package com.example.shiva.ttplaces;
+package com.example.shiva.ttplaces.pojo;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,6 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.shiva.ttplaces.HomeActivity;
+import com.example.shiva.ttplaces.LoginRegisterActivity;
+import com.example.shiva.ttplaces.MapActivity;
+import com.example.shiva.ttplaces.R;
+import com.example.shiva.ttplaces.SuggestionActivity;
 import com.parse.ParseUser;
 
 public class NavDrawer extends AppCompatActivity {
@@ -22,7 +28,7 @@ public class NavDrawer extends AppCompatActivity {
     private ListView DrawerList;
     private ArrayAdapter<String> Adapter;
     private ActionBarDrawerToggle DrawerToggle;
-    private android.support.v4.widget.DrawerLayout DrawerLayout;
+    private DrawerLayout drawerLayout;
     private String ActivityTitle;
 
     @Override
@@ -40,7 +46,7 @@ public class NavDrawer extends AppCompatActivity {
         // needing to repeat it in every activity class
 
         DrawerList = (ListView)findViewById(R.id.navList);
-        DrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         ActivityTitle = getTitle().toString();
 
         addDrawerItems();
@@ -64,9 +70,6 @@ public class NavDrawer extends AppCompatActivity {
                     i = new Intent(NavDrawer.this, MapActivity.class);
                 }
                 if (position == 3) {
-                    i=new Intent(NavDrawer.this,HomeActivity.class);
-                }
-                if (position == 4) {
                     Toast.makeText(NavDrawer.this, "SEE YOU SOON :)", Toast.LENGTH_SHORT).show();
                     ParseUser.logOut();
                     i = new Intent(NavDrawer.this, LoginRegisterActivity.class);
@@ -78,14 +81,17 @@ public class NavDrawer extends AppCompatActivity {
     }
 
     private void addDrawerItems(){
-        String[] menuList = { "HOME", "PREFERENCES", "TOUR LIST", "LIVE THROUGH TIME","LOG OUT" };
-        Adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuList);
+        String[] menuList = { "HOME", "PREFERENCES", "TOUR LIST","LOG OUT" };
+        Integer[] icons = {R.drawable.home,R.drawable.settings,R.drawable.view,R.drawable.logout};
+
+        CustomListAdapter Adapter= new CustomListAdapter(this, menuList, icons);
+        //Adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuList);//R.layout.drawer_list_item
         DrawerList.setAdapter(Adapter);
     }
 
     private void setupDrawer() {
        assert getSupportActionBar() != null;
-        DrawerToggle = new ActionBarDrawerToggle(this, DrawerLayout,
+        DrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
             /** Called when a drawer has settled in a completely open state. */
@@ -103,7 +109,7 @@ public class NavDrawer extends AppCompatActivity {
             }
         };
         DrawerToggle.setDrawerIndicatorEnabled(true);
-        DrawerLayout.setDrawerListener(DrawerToggle);
+        drawerLayout.setDrawerListener(DrawerToggle);
     }
 
     @Override
