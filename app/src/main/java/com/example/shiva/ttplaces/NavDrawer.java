@@ -12,13 +12,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.parse.ParseUser;
 
 public class NavDrawer extends AppCompatActivity {
 
-    protected RelativeLayout baseLayout;
+    protected DrawerLayout baseLayout;
     protected FrameLayout activityContent;
     private ListView DrawerList;
     private ArrayAdapter<String> Adapter;
@@ -29,7 +28,7 @@ public class NavDrawer extends AppCompatActivity {
     @Override
     public void setContentView(int layoutResID) {
         //Base layout here
-        baseLayout= (RelativeLayout) getLayoutInflater().inflate(R.layout.activity_nav_drawer, null);
+        baseLayout= (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_nav_drawer, null);
         activityContent= (FrameLayout) baseLayout.findViewById(R.id.activityContent);
 
         // Setting the content of layout your provided to the act_content frame
@@ -47,7 +46,7 @@ public class NavDrawer extends AppCompatActivity {
         addDrawerItems();
         setupDrawer();
 
-        assert getSupportActionBar() != null;
+       assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -85,7 +84,7 @@ public class NavDrawer extends AppCompatActivity {
     }
 
     private void setupDrawer() {
-        assert getSupportActionBar() != null;
+       assert getSupportActionBar() != null;
         DrawerToggle = new ActionBarDrawerToggle(this, DrawerLayout,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
