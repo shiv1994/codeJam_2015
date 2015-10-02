@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -51,35 +50,43 @@ public class LoginRegisterActivity extends AppCompatActivity {
     }
 
     public void addUser(View view){
-        ParseUser user = new ParseUser();
-        extractUserName();
-        user.setUsername(userName);
-        user.setPassword(pass.getText().toString());
-        user.setEmail(email.getText().toString());
-        //A question also has to be asked to determine whether a user is local or foreign.
-        //If no, default would be Trinidad and Tobago
-        user.put("country", "Trinidad and Tobago");
-        if(!(email.getText().toString().equals("") && pass.getText().toString().equals(""))) {
-            user.signUpInBackground(new SignUpCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-                    if (e == null) {
-                        Toast toast = Toast.makeText(getApplicationContext(), "User Account Created Successfully!", Toast.LENGTH_SHORT);
-                        toast.show();
-                        login(userName,pass.getText().toString());
-                    } else {
-                        Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
-                        toast.show();
-                        email.setText("");
-                        pass.setText("");
-                        // Sign up didn't succeed. Look at the ParseException
-                        // to figure out what went wrong
+
+        if(!email.getText().toString().equals("") && email.getText().toString().contains("@")){
+            if(!pass.getText().toString().equals("")) {
+
+                ParseUser user = new ParseUser();
+                extractUserName();
+                user.setUsername(userName);
+                user.setPassword(pass.getText().toString());
+                user.setEmail(email.getText().toString());
+                //A question also has to be asked to determine whether a user is local or foreign.
+                //If no, default would be Trinidad and Tobago
+                user.put("country", "Trinidad and Tobago");
+                user.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(com.parse.ParseException e) {
+                        if (e == null) {
+                            Toast toast = Toast.makeText(getApplicationContext(), "User Account Created Successfully!", Toast.LENGTH_SHORT);
+                            toast.show();
+                            login(userName,pass.getText().toString());
+                        } else {
+                            Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
+                            toast.show();
+                            email.setText("");
+                            pass.setText("");
+                            // Sign up didn't succeed. Look at the ParseException
+                            // to figure out what went wrong
+                        }
                     }
-                }
-            });
+                });
+            }
+            else{
+                Toast toast = Toast.makeText(getApplicationContext(), "Please Ensure all fields are filled out.", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
-        else{
-            Toast toast = Toast.makeText(getApplicationContext(), "Please Ensure all fields are filled out.", Toast.LENGTH_SHORT);
+        else {
+            Toast toast = Toast.makeText(getApplicationContext(), "Not A Valid Email Address", Toast.LENGTH_SHORT);
             toast.show();
         }
     }
@@ -102,12 +109,13 @@ public class LoginRegisterActivity extends AppCompatActivity {
     }
 
     public void login(View view){
-        extractUserName();
-        if(!pass.getText().toString().equals("")) {
+        if(!email.getText().toString().equals("") && !pass.getText().toString().equals("")){
+            extractUserName();
             ParseUser.logInInBackground(userName, pass.getText().toString(), new LogInCallback() {
                 public void done(ParseUser user, ParseException e) {
                     if (user != null) {
                         Toast toast = Toast.makeText(getApplicationContext(), "Logged In Successfully!", Toast.LENGTH_SHORT);
+                        toast.show();
                         runMainActivity();
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
@@ -127,6 +135,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                 public void done(ParseUser user, ParseException e) {
                     if (user != null) {
                         Toast toast = Toast.makeText(getApplicationContext(), "Logged In Successfully!", Toast.LENGTH_SHORT);
+                        toast.show();
                         runMainActivity();
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
