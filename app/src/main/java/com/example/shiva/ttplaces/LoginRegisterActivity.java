@@ -1,5 +1,6 @@
 package com.example.shiva.ttplaces;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +19,23 @@ import com.parse.SignUpCallback;
 public class LoginRegisterActivity extends AppCompatActivity {
     EditText pass,email;
     String userName;
+    private SharedPreferences sharedPreferences;
+    private static final String USEREMAIL="userEmail";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginregister);
         //Parse.initialize(this, "4SkJs9vZM7ev0Hpj02ZaC4fnQ6Sy6yyQEkJdnwsK", "ZmvXXAkbYBCdrzP8iAx5nqUUvuUIPHwgOmXhIbyC");
         checkUser();
+
+        sharedPreferences = getSharedPreferences(USEREMAIL, Context.MODE_PRIVATE);
+        String emailUser = sharedPreferences.getString(USEREMAIL,"");
+
         pass = (EditText)findViewById(R.id.password);
         email = (EditText)findViewById(R.id.email_address);
+        if(!emailUser.equals("")){
+            email.setText(emailUser);
+        }
+
     }
 
     @Override
@@ -53,6 +64,10 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
         if(!email.getText().toString().equals("") && email.getText().toString().contains("@")){
             if(!pass.getText().toString().equals("")) {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(USEREMAIL, email.getText().toString());
+                editor.apply();
 
                 ParseUser user = new ParseUser();
                 extractUserName();
