@@ -31,5 +31,6 @@
     <string name="btn1">Not now</string>
     <string name="title_activity_nav_drawer">NavDrawer</string>
     <string name="MenuIcon">Menu Icon</string>
+    <string name="title_activity_nearby_messages">NearbyMessages</string>
 
 </resources>
