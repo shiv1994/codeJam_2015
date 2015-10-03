@@ -1,5 +1,6 @@
 package com.example.shiva.ttplaces;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,8 @@ public class LoginRegisterActivity extends AppCompatActivity {
     String userName;
     private SharedPreferences sharedPreferences;
     private static final String USEREMAIL="userEmail";
+    ProgressDialog progressDialog;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginregister);
@@ -77,14 +80,17 @@ public class LoginRegisterActivity extends AppCompatActivity {
                 //A question also has to be asked to determine whether a user is local or foreign.
                 //If no, default would be Trinidad and Tobago
                 user.put("country", "Trinidad and Tobago");
+                showProgressDialog("Creating Account ...");
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(com.parse.ParseException e) {
                         if (e == null) {
+                            dismisssProgressDialog();
                             Toast toast = Toast.makeText(getApplicationContext(), "User Account Created Successfully!", Toast.LENGTH_SHORT);
                             toast.show();
                             login(userName,pass.getText().toString());
                         } else {
+                            dismisssProgressDialog();
                             Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
                             toast.show();
                             email.setText("");
@@ -126,16 +132,19 @@ public class LoginRegisterActivity extends AppCompatActivity {
     public void login(View view){
         if(!email.getText().toString().equals("") && !pass.getText().toString().equals("")){
             extractUserName();
+            showProgressDialog("Signing In ...");
             ParseUser.logInInBackground(userName, pass.getText().toString(), new LogInCallback() {
                 public void done(ParseUser user, ParseException e) {
                     if (user != null) {
+                        dismisssProgressDialog();
                         Toast toast = Toast.makeText(getApplicationContext(), "Logged In Successfully!", Toast.LENGTH_SHORT);
                         toast.show();
                         runMainActivity();
                     } else {
+                        dismisssProgressDialog();
                         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
                         toast.show();
-                    } 
+                    }
                 }
             });
         }
@@ -146,13 +155,16 @@ public class LoginRegisterActivity extends AppCompatActivity {
     }
 
     public void login(String userName, String password){
+        showProgressDialog("Signing In ...");
             ParseUser.logInInBackground(userName, password, new LogInCallback() {
                 public void done(ParseUser user, ParseException e) {
                     if (user != null) {
+                        dismisssProgressDialog();
                         Toast toast = Toast.makeText(getApplicationContext(), "Logged In Successfully!", Toast.LENGTH_SHORT);
                         toast.show();
                         runMainActivity();
                     } else {
+                        dismisssProgressDialog();
                         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -174,6 +186,17 @@ public class LoginRegisterActivity extends AppCompatActivity {
         startActivity(i);
         this.finish();
 
+    }
+
+    public void showProgressDialog(String message){
+        progressDialog = new ProgressDialog(LoginRegisterActivity.this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void dismisssProgressDialog(){
+        progressDialog.dismiss();
     }
 
 
