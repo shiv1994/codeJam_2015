@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#acacac"
     tools:context=".SuggestionActivity">
 
     <RelativeLayout
@@ -84,7 +85,21 @@
             android:prompt="@string/question3"
             android:spinnerMode="dialog"/>
 
-        <Button
+        <TextView
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/spinner3"
+            android:layout_marginTop="80dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#4CB6E0"
+            android:clickable="true"
+            android:onClick="notNow"
+            android:text="@string/btn1"/>
+
+        <!--<Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,7 +109,7 @@
             android:background="@drawable/btn_design2"
             android:clickable="true"
             android:onClick="notNow"
-            android:text="@string/btn1"/>
+            android:text="@string/btn1"/>-->
 
         <Button
             android:id="@+id/button2"
@@ -102,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/spinner3"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:background="@drawable/btn_design2"
             android:clickable="true"
             android:onClick="finish"

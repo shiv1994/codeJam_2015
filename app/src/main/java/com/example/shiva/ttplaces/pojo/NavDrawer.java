@@ -81,8 +81,8 @@ public class NavDrawer extends AppCompatActivity {
     }
 
     private void addDrawerItems(){
-        String[] menuList = { "HOME", "PREFERENCES", "TOUR LIST","LOG OUT" };
-        Integer[] icons = {R.drawable.home,R.drawable.settings,R.drawable.view,R.drawable.logout};
+        String[] menuList = { "HOME", "PREFERENCES", "TOURS","LOG OUT" };
+        Integer[] icons = {R.drawable.home2,R.drawable.settings2,R.drawable.view2,R.drawable.logout2};
 
         CustomListAdapter Adapter= new CustomListAdapter(this, menuList, icons);
         //Adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuList);//R.layout.drawer_list_item
@@ -97,7 +97,7 @@ public class NavDrawer extends AppCompatActivity {
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("MENU");
+                getSupportActionBar().setTitle("Menu");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
