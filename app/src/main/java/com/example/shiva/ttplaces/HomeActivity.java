@@ -49,8 +49,8 @@ public class HomeActivity extends NavDrawer {
         this.finish();
     }
 
-    public void mapActivity(View view) {
-        Intent i = new Intent(this, MapActivity.class);
+    public void mapsActivity(View view) {
+        Intent i = new Intent(this, MapsActivity.class);
         startActivity(i);
     }
 

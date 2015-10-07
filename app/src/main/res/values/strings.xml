@@ -32,5 +32,6 @@
     <string name="title_activity_nav_drawer">NavDrawer</string>
     <string name="MenuIcon">Menu Icon</string>
     <string name="title_activity_nearby_messages">NearbyMessages</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

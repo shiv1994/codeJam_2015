@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by jevon on 29-Sep-15.
  */
 public class MyPlace {
-    private LatLng latLng;
+    private LatLng position;
     private String name = "";
     private String type = "";
     private String area = "";
@@ -28,19 +28,19 @@ public class MyPlace {
         this.area = area;
     }
 
-    public MyPlace(String name, String type, String area, LatLng latLng) {
+    public MyPlace(String name, String type, String area, LatLng position) {
         this.name = name;
         this.type = type;
-        this.latLng = latLng;
+        this.position = position;
         this.area = area;
     }
 
-    public LatLng getLatLng() {
-        return latLng;
+    public LatLng getPosition() {
+        return position;
     }
 
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
+    public void setLatLng(LatLng position) {
+        this.position = position;
     }
 
     public String getName() {
