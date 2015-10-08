@@ -156,7 +156,7 @@ public class SuggestionActivity extends NavDrawer {
 
     public void suggestPlace(){
 
-
+            //do somethinggggggg
 
 
     }
