@@ -31,6 +31,10 @@ public class BeaconScannerService extends Service {
             .setTtlSeconds(3 * 60).build();
     public Context ctx;
 
+    public BeaconScannerService(){
+
+    }
+
     public BeaconScannerService(GoogleApiClient mGoogleApiClient, Context ctx) {
         this.mGoogleApiClient=mGoogleApiClient;
         this.ctx=ctx;
@@ -39,7 +43,7 @@ public class BeaconScannerService extends Service {
             @Override
             public void onFound(Message message) {
                 Log.i("ON CREATE FUNCTION", "" + message);
-                notificationToUser();
+                notificationToUser(message);
             }
 
             // Called when a message is no longer nearby.
@@ -49,6 +53,11 @@ public class BeaconScannerService extends Service {
             }
         };
     }
+
+    public void onStartCommand(){
+        subscribe();
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented");
@@ -71,14 +80,14 @@ public class BeaconScannerService extends Service {
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
     }
 
-    public void notificationToUser()
+    public void notificationToUser(Message message)
     {
-        Intent resultIntent = new Intent(ctx, HomeActivity.class);
+        Intent resultIntent = new Intent(ctx, InteractiveBeaconActivity.class);
         // Because clicking the notification opens a new ("special") activity, there's
         // no need to create an artificial back stack.
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx);
         mBuilder.setSmallIcon(R.drawable.common_signin_btn_icon_dark)
-                .setContentTitle("You are within range of a beacon!")
+                .setContentTitle("You are at "+message.getContent().toString())
                 .setContentText("Click to start the interactive tour.")
                 .setAutoCancel(true)
                 .setContentIntent(PendingIntent.getActivity(ctx, 0, resultIntent, 0));

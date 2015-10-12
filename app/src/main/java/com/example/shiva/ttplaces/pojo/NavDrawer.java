@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.shiva.ttplaces.HomeActivity;
 import com.example.shiva.ttplaces.LoginRegisterActivity;
-import com.example.shiva.ttplaces.MapActivity;
+import com.example.shiva.ttplaces.MapsActivity;
 import com.example.shiva.ttplaces.R;
 import com.example.shiva.ttplaces.SuggestionActivity;
 import com.parse.ParseUser;
@@ -67,7 +67,7 @@ public class NavDrawer extends AppCompatActivity {
                    i=new Intent(NavDrawer.this,SuggestionActivity.class);
                 }
                 if (position == 2) {
-                    i = new Intent(NavDrawer.this, MapActivity.class);
+                    i = new Intent(NavDrawer.this, MapsActivity.class);
                 }
                 if (position == 3) {
                     Toast.makeText(NavDrawer.this, "SEE YOU SOON :)", Toast.LENGTH_SHORT).show();
@@ -81,7 +81,7 @@ public class NavDrawer extends AppCompatActivity {
     }
 
     private void addDrawerItems(){
-        String[] menuList = { "HOME", "PREFERENCES", "TOURS","LOG OUT"};
+        String[] menuList = { "HOME", "PREFERENCES", "VIEW MAP","LOG OUT"};
         Integer[] icons = {R.drawable.home2,R.drawable.settings2,R.drawable.view2,R.drawable.logout2};
 
         CustomListAdapter Adapter= new CustomListAdapter(this, menuList, icons);
