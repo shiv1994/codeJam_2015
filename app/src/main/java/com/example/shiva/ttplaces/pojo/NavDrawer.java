@@ -15,7 +15,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.shiva.ttplaces.HomeActivity;
-import com.example.shiva.ttplaces.InteractiveBeacon;
 import com.example.shiva.ttplaces.LoginRegisterActivity;
 import com.example.shiva.ttplaces.MapActivity;
 import com.example.shiva.ttplaces.R;
@@ -75,9 +74,6 @@ public class NavDrawer extends AppCompatActivity {
                     ParseUser.logOut();
                     i = new Intent(NavDrawer.this, LoginRegisterActivity.class);
                 }
-                if(position==4){
-                    i = new Intent(NavDrawer.this, InteractiveBeacon.class);
-                }
                 startActivity(i);
                 NavDrawer.this.finish();
             }
@@ -85,8 +81,8 @@ public class NavDrawer extends AppCompatActivity {
     }
 
     private void addDrawerItems(){
-        String[] menuList = { "HOME", "PREFERENCES", "TOURS","LOG OUT","BEACON"};
-        Integer[] icons = {R.drawable.home2,R.drawable.settings2,R.drawable.view2,R.drawable.logout2,R.drawable.view2};
+        String[] menuList = { "HOME", "PREFERENCES", "TOURS","LOG OUT"};
+        Integer[] icons = {R.drawable.home2,R.drawable.settings2,R.drawable.view2,R.drawable.logout2};
 
         CustomListAdapter Adapter= new CustomListAdapter(this, menuList, icons);
         //Adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuList);//R.layout.drawer_list_item
