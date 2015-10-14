@@ -60,7 +60,7 @@ public class MapsActivity extends FragmentActivity{
                     }
                     loadIndividualPlace();
                 } else {
-                    // objectRetrievalFailed();
+                    dismisssProgressDialog();
                 }
             }
         });
@@ -83,7 +83,7 @@ public class MapsActivity extends FragmentActivity{
                         dismisssProgressDialog();
                         showMarkers(places);
                     } else {
-                        // something went wrong
+                        dismisssProgressDialog();
                     }
                 }
             });
