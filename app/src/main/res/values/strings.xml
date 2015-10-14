@@ -24,7 +24,12 @@
     <string name="suggestions">SUGGESTIONS</string>
     <string name="question1">Country of Origin</string>
     <string name="question2">Do you like history?</string>
-    <string name="question3">Which environment do you prefer?</string>
+    <string name="subtitle">Which environment do you prefer? Rate from 1-5:</string>
+    <string name="question3">Remote</string>
+    <string name="question4">Educational</string>
+    <string name="question5">Recreational</string>
+    <string name="question6">Religious</string>
+
 
     <string name="title">Help us suggest tours for you..</string>
     <string name="btn">FINISH</string>
