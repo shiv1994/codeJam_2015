@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#acacac"
+    android:background="#fcfbfb"
     tools:context=".SuggestionActivity">
 
     <RelativeLayout
@@ -38,7 +38,7 @@
         <Spinner
             android:id="@+id/answer1"
             android:layout_width="200dp"
-            android:layout_height="20dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/question1"
             android:layout_marginTop="5dp"
             android:prompt="@string/question1"
@@ -60,7 +60,7 @@
         <Spinner
             android:id="@+id/answer2"
             android:layout_width="200dp"
-            android:layout_height="20dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/question2"
             android:layout_marginTop="5dp"
             android:prompt="@string/question2"
@@ -68,10 +68,21 @@
             android:textAlignment="center"/>
 
         <TextView
-            android:id="@+id/question3"
+            android:id="@+id/subtitle"
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_below="@+id/answer2"
+            android:layout_marginTop="40dp"
+            android:gravity="start"
+            android:text="@string/subtitle"
+            android:textAlignment="center"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/question3"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_below="@+id/subtitle"
             android:layout_marginTop="40dp"
             android:gravity="start"
             android:text="@string/question3"
@@ -81,10 +92,70 @@
         <Spinner
             android:id="@+id/answer3"
             android:layout_width="200dp"
-            android:layout_height="20dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/question3"
             android:layout_marginTop="5dp"
             android:prompt="@string/question3"
+            android:spinnerMode="dialog"/>
+
+        <TextView
+            android:id="@+id/question4"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_below="@+id/answer3"
+            android:layout_marginTop="40dp"
+            android:gravity="start"
+            android:text="@string/question4"
+            android:textAlignment="center"
+            android:textSize="15sp"/>
+
+        <Spinner
+            android:id="@+id/answer4"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/question4"
+            android:layout_marginTop="5dp"
+            android:prompt="@string/question4"
+            android:spinnerMode="dialog"/>
+
+        <TextView
+            android:id="@+id/question5"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_below="@+id/answer4"
+            android:layout_marginTop="40dp"
+            android:gravity="start"
+            android:text="@string/question5"
+            android:textAlignment="center"
+            android:textSize="15sp"/>
+
+        <Spinner
+            android:id="@+id/answer5"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/question5"
+            android:layout_marginTop="5dp"
+            android:prompt="@string/question5"
+            android:spinnerMode="dialog"/>
+
+        <TextView
+            android:id="@+id/question6"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_below="@+id/answer5"
+            android:layout_marginTop="40dp"
+            android:gravity="start"
+            android:text="@string/question6"
+            android:textAlignment="center"
+            android:textSize="15sp"/>
+
+        <Spinner
+            android:id="@+id/answer6"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/question6"
+            android:layout_marginTop="5dp"
+            android:prompt="@string/question6"
             android:spinnerMode="dialog"/>
 
         <TextView
@@ -92,7 +163,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/answer3"
+            android:layout_below="@+id/answer6"
             android:layout_marginTop="60dp"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -106,7 +177,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/answer3"
+            android:layout_below="@+id/answer6"
             android:layout_marginTop="40dp"
             android:background="@drawable/btn_design2"
             android:clickable="true"

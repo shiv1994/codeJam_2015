@@ -7,11 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
 import com.example.shiva.ttplaces.pojo.NavDrawer;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class SuggestionActivity extends NavDrawer {
@@ -20,11 +17,15 @@ public class SuggestionActivity extends NavDrawer {
     private static final String sharedPreferenceName="userAnswers";
     private static final String ANSWER1="ansKey1";
     private static final String ANSWER2="ansKey2";
+
     private static final String ANSWER3="ansKey3";
+    private static final String ANSWER4="ansKey4";
+    private static final String ANSWER5="ansKey5";
+    private static final String ANSWER6="ansKey6";
 
-    String ans1="",ans2="",ans3="";
+    String ans1="", ans2="", ans3="", ans4="", ans5="", ans6="";
 
-    Spinner answer1,answer2,answer3;
+    Spinner answer1, answer2, answer3, answer4, answer5, answer6;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,9 @@ public class SuggestionActivity extends NavDrawer {
         answer1 = (Spinner) findViewById(R.id.answer1);
         answer2 = (Spinner) findViewById(R.id.answer2);
         answer3 = (Spinner) findViewById(R.id.answer3);
+        answer4 = (Spinner) findViewById(R.id.answer4);
+        answer5 = (Spinner) findViewById(R.id.answer5);
+        answer6 = (Spinner) findViewById(R.id.answer6);
 
 
         //creates 3 arrays to hold answer values for each of the 4 spinners
@@ -86,12 +90,35 @@ public class SuggestionActivity extends NavDrawer {
         decision2.add("Minor Interest");
         decision2.add("No");
 
-        List<String> decision3 = new ArrayList<>();
-        decision3.add("Remote");
-        decision3.add("Recreational");
-        decision3.add("Educational");
-        decision3.add("Religious");
-        decision3.add("N/A");
+        List<Integer> decision3 = new ArrayList<>(); //remote environment
+        decision3.add(1);
+        decision3.add(2);
+        decision3.add(3);
+        decision3.add(4);
+        decision3.add(5);
+
+        List<Integer> decision4 = new ArrayList<>(); //recreational environment
+        decision4.add(1);
+        decision4.add(2);
+        decision4.add(3);
+        decision4.add(4);
+        decision4.add(5);
+
+        List<Integer> decision5 = new ArrayList<>(); //educational environment
+        decision5.add(1);
+        decision5.add(2);
+        decision5.add(3);
+        decision5.add(4);
+        decision5.add(5);
+
+        List<Integer> decision6 = new ArrayList<>(); //religious environment
+        decision6.add(1);
+        decision6.add(2);
+        decision6.add(3);
+        decision6.add(4);
+        decision6.add(5);
+
+
 
         ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision1);
         dataAdapter1.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
@@ -103,9 +130,21 @@ public class SuggestionActivity extends NavDrawer {
         answer2.setAdapter(dataAdapter2);
 
 
-        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision3);
+        ArrayAdapter<Integer> dataAdapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision3);
         dataAdapter3.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         answer3.setAdapter(dataAdapter3);
+
+        ArrayAdapter<Integer> dataAdapter4 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision4);
+        dataAdapter4.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        answer4.setAdapter(dataAdapter4);
+
+        ArrayAdapter<Integer> dataAdapter5 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision5);
+        dataAdapter5.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        answer5.setAdapter(dataAdapter5);
+
+        ArrayAdapter<Integer> dataAdapter6 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision6);
+        dataAdapter6.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        answer6.setAdapter(dataAdapter6);
     }
 
     public void runMainActivity(){
@@ -122,6 +161,9 @@ public class SuggestionActivity extends NavDrawer {
         ans1 = answer1.getSelectedItem().toString();
         ans2 = answer2.getSelectedItem().toString();
         ans3 = answer3.getSelectedItem().toString();
+        ans4 = answer4.getSelectedItem().toString();
+        ans5 = answer5.getSelectedItem().toString();
+        ans6 = answer6.getSelectedItem().toString();
 
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
 
@@ -130,6 +172,9 @@ public class SuggestionActivity extends NavDrawer {
         editor.putString(ANSWER1, ans1);
         editor.putString(ANSWER2, ans2);
         editor.putString(ANSWER3, ans3);
+        editor.putString(ANSWER4, ans4);
+        editor.putString(ANSWER5, ans5);
+        editor.putString(ANSWER6, ans6);
 
         editor.apply();
 
@@ -142,7 +187,7 @@ public class SuggestionActivity extends NavDrawer {
 
     public void suggestPlace(){
 
-        //do somethinggggggg
+
 
 
     }
