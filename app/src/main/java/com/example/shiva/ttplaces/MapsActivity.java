@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity{
                     }
                     loadIndividualPlace();
                 } else {
-                    dismisssProgressDialog();
+                    dismissProgressDialog();
                 }
             }
         });
@@ -83,12 +83,12 @@ public class MapsActivity extends FragmentActivity{
 
                         MyPlace placeToAdd = new MyPlace(name, "meh" , area , new LatLng(latitude, longitude) );
                         places.add(placeToAdd);
-                        dismisssProgressDialog();
+                        dismissProgressDialog();
                         //We would like to show the places once the pulling from the internet is complete.
                         showMarkers(places);
                     }
                     else {
-                        dismisssProgressDialog();
+                        dismissProgressDialog();
                     }
                 }
             });
@@ -164,14 +164,14 @@ public class MapsActivity extends FragmentActivity{
         progressDialog.show();
     }
 
-    public void dismisssProgressDialog(){
+    public void dismissProgressDialog(){
         progressDialog.dismiss();
     }
 
     public void runAlertDialog(){
         AlertDialog alert = new AlertDialog.Builder(MapsActivity.this).create();
-        alert.setTitle("Reset...");
-        alert.setMessage("Are you sure?");
+        alert.setTitle("Do You Want To View Beacons Or Places?");
+        alert.setMessage("Select A Button");
         alert.setButton(Dialog.BUTTON_POSITIVE, "View Beacons", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 classToPull="Beacon";
