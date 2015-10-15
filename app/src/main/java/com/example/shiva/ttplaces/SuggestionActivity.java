@@ -27,8 +27,6 @@ public class SuggestionActivity extends NavDrawer {
 
     Spinner answer1, answer2, answer3, answer4, answer5;
 
-    boolean sharedPrefExistValue = false;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,13 +175,9 @@ public class SuggestionActivity extends NavDrawer {
         editor.putString(ANSWER4, ansReligious);
         editor.putString(ANSWER5, ansRemote);
 
-        sharedPrefExistValue = true; //sets to true when user clicks finish
-
-        editor.putBoolean(sharedPrefExistKey, sharedPrefExistValue);
-
+        //sets to true when user clicks finish
+        editor.putBoolean(sharedPrefExistKey, true);
         editor.apply();
-
-
 
         runMainActivity();
 

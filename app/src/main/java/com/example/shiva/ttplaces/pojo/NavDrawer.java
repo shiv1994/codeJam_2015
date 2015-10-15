@@ -75,7 +75,7 @@ public class NavDrawer extends AppCompatActivity {
                     i = new Intent(NavDrawer.this, LoginRegisterActivity.class);
                 }
                 startActivity(i);
-                NavDrawer.this.finish();
+               // NavDrawer.this.finish();
             }
         });
     }

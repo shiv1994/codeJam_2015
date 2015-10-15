@@ -14,6 +14,7 @@ public class MyPlace {
     private int educationalVal = 0;
     private int religiousVal = 0;
     private int remoteVal = 0;
+    private double diff;
     //private double rating = 0;
 
     public MyPlace(String name, String type, String area, LatLng position, int recreationVal, int educationalVal, int religiousVal, int remoteVal) {
@@ -25,6 +26,7 @@ public class MyPlace {
         this.educationalVal = educationalVal;
         this.religiousVal = religiousVal;
         this.remoteVal = remoteVal;
+        this.diff=0.0;
     }
 
     public MyPlace(String name, String type, String area, LatLng position){
@@ -32,6 +34,7 @@ public class MyPlace {
         this.type=type;
         this.area=area;
         this.position=position;
+        this.diff=0.0;
     }
 
     public LatLng getPosition() {
@@ -96,5 +99,13 @@ public class MyPlace {
 
     public void setRemoteVal(int remoteVal) {
         this.remoteVal = remoteVal;
+    }
+
+    public double getDiff(){
+        return this.diff;
+    }
+
+    public void setDiff(int diff){
+        this.diff=diff;
     }
 }

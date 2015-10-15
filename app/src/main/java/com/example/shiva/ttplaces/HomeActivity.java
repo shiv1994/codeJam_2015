@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.shiva.ttplaces.pojo.MyPlace;
 import com.example.shiva.ttplaces.pojo.NavDrawer;
 import com.google.android.gms.common.ConnectionResult;
@@ -30,6 +32,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
@@ -38,9 +43,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     static final int REQUEST_RESOLVE_ERROR = 1001;
     private GoogleApiClient mGoogleApiClient;
     private boolean mResolvingError=false;
-    private ArrayList<MyPlace> suggestedPlaces;
-    private ArrayList<MyPlace> places;
-    private ArrayList<String> placeIds;
+    private static ArrayList<MyPlace> places;
+    private static ArrayList<String> placeIds;
     private BeaconScannerService scannerService;
     private Context ctx;
 
@@ -51,13 +55,16 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     private static final String ANSWER3="ansKey3";
     private static final String ANSWER4="ansKey4";
     private static final String ANSWER5="ansKey5";
+    private static final String sharedPrefExistKey ="sharedPrefExistKey";
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         placeIds = new ArrayList<String>();
+        places = new ArrayList<MyPlace>();
 
+//        checkPrefsSet();
         super.onCreate(savedInstanceState);
         ctx=this.getApplicationContext();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -126,10 +133,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         }
     }
 
-//    public void beaconActivity(View view){
-//        Intent i = new Intent(this, InteractiveBeaconActivity.class);
-//        startActivity(i);
-//    }
 
     public void runTours(View view) {
         Intent i = new Intent(this, TourActivity.class);
@@ -241,12 +244,13 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     public void checkPrefsSet(){
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
-        boolean preferencesSet = sharedPreferences.getBoolean(ANSWER1,false);
+        boolean preferencesSet = sharedPreferences.getBoolean(sharedPrefExistKey, false);
         if(preferencesSet){
             loadPlaceObjectsID();
+
         }
         else{
-
+            Log.i("Sugg","User Doesn't Have Any Preferences To Run Suggestion Finder");
         }
     }
 
@@ -262,6 +266,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                         placeIds.add(id);
                     }
                     loadAllPlaces(size);
+                    Log.i("PLACE",">>>"+ places.get(0).getName());
+
                 } else {
                     //Let user know places werent loaded.
                 }
@@ -275,18 +281,20 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             query2.getInBackground(placeIds.get(i), new GetCallback<ParseObject>() {
                 public void done(ParseObject object, ParseException e) {
                     if (e == null) {
-
-                        double latitude = object.getParseGeoPoint("locationLatLong").getLatitude();
-                        double longitude = object.getParseGeoPoint("locationLatLong").getLongitude();
                         String name = object.getString("Name");
                         String area = object.getString("Area");
-                        int recAns = object.getInt("Recreation");
+                        int recreationalAns = object.getInt("Recreation");
+                        int educationalAns = object.getInt("Educational");
+                        int religiousAns = object.getInt("Religious");
+                        int remoteAns = object.getInt("Remote");
+                        double latitude = object.getParseGeoPoint("locationLatLong").getLatitude();
+                        double longitude = object.getParseGeoPoint("locationLatLong").getLongitude();
 
-                        MyPlace placeToAdd = new MyPlace(name, "meh" , area , new LatLng(latitude, longitude) );
+
+                        MyPlace placeToAdd = new MyPlace(name, "meh", area, new LatLng(latitude, longitude), recreationalAns, educationalAns, religiousAns, remoteAns);
+//                      Log.i("Place ADDED", "" + placeToAdd.getName());
                         places.add(placeToAdd);
-                        placeFinderAlgorithm();
                     }
-
                     else {
                         //Let user know that places werent loaded.
                     }
@@ -297,21 +305,47 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     public void placeFinderAlgorithm(){
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
-        int recAns;
+        int recreationAns,educationalAns,religiousAns,remoteAns;
         String getAns;
-        getAns = sharedPreferences.getString(ANSWER5,"N/A");
-        if(getAns.equals("N/A")){
+        Log.i("HERE","HERE");
+        getAns = sharedPreferences.getString(ANSWER3, "N/A").toString();
+        if(getAns.equals("N/A"))
+            recreationAns=-1;
+        else
+            recreationAns= Integer.parseInt(getAns);
+        Log.i("HERE","HERE"+recreationAns);
+        getAns = sharedPreferences.getString(ANSWER2, "N/A").toString();
+        if(getAns.equals("N/A"))
+            educationalAns=-1;
+        else
+            educationalAns = Integer.parseInt(getAns);
 
+        getAns = sharedPreferences.getString(ANSWER4, "N/A").toString();
+        if(getAns.equals("N/A"))
+            religiousAns=-1;
+        else
+            religiousAns = Integer.parseInt(getAns);
+
+        getAns= sharedPreferences.getString(ANSWER5, "N/A").toString();
+        if(getAns.equals("N/A"))
+            remoteAns=-1;
+        else
+            remoteAns = Integer.parseInt(getAns);
+
+        //suggestedPlaces=new ArrayList<MyPlace>();
+        for(MyPlace place : places){
+            place.setDiff(Math.abs((place.getRemoteVal() - remoteAns) + (place.getEducationalVal() - educationalAns) + (place.getRecreationVal() - recreationAns) + (place.getReligiousVal() - religiousAns)));
+            Log.i("Printing Place", "" + place.getName()+""+place.getDiff());
         }
-        else{
-            recAns= Integer.parseInt(getAns);
-        }
+
+//        Collections.sort(places, new Comparator<MyPlace>() {
+//            @Override
+//            public int compare(MyPlace p1, MyPlace p2) {
+//                return (p1.getDiff() < p2.getDiff()) ? -1 : (p1.getDiff() > p2.getDiff()) ? 1 : 0;
+//            }
+//        });
 
 
-        suggestedPlaces=new ArrayList<MyPlace>();
-        for(MyPlace place : suggestedPlaces){
 
-        }
-        
     }
 }

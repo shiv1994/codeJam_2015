@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -23,6 +22,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private static final String USEREMAIL="userEmail";
     ProgressDialog progressDialog;
+    private static final String sharedPrefExistKey ="sharedPrefExistKey";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,18 +79,17 @@ public class LoginRegisterActivity extends AppCompatActivity {
                 user.setEmail(email.getText().toString());
                 //A question also has to be asked to determine whether a user is local or foreign.
                 //If no, default would be Trinidad and Tobago
-                user.put("country", "Trinidad and Tobago");
                 showProgressDialog("Creating Account ...");
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(com.parse.ParseException e) {
                         if (e == null) {
-                            dismisssProgressDialog();
+                            dismissProgressDialog();
                             Toast toast = Toast.makeText(getApplicationContext(), "User Account Created Successfully!", Toast.LENGTH_SHORT);
                             toast.show();
                             login(userName,pass.getText().toString());
                         } else {
-                            dismisssProgressDialog();
+                            dismissProgressDialog();
                             Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
                             toast.show();
                             email.setText("");
@@ -136,12 +135,12 @@ public class LoginRegisterActivity extends AppCompatActivity {
             ParseUser.logInInBackground(userName, pass.getText().toString(), new LogInCallback() {
                 public void done(ParseUser user, ParseException e) {
                     if (user != null) {
-                        dismisssProgressDialog();
+                        dismissProgressDialog();
                         Toast toast = Toast.makeText(getApplicationContext(), "Logged In Successfully!", Toast.LENGTH_SHORT);
                         toast.show();
                         runMainActivity();
                     } else {
-                        dismisssProgressDialog();
+                        dismissProgressDialog();
                         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -159,12 +158,12 @@ public class LoginRegisterActivity extends AppCompatActivity {
             ParseUser.logInInBackground(userName, password, new LogInCallback() {
                 public void done(ParseUser user, ParseException e) {
                     if (user != null) {
-                        dismisssProgressDialog();
+                        dismissProgressDialog();
                         Toast toast = Toast.makeText(getApplicationContext(), "Logged In Successfully!", Toast.LENGTH_SHORT);
                         toast.show();
                         runMainActivity();
                     } else {
-                        dismisssProgressDialog();
+                        dismissProgressDialog();
                         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -173,10 +172,9 @@ public class LoginRegisterActivity extends AppCompatActivity {
     }
 
     public void runMainActivity(){
-
         Intent i;
         SharedPreferences preferences = getSharedPreferences("userAnswers", 0);
-        boolean value = preferences.contains("ansKey1");
+        boolean value = preferences.getBoolean(sharedPrefExistKey,false);
         if(value) {
             i = new Intent(this, HomeActivity.class);
         }
@@ -195,7 +193,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
         progressDialog.show();
     }
 
-    public void dismisssProgressDialog(){
+    public void dismissProgressDialog(){
         progressDialog.dismiss();
     }
 
