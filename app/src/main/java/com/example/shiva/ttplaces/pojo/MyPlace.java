@@ -10,6 +10,7 @@ public class MyPlace {
     private String name = "";
     private String type = "";
     private String area = "";
+    private int recreationVal;
     private double rating = 0;
 
     public double getRating() {
