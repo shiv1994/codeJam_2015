@@ -126,10 +126,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         }
     }
 
-    public void beaconActivity(View view){
-        Intent i = new Intent(this, InteractiveBeaconActivity.class);
-        startActivity(i);
-    }
+//    public void beaconActivity(View view){
+//        Intent i = new Intent(this, InteractiveBeaconActivity.class);
+//        startActivity(i);
+//    }
 
     public void runTours(View view) {
         Intent i = new Intent(this, TourActivity.class);
@@ -312,5 +312,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         for(MyPlace place : suggestedPlaces){
 
         }
+        
     }
 }
