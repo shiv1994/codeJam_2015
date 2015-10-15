@@ -44,18 +44,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
+
         <activity
             android:name=".SuggestionActivity"
             android:label="@string/title_activity_suggestion" >
         </activity>
-
-        <!-- <meta-data -->
-        <!-- android:name="com.google.android.geo.API_KEY" -->
-        <!-- android:value="AIzaSyA0tbxiz3ayWc4Vx-nlZn0wRIccEElNz_w" /> -->
 
         <activity
             android:name=".pojo.NavDrawer"
@@ -76,6 +74,13 @@
             android:name=".InteractiveBeaconActivity"
             android:label="@string/title_activity_interactive_beacon" >
         </activity>
+
+        <activity
+            android:theme="@android:style/Theme.Holo"
+            android:name=".TourActivity"
+            android:label="@string/title_activity_tour" >
+        </activity>
+
     </application>
 
 </manifest>

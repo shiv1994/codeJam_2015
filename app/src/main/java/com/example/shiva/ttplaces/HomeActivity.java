@@ -118,6 +118,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         Intent i = new Intent(this, SuggestionActivity.class);
         startActivity(i);
     }
+    public void runTours(View view) {
+        Intent i = new Intent(this, TourActivity.class);
+        startActivity(i);
+    }
 
     class myAdapter extends BaseAdapter {
         ArrayList<MyPlace> list;

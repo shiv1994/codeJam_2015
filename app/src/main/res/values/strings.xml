@@ -35,5 +35,6 @@
     <string name="title_activity_nearby_messages">NearbyMessages</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_interactive_beacon">InteractiveBeacon</string>
+    <string name="title_activity_tour">TOUR</string>
 
 </resources>
