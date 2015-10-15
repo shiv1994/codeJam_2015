@@ -39,5 +39,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_interactive_beacon">InteractiveBeacon</string>
     <string name="title_activity_tour">TOUR</string>
+    <string name="histTitle">Historical Content</string>
 
 </resources>
