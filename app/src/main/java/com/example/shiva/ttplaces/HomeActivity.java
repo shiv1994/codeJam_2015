@@ -91,7 +91,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     public void onConnectionSuspended(int cause){
 
     }
-
+ 
 
 //    TODO: remove this function after testing
     private void loadTestPlaces(ArrayList<MyPlace> list){
@@ -108,12 +108,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         startActivity(i);
         this.finish();
     }
-
-    public void beaconActivity(View view){
-        Intent i = new Intent(this, InteractiveBeaconActivity.class);
+    public void runTours(View view) {
+        Intent i = new Intent(this, TourActivity.class);
         startActivity(i);
     }
-
     public void mapsActivity(View view) {
         Intent i = new Intent(this, MapsActivity.class);
         startActivity(i);
@@ -123,10 +121,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         Intent i = new Intent(this, SuggestionActivity.class);
         startActivity(i);
     }
-    public void runTours(View view) {
-        Intent i = new Intent(this, TourActivity.class);
-        startActivity(i);
-    }
+
 
     class myAdapter extends BaseAdapter {
         ArrayList<MyPlace> list;

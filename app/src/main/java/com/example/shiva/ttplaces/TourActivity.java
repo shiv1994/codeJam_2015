@@ -32,10 +32,6 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
         ti.add(temp);
         temp=new TourItem("Audio",0);
         ti.add(temp);
-        temp=new TourItem("Image2",1);
-        ti.add(temp);
-        temp=new TourItem("Audio2",0);
-        ti.add(temp);
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();

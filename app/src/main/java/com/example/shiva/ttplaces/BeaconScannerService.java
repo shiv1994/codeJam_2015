@@ -82,7 +82,7 @@ public class BeaconScannerService extends Service {
 
     public void notificationToUser(Message message)
     {
-        Intent resultIntent = new Intent(ctx, InteractiveBeaconActivity.class);
+        Intent resultIntent = new Intent(ctx,TourActivity.class);
         // Because clicking the notification opens a new ("special") activity, there's
         // no need to create an artificial back stack.
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx);
