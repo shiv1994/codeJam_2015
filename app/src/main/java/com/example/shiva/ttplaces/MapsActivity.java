@@ -81,8 +81,8 @@ public class MapsActivity extends FragmentActivity{
                         String name = object.getString("Name");
                         String area = object.getString("Area");
 
-                        MyPlace placeToAdd = new MyPlace(name, "meh" , area , new LatLng(latitude, longitude) );
-                        places.add(placeToAdd);
+                        //MyPlace placeToAdd = new MyPlace(name, "meh" , area , new LatLng(latitude, longitude) );
+                        //places.add(placeToAdd);
                         dismissProgressDialog();
                         //We would like to show the places once the pulling from the internet is complete.
                         showMarkers(places);

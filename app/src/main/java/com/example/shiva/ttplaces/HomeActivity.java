@@ -80,7 +80,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 //        TODO: this list need to be populated maybe by some service
         ArrayList<MyPlace> list = new ArrayList<>();
 
-        loadTestPlaces(list);
+        //loadTestPlaces(list);
         myAdapter adapter = new myAdapter(this,list);
         listView.setAdapter(adapter);
     }
@@ -125,13 +125,13 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
 
 //    TODO: remove this function after testing
-    private void loadTestPlaces(ArrayList<MyPlace> list){
+    /*private void loadTestPlaces(ArrayList<MyPlace> list){
         String name = "Place ",area = "Area ",type = "Type ";
         for (int i = 0; i < 10 ; i++){
             MyPlace mp = new MyPlace(name+i, type+i, area+i ,null);
             list.add(mp);
         }
-    }
+    }*/
 
 
     public void runTours(View view) {
