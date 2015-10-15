@@ -76,7 +76,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                     @Override
                     public void run() {
                         //subscribe();
-                        scannerService = new BeaconScannerService(mGoogleApiClient,ctx);
+                        scannerService = new BeaconScannerService(mGoogleApiClient, ctx);
                         //scannerService.subscribe();
                         scannerService.onStartCommand();
                     }
@@ -107,6 +107,11 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         Intent i = new Intent(this, LoginRegisterActivity.class);
         startActivity(i);
         this.finish();
+    }
+
+    public void beaconActivity(View view){
+        Intent i = new Intent(this, InteractiveBeaconActivity.class);
+        startActivity(i);
     }
 
     public void mapsActivity(View view) {
