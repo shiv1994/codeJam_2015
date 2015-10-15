@@ -27,6 +27,13 @@ public class MyPlace {
         this.remoteVal = remoteVal;
     }
 
+    public MyPlace(String name, String type, String area, LatLng position){
+        this.name=name;
+        this.type=type;
+        this.area=area;
+        this.position=position;
+    }
+
     public LatLng getPosition() {
         return position;
     }

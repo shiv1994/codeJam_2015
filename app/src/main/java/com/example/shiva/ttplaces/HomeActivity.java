@@ -3,6 +3,7 @@ package com.example.shiva.ttplaces;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,21 +20,44 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.nearby.Nearby;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
-    ListView listView;
+    private ListView listView;
     static final int REQUEST_RESOLVE_ERROR = 1001;
     private GoogleApiClient mGoogleApiClient;
     private boolean mResolvingError=false;
-    BeaconScannerService scannerService;
-    Context ctx;
+    private ArrayList<MyPlace> suggestedPlaces;
+    private ArrayList<MyPlace> places;
+    private ArrayList<String> placeIds;
+    private BeaconScannerService scannerService;
+    private Context ctx;
+
+    private SharedPreferences sharedPreferences;
+    private static final String sharedPreferenceName="userAnswers";
+    private static final String ANSWER1="ansKey1";
+    private static final String ANSWER2="ansKey2";
+    private static final String ANSWER3="ansKey3";
+    private static final String ANSWER4="ansKey4";
+    private static final String ANSWER5="ansKey5";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        placeIds = new ArrayList<String>();
+
         super.onCreate(savedInstanceState);
         ctx=this.getApplicationContext();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -102,27 +126,11 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         }
     }
 
-     public void logOut(View view) {
-        ParseUser.logOut();
-        Intent i = new Intent(this, LoginRegisterActivity.class);
-        startActivity(i);
-        this.finish();
-    }
-
     public void beaconActivity(View view){
         Intent i = new Intent(this, InteractiveBeaconActivity.class);
         startActivity(i);
     }
 
-    public void mapsActivity(View view) {
-        Intent i = new Intent(this, MapsActivity.class);
-        startActivity(i);
-    }
-
-    public void runSuggestions(View view) {
-        Intent i = new Intent(this, SuggestionActivity.class);
-        startActivity(i);
-    }
     public void runTours(View view) {
         Intent i = new Intent(this, TourActivity.class);
         startActivity(i);
@@ -231,4 +239,78 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     }
 
+    public void checkPrefsSet(){
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        boolean preferencesSet = sharedPreferences.getBoolean(ANSWER1,false);
+        if(preferencesSet){
+            loadPlaceObjectsID();
+        }
+        else{
+
+        }
+    }
+
+    public void loadPlaceObjectsID(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Place");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    Log.i("Objects Retrieved", "" + objects);
+                    int size = objects.size();
+                    for(int count=0; count <size; count++){
+                        String id = objects.get(count).getObjectId();
+                        placeIds.add(id);
+                    }
+                    loadAllPlaces(size);
+                } else {
+                    //Let user know places werent loaded.
+                }
+            }
+        });
+    }
+
+    public void loadAllPlaces(int size){
+        for(int i=0 ; i<size; i++){
+            ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Place");
+            query2.getInBackground(placeIds.get(i), new GetCallback<ParseObject>() {
+                public void done(ParseObject object, ParseException e) {
+                    if (e == null) {
+
+                        double latitude = object.getParseGeoPoint("locationLatLong").getLatitude();
+                        double longitude = object.getParseGeoPoint("locationLatLong").getLongitude();
+                        String name = object.getString("Name");
+                        String area = object.getString("Area");
+                        int recAns = object.getInt("Recreation");
+
+                        MyPlace placeToAdd = new MyPlace(name, "meh" , area , new LatLng(latitude, longitude) );
+                        places.add(placeToAdd);
+                        placeFinderAlgorithm();
+                    }
+
+                    else {
+                        //Let user know that places werent loaded.
+                    }
+                }
+            });
+        }
+    }
+
+    public void placeFinderAlgorithm(){
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        int recAns;
+        String getAns;
+        getAns = sharedPreferences.getString(ANSWER5,"N/A");
+        if(getAns.equals("N/A")){
+
+        }
+        else{
+            recAns= Integer.parseInt(getAns);
+        }
+
+
+        suggestedPlaces=new ArrayList<MyPlace>();
+        for(MyPlace place : suggestedPlaces){
+
+        }
+    }
 }
