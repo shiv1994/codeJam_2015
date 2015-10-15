@@ -22,9 +22,11 @@ public class SuggestionActivity extends NavDrawer {
     private static final String ANSWER4="ansKey4";
     private static final String ANSWER5="ansKey5";
 
-    String ans1="", ans2="", ans3="", ans4="", ans5="";
+    String ansCountry="", ansEducational="", ansRecreational="", ansReligious="", ansRemote="";
 
     Spinner answer1, answer2, answer3, answer4, answer5;
+
+    boolean sharedPrefExist = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -154,13 +156,13 @@ public class SuggestionActivity extends NavDrawer {
     public void finish(View view) {
 
         //stores the choices the user selected
-        ans1 = answer1.getSelectedItem().toString();
+        ansCountry = answer1.getSelectedItem().toString();
 
         //stores the rating (1-5) for each environment type
-        ans2 = answer2.getSelectedItem().toString();
-        ans3 = answer3.getSelectedItem().toString();
-        ans4 = answer4.getSelectedItem().toString();
-        ans5 = answer5.getSelectedItem().toString();
+        ansEducational = answer2.getSelectedItem().toString();
+        ansRecreational = answer3.getSelectedItem().toString();
+        ansReligious = answer4.getSelectedItem().toString();
+        ansRemote = answer5.getSelectedItem().toString();
 
 
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
@@ -168,13 +170,15 @@ public class SuggestionActivity extends NavDrawer {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         //stores the user's answers in the shared preferences file userAnswers
-        editor.putString(ANSWER1, ans1);
-        editor.putString(ANSWER2, ans2);
-        editor.putString(ANSWER3, ans3);
-        editor.putString(ANSWER4, ans4);
-        editor.putString(ANSWER5, ans5);
+        editor.putString(ANSWER1, ansCountry);
+        editor.putString(ANSWER2, ansEducational);
+        editor.putString(ANSWER3, ansRecreational);
+        editor.putString(ANSWER4, ansReligious);
+        editor.putString(ANSWER5, ansRemote);
 
         editor.apply();
+
+        sharedPrefExist = true; //sets to true when user clicks finish
 
         runMainActivity();
 

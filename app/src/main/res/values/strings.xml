@@ -23,7 +23,7 @@
     <!--Suggestions String-->
     <string name="suggestions">SUGGESTIONS</string>
     <string name="question1">Country of Origin</string>
-    <string name="subtitle">Which environment do you prefer? Rate from 0-5:</string>
+    <string name="subtitle">Which environment do you prefer? Rate from 1-5:</string>
     <string name="question2">Educational</string>
     <string name="question3">Recreational</string>
     <string name="question4">Religious</string>
