@@ -45,21 +45,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="58dp" />
 
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TOURS"
-        android:onClick="runTours"
-        android:id="@+id/button6"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Launch Tour"
-        android:onClick="beaconActivity"
+        android:onClick="runTours"
         android:id="@+id/button4"
         android:layout_below="@+id/button5"
         android:layout_alignStart="@+id/button5"

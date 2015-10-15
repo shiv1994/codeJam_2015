@@ -71,11 +71,6 @@
         <service android:name=".BeaconScannerService" />
 
         <activity
-            android:name=".InteractiveBeaconActivity"
-            android:label="@string/title_activity_interactive_beacon" >
-        </activity>
-
-        <activity
             android:theme="@android:style/Theme.Holo"
             android:name=".TourActivity"
             android:label="@string/title_activity_tour" >
