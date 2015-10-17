@@ -9,11 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.shiva.ttplaces.R;
-import com.example.shiva.ttplaces.TourActivity;
 
 public class TextFragment extends Fragment {
 
-	String url="";
+	String url=null,text;
 	Bundle bundle;
 
 	@Override
@@ -21,10 +20,21 @@ public class TextFragment extends Fragment {
 			Bundle savedInstanceState) {
 
         bundle=getArguments();
-        url=bundle.getString("url");
+        if(bundle!=null) {
+            url = bundle.getString("url");
+        }
+
 		View rootView = inflater.inflate(R.layout.fragment_text, container, false);
-		TextView txt=(TextView)rootView.findViewById(R.id.histContent);
-		txt.setText(url);
+		TextView txt=(TextView)rootView.findViewById(R.id.Content);
+
+        if(url == null || url.trim().equals("")) {
+            text="Content Currently Unavailable";
+            System.out.println("Url is invalid");
+        }
+        else {//Extract text information from url to text file and store in string text   <----------------------------
+            text = url;
+        }
+		txt.setText(text);
 		txt.setTextColor(Color.parseColor("#000000"));
 		
 		return rootView;

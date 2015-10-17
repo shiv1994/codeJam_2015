@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
 import java.util.ArrayList;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -48,7 +47,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 	}
 	@Override
 	public int getCount(){
-		// get item count : equal to number of tabs
+		// number of tabs
 		return tours.size();
 	}
 

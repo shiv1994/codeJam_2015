@@ -10,29 +10,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.example.shiva.ttplaces.R;
-import com.example.shiva.ttplaces.TourActivity;
 import java.io.InputStream;
 import java.net.URL;
 
-//  Static variable used to refer to getting the content from main activity
 public class ImageFragment extends Fragment {
 
     public Bitmap bp=null;
     public ImageView iv=null;
-    String url="";
+    String url=null;
     Bundle bundle;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         bundle=getArguments();
-        url=bundle.getString("url");
+        if(bundle!=null) {
+            url = bundle.getString("url");
+        }
 
 		View rootView = inflater.inflate(R.layout.fragment_image, container, false);
         iv = (ImageView)rootView.findViewById(R.id.tourImage);
 
-        if(bp == null) {
-            //url = "http://www.personal.psu.edu/sdh5174/Mario_png.png";
+        if(url == null || url.trim().equals("")) {
+            System.out.println("Url is invalid");
+        }
+        else if(bp == null) {
             new LoadImage() {
                 @Override
                 protected void onPreExecute() {
@@ -42,19 +44,19 @@ public class ImageFragment extends Fragment {
                     bp = image;
                     if (bp != null) {
                         iv.setImageBitmap(bp);
-
-                    } else {
-
+                    }
+                    else {
                         System.out.println("error acquiring image");
                     }
                 }
             }.execute(url);
-        }else{
+        }
+        else{
             iv.setImageBitmap(bp);
         }
 
         return rootView;
-        }
+    }
 }
 
 class LoadImage extends AsyncTask<String, String, Bitmap> {

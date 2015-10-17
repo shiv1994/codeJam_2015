@@ -10,14 +10,17 @@ import com.example.shiva.ttplaces.R;
 
 public class AudioFragment extends Fragment {
 
-	String url="";
+	String url=null;
 	Bundle bundle;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		bundle=getArguments();
-		url=bundle.getString("url");
+		if(bundle!=null) {
+			url = bundle.getString("url");
+		}
+
 		View rootView = inflater.inflate(R.layout.fragment_audio, container, false);
 		
 		return rootView;

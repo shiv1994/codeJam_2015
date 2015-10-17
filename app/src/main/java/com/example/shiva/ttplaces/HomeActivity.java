@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.shiva.ttplaces.pojo.MyPlace;
 import com.example.shiva.ttplaces.pojo.NavDrawer;
@@ -30,11 +29,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
@@ -61,8 +56,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        placeIds = new ArrayList<String>();
-        places = new ArrayList<MyPlace>();
+        placeIds = new ArrayList<>();
+        places = new ArrayList<>();
 
 //        checkPrefsSet();
         super.onCreate(savedInstanceState);
@@ -308,25 +303,25 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         int recreationAns,educationalAns,religiousAns,remoteAns;
         String getAns;
         Log.i("HERE","HERE");
-        getAns = sharedPreferences.getString(ANSWER3, "N/A").toString();
+        getAns = sharedPreferences.getString(ANSWER3, "N/A");
         if(getAns.equals("N/A"))
             recreationAns=-1;
         else
             recreationAns= Integer.parseInt(getAns);
         Log.i("HERE","HERE"+recreationAns);
-        getAns = sharedPreferences.getString(ANSWER2, "N/A").toString();
+        getAns = sharedPreferences.getString(ANSWER2, "N/A");
         if(getAns.equals("N/A"))
             educationalAns=-1;
         else
             educationalAns = Integer.parseInt(getAns);
 
-        getAns = sharedPreferences.getString(ANSWER4, "N/A").toString();
+        getAns = sharedPreferences.getString(ANSWER4, "N/A");
         if(getAns.equals("N/A"))
             religiousAns=-1;
         else
             religiousAns = Integer.parseInt(getAns);
 
-        getAns= sharedPreferences.getString(ANSWER5, "N/A").toString();
+        getAns= sharedPreferences.getString(ANSWER5, "N/A");
         if(getAns.equals("N/A"))
             remoteAns=-1;
         else
@@ -343,9 +338,11 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 //            public int compare(MyPlace p1, MyPlace p2) {
 //                return (p1.getDiff() < p2.getDiff()) ? -1 : (p1.getDiff() > p2.getDiff()) ? 1 : 0;
 //            }
-//        });
+//        })
 
-
-
+    }
+    @Override
+    public void onBackPressed(){
+        this.finish();
     }
 }

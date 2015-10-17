@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -26,7 +25,6 @@ public class NavDrawer extends AppCompatActivity {
     protected DrawerLayout baseLayout;
     protected FrameLayout activityContent;
     private ListView DrawerList;
-    private ArrayAdapter<String> Adapter;
     private ActionBarDrawerToggle DrawerToggle;
     private DrawerLayout drawerLayout;
     private String ActivityTitle;
@@ -75,7 +73,7 @@ public class NavDrawer extends AppCompatActivity {
                     i = new Intent(NavDrawer.this, LoginRegisterActivity.class);
                 }
                 startActivity(i);
-               // NavDrawer.this.finish();
+                NavDrawer.this.finish();
             }
         });
     }
@@ -136,5 +134,13 @@ public class NavDrawer extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         DrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onBackPressed(){
+
+        Intent i = new Intent(this,HomeActivity.class);
+        startActivity(i);
+        this.finish();
     }
 }
