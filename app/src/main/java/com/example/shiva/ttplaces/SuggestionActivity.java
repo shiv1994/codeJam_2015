@@ -23,7 +23,8 @@ public class SuggestionActivity extends NavDrawer {
     private static final String ANSWER5="ansKey5";
     private static final String sharedPrefExistKey ="sharedPrefExistKey";
 
-    String ansCountry="", ansEducational="", ansRecreational="", ansReligious="", ansRemote="";
+    String ansCountry="";
+    int ansEducational=-1, ansRecreational=-1, ansReligious=-1, ansRemote=-1;
 
     Spinner answer1, answer2, answer3, answer4, answer5;
 
@@ -85,35 +86,38 @@ public class SuggestionActivity extends NavDrawer {
 
         List<String> decision2 = new ArrayList<>(); //educational environment
         decision2.add("N/A");
-        decision2.add("1");
-        decision2.add("2");
-        decision2.add("3");
-        decision2.add("4");
-        decision2.add("5");
+        decision2.add("Not at all");
+        decision2.add("A little");
+        decision2.add("Somewhat");
+        decision2.add("A lot");
+        decision2.add("Very much");
+
 
         List<String> decision3 = new ArrayList<>(); //recreational environment
         decision3.add("N/A");
-        decision3.add("1");
-        decision3.add("2");
-        decision3.add("3");
-        decision3.add("4");
-        decision3.add("5");
+        decision3.add("Not at all");
+        decision3.add("A little");
+        decision3.add("Somewhat");
+        decision3.add("A lot");
+        decision3.add("Very much");
+
 
         List<String> decision4 = new ArrayList<>(); //religious environment
         decision4.add("N/A");
-        decision4.add("1");
-        decision4.add("2");
-        decision4.add("3");
-        decision4.add("4");
-        decision4.add("5");
+        decision4.add("Not at all");
+        decision4.add("A little");
+        decision4.add("Somewhat");
+        decision4.add("A lot");
+        decision4.add("Very much");
+
 
         List<String> decision5 = new ArrayList<>(); //remote environment
         decision5.add("N/A");
-        decision5.add("1");
-        decision5.add("2");
-        decision5.add("3");
-        decision5.add("4");
-        decision5.add("5");
+        decision5.add("Not at all");
+        decision5.add("A little");
+        decision5.add("Somewhat");
+        decision5.add("A lot");
+        decision5.add("Very much");
 
 
         //spinners for each of the questions
@@ -156,12 +160,11 @@ public class SuggestionActivity extends NavDrawer {
 
         //stores the choices the user selected
         ansCountry = answer1.getSelectedItem().toString();
-
         //stores the rating (1-5) for each environment type
-        ansEducational = answer2.getSelectedItem().toString();
-        ansRecreational = answer3.getSelectedItem().toString();
-        ansReligious = answer4.getSelectedItem().toString();
-        ansRemote = answer5.getSelectedItem().toString();
+        ansEducational = answer2.getSelectedItemPosition();
+        ansRecreational = Integer.parseInt(Integer.toString(answer3.getSelectedItemPosition()));
+        ansReligious = Integer.parseInt(Integer.toString(answer4.getSelectedItemPosition()));
+        ansRemote = Integer.parseInt(Integer.toString(answer5.getSelectedItemPosition()));
 
 
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
@@ -170,10 +173,26 @@ public class SuggestionActivity extends NavDrawer {
 
         //stores the user's answers in the shared preferences file userAnswers
         editor.putString(ANSWER1, ansCountry);
-        editor.putString(ANSWER2, ansEducational);
-        editor.putString(ANSWER3, ansRecreational);
-        editor.putString(ANSWER4, ansReligious);
-        editor.putString(ANSWER5, ansRemote);
+
+        if(ansEducational==0)
+            editor.putInt(ANSWER2, -1);
+
+        editor.putInt(ANSWER2, ansEducational);
+
+        if(ansRecreational == 0)
+            editor.putInt(ANSWER3, -1);
+
+        editor.putInt(ANSWER3, ansRecreational);
+
+        if(ansReligious == 0)
+            editor.putInt(ANSWER4, -1);
+
+        editor.putInt(ANSWER4, ansReligious);
+
+        if(ansRemote == 0)
+            editor.putInt(ANSWER5, -1);
+
+        editor.putInt(ANSWER5, ansRemote);
 
         //sets to true when user clicks finish
         editor.putBoolean(sharedPrefExistKey, true);
