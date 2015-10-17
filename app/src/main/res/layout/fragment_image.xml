@@ -4,14 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffffff" >
-    
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Design Image Screen"
-        android:textSize="20dp"
-        android:layout_centerInParent="true"
-        android:id="@+id/textView" />
 
+
+    <ImageView
+        android:id="@+id/tourImage"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/notfound"/>
 
 </RelativeLayout>
