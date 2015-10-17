@@ -10,10 +10,14 @@ import com.example.shiva.ttplaces.R;
 
 public class VideoFragment extends Fragment {
 
+	String url="";
+	Bundle bundle;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+		bundle=getArguments();
+		url=bundle.getString("url");
 		View rootView = inflater.inflate(R.layout.fragment_video, container, false);
 		
 		return rootView;

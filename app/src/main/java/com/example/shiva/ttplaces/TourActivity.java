@@ -3,6 +3,7 @@ package com.example.shiva.ttplaces;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -17,30 +18,32 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
 	public ArrayList<TourItem> ti = new ArrayList<>();
-	public static String txts;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tour);
 
-		// Initialization
-        TourItem temp=new TourItem("History",2);
-        ti.add(temp);
-		txts="Mission Statement:\n\n" +
-				"        To collect, preserve, document and display the fauna of Trinidad & Tobago\n\n\n" +
-				"The Collections:\n\n" +
-				"The collections consist of a wide range of specimens from all over Trinidad & Tobago and the wider Caribbean and South American region. There are specimens from all the major animal groups and some geological and archaeological objects as well.\n\n\n" +
+        String txts="Mission Statement:\n\n" +
+                "        To collect, preserve, document and display the fauna of Trinidad & Tobago\n\n\n" +
+                "The Collections:\n\n" +
+                "The collections consist of a wide range of specimens from all over Trinidad & Tobago and the wider Caribbean and South American region. There are specimens from all the major animal groups and some geological and archaeological objects as well.\n\n\n" +
 
-				"The Beginnings:\n\n" +
-				"The collections held by the Zoology Museum date back to the 1920s. Before The University of the West Indies (UWI) existed the St. Augustine campus was home to the West Indies Agricultural College which in 1924 became the Imperial College of Tropical Agriculture (ICTA).\n" +
-				"The early collection was basically a repository for researchers investigating animal species of agricultural importance and as a resource for teaching. Insects formed the bulk of the specimens and consisted of pest and beneficial species associated with the various crops under study – cocoa, maize, coffee, cotton, tobacco, citrus, pineapple and banana to name a few.\n" +
-				"Many of these were collected by the Professor of Entomology and Commissioner of Agriculture Henry Arthur Ballou, a prolific author on many aspects of entomology throughout the Caribbean and beyond.\n";
+                "The Beginnings:\n\n" +
+                "The collections held by the Zoology Museum date back to the 1920s. Before The University of the West Indies (UWI) existed the St. Augustine campus was home to the West Indies Agricultural College which in 1924 became the Imperial College of Tropical Agriculture (ICTA).\n" +
+                "The early collection was basically a repository for researchers investigating animal species of agricultural importance and as a resource for teaching. Insects formed the bulk of the specimens and consisted of pest and beneficial species associated with the various crops under study – cocoa, maize, coffee, cotton, tobacco, citrus, pineapple and banana to name a few.\n" +
+                "Many of these were collected by the Professor of Entomology and Commissioner of Agriculture Henry Arthur Ballou, a prolific author on many aspects of entomology throughout the Caribbean and beyond.\n";
+        // Initialization
+        TourItem temp=new TourItem("History",2,txts);
+        ti.add(temp);
 
-        temp=new TourItem("Video",3);
+        temp=new TourItem("Video",3,null);
         ti.add(temp);
-        temp=new TourItem("Image",1);
+        temp=new TourItem("Image",1,"https://www.dropbox.com/s/cd4nqpn5jlgok25/You_win_this_time.png?dl=0");
         ti.add(temp);
-        temp=new TourItem("Audio",0);
+        temp=new TourItem("Audio",0,null);
+        ti.add(temp);
+        temp=new TourItem("Image2",1,"http://img3.wikia.nocookie.net/__cb20111116185320/fakemon/es/images/7/7a/You_win_this_time.png");
         ti.add(temp);
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
@@ -77,6 +80,8 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+
+
 	}
 
 	@Override

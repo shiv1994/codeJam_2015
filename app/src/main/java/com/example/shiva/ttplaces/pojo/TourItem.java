@@ -3,9 +3,11 @@ package com.example.shiva.ttplaces.pojo;
 public class TourItem {
     String name;
     int type;
-    public TourItem(String n, int t) {
+    String url;
+    public TourItem(String n, int t,String u) {
         name = n;
         type = t;
+        url=u;
     }
 
     public String getName() {
@@ -22,5 +24,13 @@ public class TourItem {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

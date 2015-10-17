@@ -11,15 +11,20 @@ import android.widget.TextView;
 import com.example.shiva.ttplaces.R;
 import com.example.shiva.ttplaces.TourActivity;
 
-public class HistoryFragment extends Fragment {
+public class TextFragment extends Fragment {
+
+	String url="";
+	Bundle bundle;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.fragment_history, container, false);
+        bundle=getArguments();
+        url=bundle.getString("url");
+		View rootView = inflater.inflate(R.layout.fragment_text, container, false);
 		TextView txt=(TextView)rootView.findViewById(R.id.histContent);
-		txt.setText(TourActivity.txts);
+		txt.setText(url);
 		txt.setTextColor(Color.parseColor("#000000"));
 		
 		return rootView;

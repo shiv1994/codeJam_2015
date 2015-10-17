@@ -1,5 +1,6 @@
 package com.example.shiva.ttplaces.pojo;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,19 +19,32 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
 		TourItem item= tours.get(index);
 
-		if(item.type==0)
-			return new AudioFragment();
+        Bundle b;
+        b = new Bundle();
+        b.putString("url",item.getUrl());
 
-		else if(item.type==1)
-			return new ImageFragment();
+		if(item.type==0) {
+            AudioFragment audio = new AudioFragment();
+            audio.setArguments(b);
+            return audio;
+        }
+		else if(item.type==1) {
+            ImageFragment image =new ImageFragment();
+            image.setArguments(b);
+            return image;
+        }
+		else if(item.type==2) {
+            TextFragment text = new TextFragment();
+            text.setArguments(b);
+            return text ;
+        }
+		else if(item.type==3) {
+            VideoFragment video = new VideoFragment();
+            video.setArguments(b);
+            return video ;
+        }
 
-		else if(item.type==2)
-			return new HistoryFragment();
-
-		else if(item.type==3)
-			return new VideoFragment();
 		return null;
-
 	}
 	@Override
 	public int getCount(){
