@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,13 +24,13 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.nearby.Nearby;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
@@ -38,8 +39,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     static final int REQUEST_RESOLVE_ERROR = 1001;
     private GoogleApiClient mGoogleApiClient;
     private boolean mResolvingError=false;
-    private static ArrayList<MyPlace> places;
-    private static ArrayList<String> placeIds;
+    private static ArrayList<MyPlace> list;
+
     private BeaconScannerService scannerService;
     private Context ctx;
 
@@ -52,14 +53,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     private static final String ANSWER5="ansKey5";
     private static final String sharedPrefExistKey ="sharedPrefExistKey";
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        placeIds = new ArrayList<>();
-        places = new ArrayList<>();
+        list = new ArrayList<MyPlace>();
 
-//        checkPrefsSet();
         super.onCreate(savedInstanceState);
         ctx=this.getApplicationContext();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -72,12 +69,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         setContentView(R.layout.activity_home);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         listView = (ListView) findViewById(R.id.lv_suggestions);
-//        TODO: this list need to be populated maybe by some service
-        ArrayList<MyPlace> list = new ArrayList<>();
-
-        //loadTestPlaces(list);
+        checkPrefsSetSuggest();
         myAdapter adapter = new myAdapter(this,list);
         listView.setAdapter(adapter);
+
     }
 
     public void onStart() {
@@ -117,17 +112,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     public void onConnectionSuspended(int cause){
 
     }
-
-
-//    TODO: remove this function after testing
-    /*private void loadTestPlaces(ArrayList<MyPlace> list){
-        String name = "Place ",area = "Area ",type = "Type ";
-        for (int i = 0; i < 10 ; i++){
-            MyPlace mp = new MyPlace(name+i, type+i, area+i ,null);
-            list.add(mp);
-        }
-    }*/
-
 
     public void runTours(View view) {
         Intent i = new Intent(this, TourActivity.class);
@@ -187,9 +171,9 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         private final String method;
         private final Runnable runOnSuccess;
 
-        private ErrorCheckingCallback(String method) {
-            this(method, null);
-        }
+//        private ErrorCheckingCallback(String method) {
+//            this(method, null);
+//        }
 
         private ErrorCheckingCallback(String method, @Nullable Runnable runOnSuccess) {
             this.method = method;
@@ -237,112 +221,94 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     }
 
-    public void checkPrefsSet(){
+    public void checkPrefsSetSuggest(){
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
         boolean preferencesSet = sharedPreferences.getBoolean(sharedPrefExistKey, false);
         if(preferencesSet){
-            loadPlaceObjectsID();
-
+            loadSuggestionPlaces();
         }
         else{
-            Log.i("Sugg","User Doesn't Have Any Preferences To Run Suggestion Finder");
+            loadSuggestionPlaces();
         }
     }
 
-    public void loadPlaceObjectsID(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Place");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    Log.i("Objects Retrieved", "" + objects);
-                    int size = objects.size();
-                    for(int count=0; count <size; count++){
-                        String id = objects.get(count).getObjectId();
-                        placeIds.add(id);
-                    }
-                    loadAllPlaces(size);
-                    Log.i("PLACE",">>>"+ places.get(0).getName());
+    public void loadSuggestionPlaces() {
+        LoadPlacesData loadPlace = new LoadPlacesData();
+        List<MyPlace> placeObjects;
+        placeObjects = loadPlace.doInBackground();
+        placeFinderAlgorithm(placeObjects);
+        if(!placeObjects.isEmpty()) {
+            for (int i = 0; i < 5; i++) {
+                list.add(placeObjects.get(i));
+            }
+        }
+    }
 
-                } else {
-                    //Let user know places werent loaded.
-                }
+    public void placeFinderAlgorithm(List<MyPlace> placeObjects){
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        int recreationAns,educationalAns,religiousAns,remoteAns;
+        int getAns;
+
+        getAns = sharedPreferences.getInt(ANSWER3, -1);
+        recreationAns= getAns;
+
+        getAns = sharedPreferences.getInt(ANSWER2, -1);
+        educationalAns = getAns;
+
+        getAns = sharedPreferences.getInt(ANSWER4, -1);
+        religiousAns = getAns;
+
+        getAns= sharedPreferences.getInt(ANSWER5, -1);
+        remoteAns = getAns;
+
+        for(MyPlace place : placeObjects){
+            place.setDiff(Math.abs((place.getRemoteVal() - remoteAns) + (place.getEducationalVal() - educationalAns) + (place.getRecreationVal() - recreationAns) + (place.getReligiousVal() - religiousAns)));
+        }
+
+        Collections.sort(placeObjects, new Comparator<MyPlace>() {
+            @Override
+            public int compare(MyPlace p1, MyPlace p2) {
+                return (p1.getDiff() < p2.getDiff()) ? -1 : (p1.getDiff() > p2.getDiff()) ? 1 : 0;
             }
         });
     }
+}
 
-    public void loadAllPlaces(int size){
-        for(int i=0 ; i<size; i++){
-            ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Place");
-            query2.getInBackground(placeIds.get(i), new GetCallback<ParseObject>() {
-                public void done(ParseObject object, ParseException e) {
-                    if (e == null) {
-                        String name = object.getString("Name");
-                        String area = object.getString("Area");
-                        int recreationalAns = object.getInt("Recreation");
-                        int educationalAns = object.getInt("Educational");
-                        int religiousAns = object.getInt("Religious");
-                        int remoteAns = object.getInt("Remote");
-                        double latitude = object.getParseGeoPoint("locationLatLong").getLatitude();
-                        double longitude = object.getParseGeoPoint("locationLatLong").getLongitude();
+class LoadPlacesData extends AsyncTask<Void, List<ParseObject>, ArrayList<MyPlace>> {
 
+    protected ArrayList<MyPlace> doInBackground(Void... params){
+        List<ParseObject> objects=null;
+        ArrayList<MyPlace> places = new ArrayList<MyPlace>();
 
-                        MyPlace placeToAdd = new MyPlace(name, "meh", area, new LatLng(latitude, longitude), recreationalAns, educationalAns, religiousAns, remoteAns);
-//                      Log.i("Place ADDED", "" + placeToAdd.getName());
-                        places.add(placeToAdd);
-                    }
-                    else {
-                        //Let user know that places werent loaded.
-                    }
+        ParseObject temp=null;
+        ParseQuery<ParseObject> findAllPlaceObjectsQuery = ParseQuery.getQuery("Place");
+        try {
+            objects = findAllPlaceObjectsQuery.find();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        if(objects!=null){
+            for (ParseObject obj : objects){
+                try {
+                    temp = findAllPlaceObjectsQuery.get(obj.getObjectId());
                 }
-            });
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                String name = obj.getString("Name");
+                String area = obj.getString("Area");
+                int recreationalAns = obj.getInt("Recreation");
+                int educationalAns = obj.getInt("Educational");
+                int religiousAns = obj.getInt("Religious");
+                int remoteAns = obj.getInt("Remote");
+                double lat = temp.getParseGeoPoint("locationLatLong").getLatitude();
+                double lng = temp.getParseGeoPoint("locationLatLong").getLongitude();
+
+                places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns));
+            }
         }
-    }
-
-    public void placeFinderAlgorithm(){
-        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
-        int recreationAns,educationalAns,religiousAns,remoteAns;
-        String getAns;
-        Log.i("HERE","HERE");
-        getAns = sharedPreferences.getString(ANSWER3, "N/A");
-        if(getAns.equals("N/A"))
-            recreationAns=-1;
-        else
-            recreationAns= Integer.parseInt(getAns);
-        Log.i("HERE","HERE"+recreationAns);
-        getAns = sharedPreferences.getString(ANSWER2, "N/A");
-        if(getAns.equals("N/A"))
-            educationalAns=-1;
-        else
-            educationalAns = Integer.parseInt(getAns);
-
-        getAns = sharedPreferences.getString(ANSWER4, "N/A");
-        if(getAns.equals("N/A"))
-            religiousAns=-1;
-        else
-            religiousAns = Integer.parseInt(getAns);
-
-        getAns= sharedPreferences.getString(ANSWER5, "N/A");
-        if(getAns.equals("N/A"))
-            remoteAns=-1;
-        else
-            remoteAns = Integer.parseInt(getAns);
-
-        //suggestedPlaces=new ArrayList<MyPlace>();
-        for(MyPlace place : places){
-            place.setDiff(Math.abs((place.getRemoteVal() - remoteAns) + (place.getEducationalVal() - educationalAns) + (place.getRecreationVal() - recreationAns) + (place.getReligiousVal() - religiousAns)));
-            Log.i("Printing Place", "" + place.getName()+""+place.getDiff());
-        }
-
-//        Collections.sort(places, new Comparator<MyPlace>() {
-//            @Override
-//            public int compare(MyPlace p1, MyPlace p2) {
-//                return (p1.getDiff() < p2.getDiff()) ? -1 : (p1.getDiff() > p2.getDiff()) ? 1 : 0;
-//            }
-//        })
-
-    }
-    @Override
-    public void onBackPressed(){
-        this.finish();
+        return places;
     }
 }
