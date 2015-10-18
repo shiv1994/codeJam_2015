@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -24,7 +25,7 @@ import com.google.android.gms.nearby.messages.SubscribeOptions;
  * Created by Shiva on 10/12/2015.
  */
 public class BeaconScannerService extends Service {
-
+    private static final String sharedPreferenceName="userAnswers";
     private GoogleApiClient mGoogleApiClient;
     private MessageListener mMessageListener;
     private static final Strategy PUB_SUB_STRATEGY = new Strategy.Builder()
@@ -32,7 +33,6 @@ public class BeaconScannerService extends Service {
     public Context ctx;
 
     public BeaconScannerService(){
-
     }
 
     public BeaconScannerService(GoogleApiClient mGoogleApiClient, Context ctx) {
@@ -44,6 +44,7 @@ public class BeaconScannerService extends Service {
             public void onFound(Message message) {
                 Log.i("ON CREATE FUNCTION", "" + message);
                 notificationToUser(message);
+                insertSharedPref(message);
             }
 
             // Called when a message is no longer nearby.
@@ -159,5 +160,13 @@ public class BeaconScannerService extends Service {
                         }
                     });
         }
+    }
+
+    public void insertSharedPref(Message message){
+        int id = Integer.parseInt(message.toString());
+        SharedPreferences sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("BeaconID",id);
+        editor.apply();
     }
 }
