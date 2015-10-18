@@ -7,12 +7,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
@@ -24,95 +23,35 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 public class TourActivity extends FragmentActivity implements ActionBar.TabListener {
-	private SharedPreferences sharedPreferences;
-	private static final String sharedPreferenceName="userAnswers";
-	private ViewPager viewPager;
-	private TabsPagerAdapter mAdapter;
-	private ActionBar actionBar;
+	public SharedPreferences sharedPreferences;
+	public static final String sharedPreferenceName="userAnswers";
+	public ViewPager viewPager=null;
+	public TabsPagerAdapter mAdapter=null;
+	public ActionBar actionBar;
 	public ArrayList<TourItem> ti = new ArrayList<>();
 	public int beaconId;
 	ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		getBeaconID();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tour);
-		//TEST TEXT CODE
-        String txts="Mission Statement:\n\n" +
-                "        To collect, preserve, document and display the fauna of Trinidad & Tobago\n\n\n" +
-                "The Collections:\n\n" +
-                "The collections consist of a wide range of specimens from all over Trinidad & Tobago and the wider Caribbean and South American region. There are specimens from all the major animal groups and some geological and archaeological objects as well.\n\n\n" +
 
-                "The Beginnings:\n\n" +
-                "The collections held by the Zoology Museum date back to the 1920s. Before The University of the West Indies (UWI) existed the St. Augustine campus was home to the West Indies Agricultural College which in 1924 became the Imperial College of Tropical Agriculture (ICTA).\n" +
-                "The early collection was basically a repository for researchers investigating animal species of agricultural importance and as a resource for teaching. Insects formed the bulk of the specimens and consisted of pest and beneficial species associated with the various crops under study – cocoa, maize, coffee, cotton, tobacco, citrus, pineapple and banana to name a few.\n" +
-                "Many of these were collected by the Professor of Entomology and Commissioner of Agriculture Henry Arthur Ballou, a prolific author on many aspects of entomology throughout the Caribbean and beyond.\n";
-
-        // Initialization
-        TourItem temp=new TourItem("History",2,txts);
-        ti.add(temp);
-
-        temp=new TourItem("Random Online Url",1,"http://goo.gl/IWpKMb");
-        ti.add(temp);
-
-        temp=new TourItem("Batman vs Superman",3,"h-ttps://youtu.be/bha24P9uw-E?t=4");
-        ti.add(temp);
-
-        temp=new TourItem("No img link",1,null);
-        ti.add(temp);
-
-        temp=new TourItem("Audio",0,null);
-        ti.add(temp);
-
-        temp=new TourItem("no Vid link",3,null);
-        ti.add(temp);
-
-		new LoadContentData() {
-			protected void onPreExecute(){
-				showProgressDialog("Loading Content");
-			}
-			protected ArrayList<TourItem> doInBackground(Void ... params){
-				getBeaconID();
-				List<ParseObject> objects=null;
-				ArrayList<TourItem> tours = new ArrayList<>();
-				ParseQuery<ParseObject> findAllBeaconContent = ParseQuery.getQuery("Place");
-				findAllBeaconContent.whereEqualTo("ID", beaconId);
-				try {
-					objects=findAllBeaconContent.find();
-				}
-				catch(Exception e){
-					e.printStackTrace();
-				}
-				if(objects!=null){
-					ParseObject temp=null;
-					for(ParseObject obj : objects){
-						try {
-							temp = findAllBeaconContent.get(obj.getObjectId());
-						}
-						catch(Exception e){
-							e.printStackTrace();
-						}
-						if(temp!=null) {
-							tours.add(new TourItem(temp.getString("Name"), temp.getInt("Type"), temp.getString("ContentLink")));
-						}
-					}
-				}
-				return tours;
-			}
-			protected void onPostExecute(ArrayList<TourItem> tourItems){
-				for(TourItem content:tourItems){
-					ti.add(content);
-				}
-				setUpTabListeners();
-				dismissProgressDialog();
-			}
-
-		}.execute();
-
+		getBeaconID();
+		Log.d("ASFTTTTXEETTEEEEEEE    ", "logggg");
+//		for(TourItem t:ti){
+//			Log.d("ASFTTTTXEETTEEEEEEE    ", t.getName());
+//			Log.d("AFFFFTEERECCEEEEE    ", t.toString());
+//		}
+		ti.add(new TourItem("randItem",1,"url"));
+		for(int i =0;i<ti.size();i++ ){
+			Log.d("Dooo innn baccroundddd" ,ti.get(i).getName());
+			Log.d("Dooo baccgroundddd    " , ti.get(i).toString());
+		}
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();
 		mAdapter = new TabsPagerAdapter(getSupportFragmentManager(),ti);
 
+		pleaseWork();
 		viewPager.setAdapter(mAdapter);
 		actionBar.setHomeButtonEnabled(true);
         actionBar.setIcon(R.drawable.touricon2);
@@ -120,10 +59,9 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 //        // Adding Tabs
-//		for (TourItem t : ti) {
-//			actionBar.addTab(actionBar.newTab().setText(t.getName())
-//					.setTabListener(this));
-//		}
+
+		Log.d("adddddd tabssss    ", "");
+
 
 		/**
 		 * on swiping the viewpager make respective tab selected
@@ -189,14 +127,73 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 	public void dismissProgressDialog(){
 		progressDialog.dismiss();
 	}
+	void pleaseWork(){
+		(new LoadContentData()).execute(Integer.toString(1));
+	}
 
-	public void setUpTabListeners(){
+	public void updateUI(){
 		for (TourItem t : ti) {
-			actionBar.addTab(actionBar.newTab().setText(t.getName())
-					.setTabListener(this));
+			actionBar.addTab(actionBar.newTab().setText(t.getName()).setTabListener(this));
+		}
+	}
+
+	class LoadContentData extends AsyncTask<String, Void, ArrayList<TourItem> > {
+
+		protected ArrayList<TourItem> doInBackground(String ... params){
+
+			List<ParseObject> objects =null;
+			ArrayList<TourItem> tours = new ArrayList<>();
+			ParseQuery<ParseObject> findAllBeaconContent = ParseQuery.getQuery("BeaconContent");
+
+			findAllBeaconContent.whereEqualTo("ID", Integer.parseInt(params[0]));
+			Log.d("LoadContentDataTask",(params[0]));
+			try {
+				objects=findAllBeaconContent.find();
+				Log.d("LoadContentDataTask", "Found " + objects.size() + " Items");
+			}
+			catch(Exception e){
+				Log.e("LoadContentDataTask", "Error In receiving object occurred: " + e.getLocalizedMessage());
+				e.printStackTrace();
+			}
+
+			if(objects!=null){
+				ParseObject temp=null;
+				for(ParseObject obj : objects){
+					try {
+						temp = findAllBeaconContent.get(obj.getObjectId());
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}
+					if(temp!=null) {
+						tours.add(new TourItem(temp.getString("Name"), temp.getInt("Type"), temp.getString("ContentLink")));
+					}
+				}
+			}
+			for(int i =0;i<tours.size();i++ ){
+				Log.d("LoadContentDataTask" , "Tour Name: "+ tours.get(i).getName());
+				Log.d("LoadContentDataTask", "Tour:" + tours.get(i).toString());
+			}
+
+			return tours;
+		}
+
+		protected void onPreExecute(){
+			showProgressDialog("Loading Content");
+		}
+
+		protected void onPostExecute(ArrayList<TourItem> tourItems){
+			Log.d("LoadContentDataTask", "From the DoInBackground We received: " + tourItems.size());
+
+				for(TourItem t:tourItems){
+					ti.add(t);
+					Log.d("LoadContentDataTask", "Name: " + t.getName() + " ToString: " + t.toString());
+				}
+			dismissProgressDialog();
+			updateUI();
+			//up
 		}
 	}
 }
 
-abstract  class LoadContentData extends AsyncTask<Void, Void, ArrayList<TourItem> > {
-}
+
