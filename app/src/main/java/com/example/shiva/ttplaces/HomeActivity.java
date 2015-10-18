@@ -1,6 +1,10 @@
 package com.example.shiva.ttplaces;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -35,15 +39,15 @@ import java.util.List;
 
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
-    private ListView listView;
+    public ListView listView;
     static final int REQUEST_RESOLVE_ERROR = 1001;
     private GoogleApiClient mGoogleApiClient;
     private boolean mResolvingError=false;
-    private static ArrayList<MyPlace> list;
-
+    public ArrayList<MyPlace> list = new ArrayList<>();
+    ProgressDialog progressDialog;
     private BeaconScannerService scannerService;
     private Context ctx;
-
+    public ArrayList<MyPlace> placeObjects;
     private SharedPreferences sharedPreferences;
     private static final String sharedPreferenceName="userAnswers";
     private static final String ANSWER1="ansKey1";
@@ -55,7 +59,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        list = new ArrayList<MyPlace>();
+        //list = new ArrayList<>();
 
         super.onCreate(savedInstanceState);
         ctx=this.getApplicationContext();
@@ -233,15 +237,46 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     }
 
     public void loadSuggestionPlaces() {
-        LoadPlacesData loadPlace = new LoadPlacesData();
-        List<MyPlace> placeObjects;
-        placeObjects = loadPlace.doInBackground();
-        placeFinderAlgorithm(placeObjects);
-        if(!placeObjects.isEmpty()) {
-            for (int i = 0; i < 5; i++) {
-                list.add(placeObjects.get(i));
+//        LoadPlacesData loadPlace = new LoadPlacesData();
+//        List<MyPlace> placeObjects;
+//        placeObjects = loadPlace.doInBackground();
+//        placeFinderAlgorithm(placeObjects);
+//        if(!placeObjects.isEmpty()) {
+//            for (int i = 0; i < 5; i++) {
+//                list.add(placeObjects.get(i));
+//            }
+//        }
+
+        LoadPlacesData lpd = new LoadPlacesData();
+
+        new LoadPlacesData(){
+
+            protected void onPreExecute(){
+                showProgressDialog("Loading Data");
             }
-        }
+
+            protected void onPostExecute(ArrayList<MyPlace> myPlaces){
+                placeObjects= myPlaces;
+
+                placeFinderAlgorithm(placeObjects);
+
+                if(!placeObjects.isEmpty()) {
+                    for (int i = 0; i < 5; i++) {
+                        MyPlace mp = placeObjects.get(i);
+                        list.add(mp);
+                       // Log.i("PRINTING", "Name:" + list.get(i).getName());
+                    }
+                }
+                dismissProgressDialog();
+            }
+        }.execute();
+
+//        populateList(placeObjects);
+//        for(int i=0;i<5;i++){
+//            MyPlace p = new MyPlace("Shiva","Dan","Area",new LatLng(999,999));
+//            list.add(p);
+//        }
+
     }
 
     public void placeFinderAlgorithm(List<MyPlace> placeObjects){
@@ -272,9 +307,19 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             }
         });
     }
+    public void showProgressDialog(String message){
+        progressDialog = new ProgressDialog(HomeActivity.this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void dismissProgressDialog(){
+        progressDialog.dismiss();
+    }
 }
 
-class LoadPlacesData extends AsyncTask<Void, List<ParseObject>, ArrayList<MyPlace>> {
+class LoadPlacesData extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
 
     protected ArrayList<MyPlace> doInBackground(Void... params){
         List<ParseObject> objects=null;

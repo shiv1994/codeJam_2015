@@ -3,8 +3,10 @@ package com.example.shiva.ttplaces;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,72 +30,22 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity{
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private ArrayList<MyPlace> places;
-    private ArrayList<String> placeIds;
     private LatLng myLoc;
     private boolean locSet = false;
-    String classToPull = null;
     private CameraUpdate myLocation;
     ProgressDialog progressDialog;
+    ArrayList<MyPlace> placeObjects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        classToPull="Place";
-        runAlertDialog();
-        places = new ArrayList<>();
-        placeIds = new ArrayList<>();
-//        loadTestPlaces();
+//      runAlertDialog();
         setUpMapIfNeeded();
+        loadPlaces();
     }
 
-    private void loadTestPlaces(){
 
-        showProgressDialog("Getting Data");
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(classToPull);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    Log.i("Objects Retrieved", "" + objects);
-                    int size = objects.size();
-                    for(int count=0; count <size; count++){
-                        String id = objects.get(count).getObjectId();
-                        placeIds.add(id);
-                    }
-                    loadIndividualPlace();
-                } else {
-                    dismissProgressDialog();
-                }
-            }
-        });
-    }
-
-    public void loadIndividualPlace(){
-        for(int i=0 ; i<placeIds.size(); i++){
-            ParseQuery<ParseObject> query2 = ParseQuery.getQuery(classToPull);
-            query2.getInBackground(placeIds.get(i), new GetCallback<ParseObject>() {
-                public void done(ParseObject object, ParseException e) {
-                    if (e == null) {
-
-                        double latitude = object.getParseGeoPoint("locationLatLong").getLatitude();
-                        double longitude = object.getParseGeoPoint("locationLatLong").getLongitude();
-                        String name = object.getString("Name");
-                        String area = object.getString("Area");
-
-                        //MyPlace placeToAdd = new MyPlace(name, "meh" , area , new LatLng(latitude, longitude) );
-                        //places.add(placeToAdd);
-                        dismissProgressDialog();
-                        //We would like to show the places once the pulling from the internet is complete.
-                        showMarkers(places);
-                    }
-                    else {
-                        dismissProgressDialog();
-                    }
-                }
-            });
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -119,7 +71,7 @@ public class MapsActivity extends FragmentActivity{
             myLoc = new LatLng(location.getLatitude(), location.getLongitude());
             if(!locSet){
                 if (mMap != null) {
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLoc, 10));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLoc, 8));
                 }
                 locSet = true;
                 myLocationChangeListener = null;
@@ -135,7 +87,7 @@ public class MapsActivity extends FragmentActivity{
     private void setUpMap() {
         mMap.setMyLocationEnabled(true);
        // mMap.setOnMyLocationChangeListener(myLocationChangeListener);
-        //showMarkers(places)
+//        showMarkers(places);
         setDefaultLocationAndZoom();
         mMap.animateCamera(myLocation);
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -168,23 +120,91 @@ public class MapsActivity extends FragmentActivity{
         progressDialog.dismiss();
     }
 
-    public void runAlertDialog(){
-        AlertDialog alert = new AlertDialog.Builder(MapsActivity.this).create();
-        alert.setTitle("Do You Want To View Beacons Or Places?");
-        alert.setMessage("Select A Button");
-        alert.setButton(Dialog.BUTTON_POSITIVE, "View Beacons", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                classToPull="Beacon";
-                loadTestPlaces();
+//    public void runAlertDialog(){
+//        AlertDialog alert = new AlertDialog.Builder(MapsActivity.this).create();
+//        alert.setTitle("Do You Want To View Beacons Or Places?");
+//        alert.setMessage("Select A Button");
+//        alert.setButton(Dialog.BUTTON_POSITIVE, "View Beacons", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int which) {
+//                classToPull = "Beacon";
+//                loadTestPlaces();
+//            }
+//        });
+//        alert.setButton(Dialog.BUTTON_NEGATIVE, "View Places", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int which) {
+//                classToPull = "Place";
+//                loadTestPlaces();
+//            }
+//        });
+//        alert.show();
+//    }
+
+    private void loadPlaces() {
+
+        new LoadPlacesData2(){
+            protected void onPreExecute(){
+                showProgressDialog("Loading Data");
             }
-        });
-        alert.setButton(Dialog.BUTTON_NEGATIVE, "View Places", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                classToPull="Place";
-                loadTestPlaces();
+            protected void onPostExecute(ArrayList<MyPlace> myPlaces){
+                placeObjects= myPlaces;
+                dismissProgressDialog();
+                AlertDialog alert = new AlertDialog.Builder(MapsActivity.this).create();
+                alert.setTitle("Important Note:");
+                alert.setMessage("Places are highlighted in Red and Beacons in Blue" + "\nPress VIEW PLACES To Continue");
+                alert.setButton(Dialog.BUTTON_NEGATIVE, "View Places", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        showPlaces();
+                    }
+                });
+                alert.show();
             }
-        });
-        alert.show();
-        }
+        }.execute();
 
     }
+
+    public void showPlaces(){
+        if(!placeObjects.isEmpty())
+            showMarkers(placeObjects);
+    }
+
+}
+
+
+class LoadPlacesData2 extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
+
+    protected ArrayList<MyPlace> doInBackground(Void... params){
+        List<ParseObject> objects=null;
+        ArrayList<MyPlace> places = new ArrayList<MyPlace>();
+
+        ParseObject temp=null;
+        ParseQuery<ParseObject> findAllPlaceObjectsQuery = ParseQuery.getQuery("Place");
+        try {
+            objects = findAllPlaceObjectsQuery.find();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        if(objects!=null){
+            for (ParseObject obj : objects){
+                try {
+                    temp = findAllPlaceObjectsQuery.get(obj.getObjectId());
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                String name = obj.getString("Name");
+                String area = obj.getString("Area");
+                int recreationalAns = obj.getInt("Recreation");
+                int educationalAns = obj.getInt("Educational");
+                int religiousAns = obj.getInt("Religious");
+                int remoteAns = obj.getInt("Remote");
+                double lat = temp.getParseGeoPoint("locationLatLong").getLatitude();
+                double lng = temp.getParseGeoPoint("locationLatLong").getLongitude();
+
+                places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns));
+            }
+        }
+        return places;
+    }
+}
