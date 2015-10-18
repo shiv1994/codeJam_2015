@@ -1,10 +1,8 @@
 package com.example.shiva.ttplaces;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -38,17 +36,16 @@ import java.util.Comparator;
 import java.util.List;
 
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
-
-    public ListView listView;
+    ProgressDialog progressDialog;
+    private ListView listView;
     static final int REQUEST_RESOLVE_ERROR = 1001;
     private GoogleApiClient mGoogleApiClient;
     private boolean mResolvingError=false;
-    public ArrayList<MyPlace> list = new ArrayList<>();
-    public static ArrayList<MyPlace> plist= new ArrayList<>();
-    ProgressDialog progressDialog;
+    private static ArrayList<MyPlace> list;
+
     private BeaconScannerService scannerService;
     private Context ctx;
-    public ArrayList<MyPlace> placeObjects;
+
     private SharedPreferences sharedPreferences;
     private static final String sharedPreferenceName="userAnswers";
     private static final String ANSWER1="ansKey1";
@@ -60,9 +57,9 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        list = new ArrayList<MyPlace>();
 
+        super.onCreate(savedInstanceState);
         ctx=this.getApplicationContext();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
@@ -71,10 +68,11 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                 .build();
         mGoogleApiClient.connect();
 
+        setContentView(R.layout.activity_home);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         listView = (ListView) findViewById(R.id.lv_suggestions);
         checkPrefsSetSuggest();
-        myAdapter adapter = new myAdapter(this,HomeActivity.plist);
+        myAdapter adapter = new myAdapter(this,list);
         listView.setAdapter(adapter);
 
     }
@@ -123,11 +121,11 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     }
 
     class myAdapter extends BaseAdapter {
-        ArrayList<MyPlace> list= new ArrayList<>();
+        ArrayList<MyPlace> list;
         Context ctx;
         myAdapter(Context context,ArrayList<MyPlace> list) {
             ctx=context;
-            this.list.addAll(list);
+            this.list=list;
         }
 
         @Override
@@ -164,6 +162,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
             if(temp.getArea()==null) area.setText("Area");
             else   area.setText(temp.getArea());
+
+
 
             return convertView;
         }
@@ -235,28 +235,17 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     }
 
     public void loadSuggestionPlaces() {
-
-        new LoadPlacesData(){
-
-            protected void onPreExecute(){
-                showProgressDialog("Loading Data");
+        LoadPlacesData loadPlace = new LoadPlacesData(HomeActivity.this){};
+        List<MyPlace> placeObjects;
+        loadPlace.onPreExecute();
+        placeObjects = loadPlace.doInBackground();
+        placeFinderAlgorithm(placeObjects);
+        if(!placeObjects.isEmpty()) {
+            for (int i = 0; i < 5; i++) {
+                list.add(placeObjects.get(i));
             }
-
-            protected void onPostExecute(ArrayList<MyPlace> myPlaces){
-                placeObjects= myPlaces;
-
-                placeFinderAlgorithm(placeObjects);
-
-                if(!placeObjects.isEmpty()) {
-                    for (int i = 0; i < 5; i++) {
-                        list.add(placeObjects.get(i));
-                    }
-                    plist.clear();
-                    plist.addAll(list);
-                }
-                dismissProgressDialog();
-            }
-        }.execute();
+        }
+        loadPlace.onPostExecute(list);
     }
 
     public void placeFinderAlgorithm(List<MyPlace> placeObjects){
@@ -287,22 +276,31 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             }
         });
     }
-    public void showProgressDialog(String message){
-        progressDialog = new ProgressDialog(HomeActivity.this);
-        progressDialog.setMessage(message);
+
+//    public void showProgressDialog(String message){
+//        progressDialog = new ProgressDialog(HomeActivity.this);
+//        progressDialog.setMessage(message);
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+//    }
+//
+//    public void dismissProgressDialog(){
+//        progressDialog.dismiss();
+//    }
+}
+
+class LoadPlacesData extends AsyncTask<Void, List<ParseObject>, ArrayList<MyPlace>> {
+    public  ProgressDialog progressDialog;
+
+    public LoadPlacesData(Activity act){
+        progressDialog=new ProgressDialog(act);
+    }
+
+    protected void onPreExecute(){
+        progressDialog.setMessage("Loading Suggestions");
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
-
-    public void dismissProgressDialog(){
-        progressDialog.dismiss();
-    }
-    public void onBackPressed(){
-        this.finish();
-    }
-}
-
-class LoadPlacesData extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
 
     protected ArrayList<MyPlace> doInBackground(Void... params){
         List<ParseObject> objects=null;
@@ -338,5 +336,9 @@ class LoadPlacesData extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
             }
         }
         return places;
+    }
+
+    protected void onPostExecute(ArrayList<MyPlace> places){
+        progressDialog.dismiss();
     }
 }
