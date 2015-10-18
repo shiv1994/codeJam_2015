@@ -7,6 +7,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -36,34 +38,34 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tour);
 		//TEST TEXT CODE
-//        String txts="Mission Statement:\n\n" +
-//                "        To collect, preserve, document and display the fauna of Trinidad & Tobago\n\n\n" +
-//                "The Collections:\n\n" +
-//                "The collections consist of a wide range of specimens from all over Trinidad & Tobago and the wider Caribbean and South American region. There are specimens from all the major animal groups and some geological and archaeological objects as well.\n\n\n" +
-//
-//                "The Beginnings:\n\n" +
-//                "The collections held by the Zoology Museum date back to the 1920s. Before The University of the West Indies (UWI) existed the St. Augustine campus was home to the West Indies Agricultural College which in 1924 became the Imperial College of Tropical Agriculture (ICTA).\n" +
-//                "The early collection was basically a repository for researchers investigating animal species of agricultural importance and as a resource for teaching. Insects formed the bulk of the specimens and consisted of pest and beneficial species associated with the various crops under study – cocoa, maize, coffee, cotton, tobacco, citrus, pineapple and banana to name a few.\n" +
-//                "Many of these were collected by the Professor of Entomology and Commissioner of Agriculture Henry Arthur Ballou, a prolific author on many aspects of entomology throughout the Caribbean and beyond.\n";
-//
-//        // Initialization
-//        TourItem temp=new TourItem("History",2,txts);
-//        ti.add(temp);
-//
-//        temp=new TourItem("Random Online Url",1,"http://goo.gl/IWpKMb");
-//        ti.add(temp);
-//
-//        temp=new TourItem("Batman vs Superman",3,"https://youtu.be/bha24P9uw-E?t=4");
-//        ti.add(temp);
-//
-//        temp=new TourItem("No img link",1,null);
-//        ti.add(temp);
-//
-//        temp=new TourItem("Audio",0,null);
-//        ti.add(temp);
-//
-//        temp=new TourItem("no Vid link",3,null);
-//        ti.add(temp);
+        String txts="Mission Statement:\n\n" +
+                "        To collect, preserve, document and display the fauna of Trinidad & Tobago\n\n\n" +
+                "The Collections:\n\n" +
+                "The collections consist of a wide range of specimens from all over Trinidad & Tobago and the wider Caribbean and South American region. There are specimens from all the major animal groups and some geological and archaeological objects as well.\n\n\n" +
+
+                "The Beginnings:\n\n" +
+                "The collections held by the Zoology Museum date back to the 1920s. Before The University of the West Indies (UWI) existed the St. Augustine campus was home to the West Indies Agricultural College which in 1924 became the Imperial College of Tropical Agriculture (ICTA).\n" +
+                "The early collection was basically a repository for researchers investigating animal species of agricultural importance and as a resource for teaching. Insects formed the bulk of the specimens and consisted of pest and beneficial species associated with the various crops under study – cocoa, maize, coffee, cotton, tobacco, citrus, pineapple and banana to name a few.\n" +
+                "Many of these were collected by the Professor of Entomology and Commissioner of Agriculture Henry Arthur Ballou, a prolific author on many aspects of entomology throughout the Caribbean and beyond.\n";
+
+        // Initialization
+        TourItem temp=new TourItem("History",2,txts);
+        ti.add(temp);
+
+        temp=new TourItem("Random Online Url",1,"http://goo.gl/IWpKMb");
+        ti.add(temp);
+
+        temp=new TourItem("Batman vs Superman",3,"h-ttps://youtu.be/bha24P9uw-E?t=4");
+        ti.add(temp);
+
+        temp=new TourItem("No img link",1,null);
+        ti.add(temp);
+
+        temp=new TourItem("Audio",0,null);
+        ti.add(temp);
+
+        temp=new TourItem("no Vid link",3,null);
+        ti.add(temp);
 
 		new LoadContentData() {
 			protected void onPreExecute(){

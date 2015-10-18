@@ -1,26 +1,25 @@
-<RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context="com.example.shiva.ttplaces.HomeActivity"
-            android:background="#ffffff">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+   android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.shiva.ttplaces.HomeActivity"
+    android:background="#ffffff">
 
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:layout_alignParentBottom="true"
-                android:id="@+id/relativeLayout">
+                android:layout_height="400dp"
+                android:id="@+id/relativeLayout"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#00BCD4"
                     android:text="@string/suggestions"
                     android:id="@+id/tv_suggestions"
                     android:layout_alignParentTop="true"
@@ -31,28 +30,37 @@
 
                     android:id="@+id/lv_suggestions"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="300dp"
                     android:layout_below="@+id/tv_suggestions"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true" />
+
             </RelativeLayout>
 
     <Button
+        android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stop Service"
-        android:onClick="stopService"
-        android:id="@+id/button5"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="58dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@drawable/btn_design2"
         android:text="Launch Tour"
         android:onClick="runTours"
-        android:id="@+id/button4"
-        android:layout_below="@+id/button5"
-        android:layout_alignStart="@+id/button5"
-        android:layout_marginTop="32dp" />
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true" />
+
+    <!--<Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:text="Stop Service"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#80DEEA"
+        android:clickable="true"
+        android:onClick="stopService"/>-->
+
+
 
 </RelativeLayout>

@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textStyle="bold"
-        android:text="Click to View Video"
+        android:text="Click to view Video"
         android:textSize="30dp"
+        android:textColor="#00BCD4"
         android:clickable="true"
         android:layout_centerInParent="true"/>
 

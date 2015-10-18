@@ -20,6 +20,7 @@
             android:layout_marginTop="10dp"
             android:gravity="start"
             android:text="@string/title"
+            android:textColor="#00BCD4"
             android:textAlignment="center"
             android:textSize="20sp"/>
 
@@ -54,6 +55,7 @@
             android:gravity="start"
             android:text="@string/subtitle"
             android:textAlignment="center"
+            android:textColor="#00BCD4"
             android:textSize="15sp"/>
 
         <TextView
@@ -143,12 +145,12 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/answer5"
             android:layout_marginTop="60dp"
+            android:text="@string/btn1"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#4CB6E0"
+            android:textColor="#80DEEA"
             android:clickable="true"
-            android:onClick="notNow"
-            android:text="@string/btn1"/>
+            android:onClick="notNow"/>
 
         <Button
             android:id="@+id/button2"
@@ -158,9 +160,10 @@
             android:layout_below="@+id/answer5"
             android:layout_marginTop="40dp"
             android:background="@drawable/btn_design2"
+            android:text="@string/btn"
             android:clickable="true"
-            android:onClick="finish"
-            android:text="@string/btn"/>
+            android:onClick="finish"/>
+
     </RelativeLayout>
 </ScrollView>
 
