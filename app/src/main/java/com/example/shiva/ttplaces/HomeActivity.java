@@ -44,6 +44,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     private GoogleApiClient mGoogleApiClient;
     private boolean mResolvingError=false;
     public ArrayList<MyPlace> list = new ArrayList<>();
+    public static ArrayList<MyPlace> plist= new ArrayList<>();
     ProgressDialog progressDialog;
     private BeaconScannerService scannerService;
     private Context ctx;
@@ -59,9 +60,9 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //list = new ArrayList<>();
-
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
         ctx=this.getApplicationContext();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
@@ -70,11 +71,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                 .build();
         mGoogleApiClient.connect();
 
-        setContentView(R.layout.activity_home);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         listView = (ListView) findViewById(R.id.lv_suggestions);
         checkPrefsSetSuggest();
-        myAdapter adapter = new myAdapter(this,list);
+        myAdapter adapter = new myAdapter(this,HomeActivity.plist);
         listView.setAdapter(adapter);
 
     }
@@ -123,11 +123,11 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     }
 
     class myAdapter extends BaseAdapter {
-        ArrayList<MyPlace> list;
+        ArrayList<MyPlace> list= new ArrayList<>();
         Context ctx;
         myAdapter(Context context,ArrayList<MyPlace> list) {
             ctx=context;
-            this.list=list;
+            this.list.addAll(list);
         }
 
         @Override
@@ -164,8 +164,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
             if(temp.getArea()==null) area.setText("Area");
             else   area.setText(temp.getArea());
-
-
 
             return convertView;
         }
@@ -237,17 +235,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     }
 
     public void loadSuggestionPlaces() {
-//        LoadPlacesData loadPlace = new LoadPlacesData();
-//        List<MyPlace> placeObjects;
-//        placeObjects = loadPlace.doInBackground();
-//        placeFinderAlgorithm(placeObjects);
-//        if(!placeObjects.isEmpty()) {
-//            for (int i = 0; i < 5; i++) {
-//                list.add(placeObjects.get(i));
-//            }
-//        }
-
-        LoadPlacesData lpd = new LoadPlacesData();
 
         new LoadPlacesData(){
 
@@ -262,21 +249,14 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
                 if(!placeObjects.isEmpty()) {
                     for (int i = 0; i < 5; i++) {
-                        MyPlace mp = placeObjects.get(i);
-                        list.add(mp);
-                       // Log.i("PRINTING", "Name:" + list.get(i).getName());
+                        list.add(placeObjects.get(i));
                     }
+                    plist.clear();
+                    plist.addAll(list);
                 }
                 dismissProgressDialog();
             }
         }.execute();
-
-//        populateList(placeObjects);
-//        for(int i=0;i<5;i++){
-//            MyPlace p = new MyPlace("Shiva","Dan","Area",new LatLng(999,999));
-//            list.add(p);
-//        }
-
     }
 
     public void placeFinderAlgorithm(List<MyPlace> placeObjects){
@@ -316,6 +296,9 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     public void dismissProgressDialog(){
         progressDialog.dismiss();
+    }
+    public void onBackPressed(){
+        this.finish();
     }
 }
 

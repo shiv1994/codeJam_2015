@@ -29,7 +29,6 @@
     <string name="question4">Religious</string>
     <string name="question5">Remote</string>
 
-
     <string name="title">Help us suggest tours for you..</string>
     <string name="btn">FINISH</string>
     <string name="btn1">NOT NOW</string>
@@ -40,5 +39,6 @@
     <string name="title_activity_interactive_beacon">InteractiveBeacon</string>
     <string name="title_activity_tour"> INTERACTIVE TOUR</string>
     <string name="histTitle">Historical Content</string>
+    <string name="btn_audio">Play/Pause</string>
 
 </resources>

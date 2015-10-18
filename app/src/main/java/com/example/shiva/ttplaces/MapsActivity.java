@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
@@ -167,6 +168,12 @@ public class MapsActivity extends FragmentActivity{
             showMarkers(placeObjects);
     }
 
+    public void onBackPressed(){
+        Intent i = new Intent(this,HomeActivity.class);
+        startActivity(i);
+        this.finish();
+    }
+
 }
 
 
@@ -206,5 +213,6 @@ class LoadPlacesData2 extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
             }
         }
         return places;
+
     }
 }

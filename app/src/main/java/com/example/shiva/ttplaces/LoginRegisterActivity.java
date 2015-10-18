@@ -182,7 +182,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
             i = new Intent(this, SuggestionActivity.class);
         }
         startActivity(i);
-        //this.finish();
+        this.finish();
 
     }
 

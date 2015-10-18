@@ -35,11 +35,13 @@ public class ImageFragment extends Fragment {
             System.out.println("Url is invalid");
         }
         else if(bp == null) {
+
             new LoadImage() {
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
                 }
+
                 protected void onPostExecute(Bitmap image) {
                     bp = image;
                     if (bp != null) {
@@ -53,6 +55,7 @@ public class ImageFragment extends Fragment {
         }
         else{
             iv.setImageBitmap(bp);
+
         }
 
         return rootView;
