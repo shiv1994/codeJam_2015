@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 	ArrayList<TourItem> tours = new ArrayList<>();
+
 	public TabsPagerAdapter(FragmentManager fm,ArrayList<TourItem> ti) {
 		super(fm);
 		tours=ti;
@@ -28,14 +29,14 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             return audio;
         }
 		else if(item.type==1) {
-            ImageFragment image =new ImageFragment();
-            image.setArguments(b);
-            return image;
-        }
-		else if(item.type==2) {
             TextFragment text = new TextFragment();
             text.setArguments(b);
             return text ;
+        }
+        else if(item.type==2) {
+            ImageFragment image =new ImageFragment();
+            image.setArguments(b);
+            return image;
         }
 		else if(item.type==3) {
             VideoFragment video = new VideoFragment();

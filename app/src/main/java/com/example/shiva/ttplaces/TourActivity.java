@@ -31,41 +31,19 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 	public ArrayList<TourItem> ti = new ArrayList<>();
 	public int beaconId;
 	ProgressDialog progressDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tour);
 
 		getBeaconID();
-		Log.d("ASFTTTTXEETTEEEEEEE    ", "logggg");
-//		for(TourItem t:ti){
-//			Log.d("ASFTTTTXEETTEEEEEEE    ", t.getName());
-//			Log.d("AFFFFTEERECCEEEEE    ", t.toString());
-//		}
-		ti.add(new TourItem("randItem",1,"url"));
-		for(int i =0;i<ti.size();i++ ){
-			Log.d("Dooo innn baccroundddd" ,ti.get(i).getName());
-			Log.d("Dooo baccgroundddd    " , ti.get(i).toString());
-		}
+
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();
-		mAdapter = new TabsPagerAdapter(getSupportFragmentManager(),ti);
 
-		pleaseWork();
-		viewPager.setAdapter(mAdapter);
-		actionBar.setHomeButtonEnabled(true);
-        actionBar.setIcon(R.drawable.touricon2);
-        actionBar.setTitle("LEAVE TOUR");
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        getItemContent();
 
-//        // Adding Tabs
-
-		Log.d("adddddd tabssss    ", "");
-
-
-		/**
-		 * on swiping the viewpager make respective tab selected
-		 * */
 		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
 			@Override
@@ -127,14 +105,21 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 	public void dismissProgressDialog(){
 		progressDialog.dismiss();
 	}
-	void pleaseWork(){
-		(new LoadContentData()).execute(Integer.toString(1));
+	void getItemContent(){
+		(new LoadContentData()).execute(Integer.toString(1));// <------ FOR TESTING ONLY ------- remove after testing --->>
+		//(new LoadContentData()).execute(Integer.toString(beaconId));
 	}
 
 	public void updateUI(){
 		for (TourItem t : ti) {
 			actionBar.addTab(actionBar.newTab().setText(t.getName()).setTabListener(this));
 		}
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(),ti);
+		viewPager.setAdapter(mAdapter);
+		actionBar.setHomeButtonEnabled(true);
+        actionBar.setIcon(R.drawable.touricon2);
+        actionBar.setTitle("LEAVE TOUR");
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	}
 
 	class LoadContentData extends AsyncTask<String, Void, ArrayList<TourItem> > {
@@ -146,13 +131,13 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 			ParseQuery<ParseObject> findAllBeaconContent = ParseQuery.getQuery("BeaconContent");
 
 			findAllBeaconContent.whereEqualTo("ID", Integer.parseInt(params[0]));
-			Log.d("LoadContentDataTask",(params[0]));
+			//Log.d("LoadContentDataTask",(params[0]));
 			try {
 				objects=findAllBeaconContent.find();
-				Log.d("LoadContentDataTask", "Found " + objects.size() + " Items");
+				//Log.d("LoadContentDataTask", "Found " + objects.size() + " Items");
 			}
 			catch(Exception e){
-				Log.e("LoadContentDataTask", "Error In receiving object occurred: " + e.getLocalizedMessage());
+				//Log.e("LoadContentDataTask", "Error In receiving object occurred: " + e.getLocalizedMessage());
 				e.printStackTrace();
 			}
 
@@ -170,28 +155,21 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 					}
 				}
 			}
-			for(int i =0;i<tours.size();i++ ){
-				Log.d("LoadContentDataTask" , "Tour Name: "+ tours.get(i).getName());
-				Log.d("LoadContentDataTask", "Tour:" + tours.get(i).toString());
-			}
-
 			return tours;
 		}
 
 		protected void onPreExecute(){
 			showProgressDialog("Loading Content");
 		}
-
 		protected void onPostExecute(ArrayList<TourItem> tourItems){
-			Log.d("LoadContentDataTask", "From the DoInBackground We received: " + tourItems.size());
+			//Log.d("LoadContentDataTask", "From the DoInBackground We received: " + tourItems.size());
 
 				for(TourItem t:tourItems){
 					ti.add(t);
-					Log.d("LoadContentDataTask", "Name: " + t.getName() + " ToString: " + t.toString());
+					//Log.d("LoadContentDataTask", "Name: " + t.getName() + " ToString: " + t.toString());
 				}
 			dismissProgressDialog();
 			updateUI();
-			//up
 		}
 	}
 }
