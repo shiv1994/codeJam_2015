@@ -1,15 +1,11 @@
 package com.example.shiva.ttplaces;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -192,7 +188,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
         protected ArrayList<MyPlace> doInBackground(Void... params){
             List<ParseObject> objects=null;
-            ArrayList<MyPlace> places = new ArrayList<MyPlace>();
+            ArrayList<MyPlace> places = new ArrayList<>();
+
             ParseObject temp=null;
             ParseQuery<ParseObject> findAllPlaceObjectsQuery = ParseQuery.getQuery("Place");
             try {
@@ -356,7 +353,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     public void showProgressDialog(String message){
         progressDialog = new ProgressDialog(HomeActivity.this);
-        progressDialog.setMessage(message);
+           progressDialog.setMessage(message);
         progressDialog.setCancelable(false);
         progressDialog.show();
     }

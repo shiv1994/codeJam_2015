@@ -127,25 +127,25 @@ public class SuggestionActivity extends NavDrawer {
 
         //spinners for each of the questions
 
-        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision1);
+        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(this, R.layout.spinner_item,decision1);
         dataAdapter1.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         answer1.setAdapter(dataAdapter1);
 
 
-        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision2);
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<>(this, R.layout.spinner_item,decision2);
         dataAdapter2.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         answer2.setAdapter(dataAdapter2);
 
 
-        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision3);
+        ArrayAdapter<String> dataAdapter3 = new ArrayAdapter<>(this, R.layout.spinner_item,decision3);
         dataAdapter3.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         answer3.setAdapter(dataAdapter3);
 
-        ArrayAdapter<String> dataAdapter4 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision4);
+        ArrayAdapter<String> dataAdapter4 = new ArrayAdapter<>(this,R.layout.spinner_item,decision4);
         dataAdapter4.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         answer4.setAdapter(dataAdapter4);
 
-        ArrayAdapter<String> dataAdapter5 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,decision5);
+        ArrayAdapter<String> dataAdapter5 = new ArrayAdapter<>(this, R.layout.spinner_item,decision5);
         dataAdapter5.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         answer5.setAdapter(dataAdapter5);
 
