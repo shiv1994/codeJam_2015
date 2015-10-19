@@ -23,11 +23,12 @@ import java.net.URLConnection;
 
 public class TextFragment extends Fragment {
 
-	String url=null,text;
+	String link=null,text;
 	Bundle bundle;
     View rootView;
     TextView txt;
     ProgressDialog progressDialog;
+    URL url;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,20 +36,20 @@ public class TextFragment extends Fragment {
 
         bundle=getArguments();
         if(bundle!=null) {
-            url = bundle.getString("url");
+            link = bundle.getString("url");
         }
 
 		rootView = inflater.inflate(R.layout.fragment_text, container, false);
 		txt=(TextView)rootView.findViewById(R.id.Content);
         txt.setTextColor(Color.parseColor("#000000"));
 
-        if(url == null || url.trim().equals("")) {
+        if(link == null || link.trim().equals("")) {
             text="Content Currently Unavailable";
             txt.setText(text);
             System.out.println("Url is invalid");
         }
         else {//Extract text information from url to text file and store in string text   <----------------------------
-            (new LoadText()).execute(url);
+            (new LoadText()).execute(link);
         }
 		return rootView;
 	}
@@ -67,15 +68,13 @@ public class TextFragment extends Fragment {
 
         protected String doInBackground(String... args) {
             StringBuilder content = new StringBuilder(5000);
-
-            URL url = null;
+            String error="Sorry this text is Unavailable";
             try {
-                url = new URL("http://mas-health.com/ttplaces/zoology.txt");
-
+                url=new URL("link");
                 // Get the response
                 BufferedReader buffer = new BufferedReader(new InputStreamReader(url.openStream()));
 
-                String s = "";
+                String s="";
                 while ((s = buffer.readLine()) != null) {
                     content.append(s).append("\n");
                 }
@@ -85,10 +84,11 @@ public class TextFragment extends Fragment {
 
             catch (MalformedURLException e) {
                 e.printStackTrace();
+                return error;
             }
-
             catch (IOException e) {
                 e.printStackTrace();
+                return error;
             }
 
             return content.toString();
