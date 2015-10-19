@@ -1,5 +1,6 @@
 package com.example.shiva.ttplaces.pojo;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,10 +26,10 @@ public class TextFragment extends Fragment {
     View rootView;
     TextView txt;
     URL url;
+    public ProgressBar progressBar;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         bundle=getArguments();
         if(bundle!=null) {
@@ -35,6 +37,8 @@ public class TextFragment extends Fragment {
         }
 
 		rootView = inflater.inflate(R.layout.fragment_text, container, false);
+        progressBar =(ProgressBar)rootView.findViewById(R.id.progressBar2);
+        progressBar.setVisibility(View.INVISIBLE);
 		txt=(TextView)rootView.findViewById(R.id.Content);
         txt.setTextColor(Color.parseColor("#000000"));
 
@@ -54,10 +58,12 @@ public class TextFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         protected void onPostExecute(String text) {
             updateUI(text);
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
         protected String doInBackground(String... args) {
@@ -87,6 +93,7 @@ public class TextFragment extends Fragment {
 
             return content.toString();
         }
+
     }
 
     public void updateUI(String text){

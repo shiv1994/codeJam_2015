@@ -1,5 +1,6 @@
 package com.example.shiva.ttplaces.pojo;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+
 import com.example.shiva.ttplaces.R;
 import java.io.InputStream;
 import java.net.URL;
@@ -17,8 +20,9 @@ public class ImageFragment extends Fragment {
 
     public Bitmap bp=null;
     public ImageView iv=null;
-    String url=null;
-    Bundle bundle;
+    public String url=null;
+    public Bundle bundle;
+    public ProgressBar progressBar;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -29,6 +33,8 @@ public class ImageFragment extends Fragment {
         }
 
 		View rootView = inflater.inflate(R.layout.fragment_image, container, false);
+        progressBar =(ProgressBar)rootView.findViewById(R.id.progressBar1);
+        progressBar.setVisibility(View.INVISIBLE);
         iv = (ImageView)rootView.findViewById(R.id.tourImage);
 
         if(url == null || url.trim().equals("")) {
@@ -40,7 +46,9 @@ public class ImageFragment extends Fragment {
         }
         else{
             iv.setImageBitmap(bp);
+
         }
+
         return rootView;
     }
 
@@ -49,6 +57,7 @@ public class ImageFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         protected void onPostExecute(Bitmap image) {
@@ -59,6 +68,7 @@ public class ImageFragment extends Fragment {
             else {
                 System.out.println("error acquiring image");
             }
+            progressBar.setVisibility(View.INVISIBLE);
         }
         protected Bitmap doInBackground(String... args) {
             Bitmap bp=null;
@@ -71,6 +81,7 @@ public class ImageFragment extends Fragment {
             return bp;
         }
     }
+
 }
 
 
