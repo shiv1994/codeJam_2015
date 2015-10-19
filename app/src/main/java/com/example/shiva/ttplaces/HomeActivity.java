@@ -72,10 +72,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
         setContentView(R.layout.activity_home);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
-        listView = (ListView) findViewById(R.id.lv_suggestions);
+//        listView = (ListView) findViewById(R.id.lv_suggestions);
+//        myAdapter adapter = new myAdapter(this,list);
+//        listView.setAdapter(adapter);
         checkPrefsSetSuggest();
-        myAdapter adapter = new myAdapter(this,list);
-        listView.setAdapter(adapter);
 
     }
 
@@ -171,6 +171,68 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         }
     }
 
+    public void loadSuggestionPlaces() {
+        new LoadPlacesData().execute();
+
+    }
+
+    class LoadPlacesData extends AsyncTask<Void, List<ParseObject>, ArrayList<MyPlace>> {
+
+        protected void onPreExecute(){
+            showProgressDialog("Determining Suggestions");
+        }
+
+        protected ArrayList<MyPlace> doInBackground(Void... params){
+            List<ParseObject> objects=null;
+            ArrayList<MyPlace> places = new ArrayList<MyPlace>();
+
+            ParseObject temp=null;
+            ParseQuery<ParseObject> findAllPlaceObjectsQuery = ParseQuery.getQuery("Place");
+            try {
+                objects = findAllPlaceObjectsQuery.find();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            if(objects!=null){
+                for (ParseObject obj : objects){
+                    try {
+                        temp = findAllPlaceObjectsQuery.get(obj.getObjectId());
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                    String name = obj.getString("Name");
+                    String area = obj.getString("Area");
+                    int recreationalAns = obj.getInt("Recreation");
+                    int educationalAns = obj.getInt("Educational");
+                    int religiousAns = obj.getInt("Religious");
+                    int remoteAns = obj.getInt("Remote");
+                    double lat = temp.getParseGeoPoint("locationLatLong").getLatitude();
+                    double lng = temp.getParseGeoPoint("locationLatLong").getLongitude();
+
+                    places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns));
+                }
+            }
+            return places;
+        }
+
+        protected void onPostExecute(ArrayList<MyPlace> placeObjects){
+            if(placeObjects!=null) {
+                placeFinderAlgorithm(placeObjects);
+                for (int i = 0; i < 5; i++) {
+                    list.add(placeObjects.get(i));
+                    Log.i("Inserting Into List",""+placeObjects.get(i).getName());
+                }
+            }
+            listView = (ListView) findViewById(R.id.lv_suggestions);
+            myAdapter adapter = new myAdapter(ctx,list);
+            listView.setAdapter(adapter);
+            progressDialog.dismiss();
+        }
+    }
+
     private class ErrorCheckingCallback implements ResultCallback<Status> {
         private final String method;
         private final Runnable runOnSuccess;
@@ -222,7 +284,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     public void stopService(View view) {
         scannerService.stopSubscription();
         stopService(new Intent(getBaseContext(), HomeActivity.class));
-
     }
 
     public void checkPrefsSetSuggest(){
@@ -234,20 +295,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         else{
             loadSuggestionPlaces();
         }
-    }
-
-    public void loadSuggestionPlaces() {
-        LoadPlacesData loadPlace = new LoadPlacesData(HomeActivity.this){};
-        List<MyPlace> placeObjects;
-        loadPlace.onPreExecute();
-        placeObjects = loadPlace.doInBackground();
-        placeFinderAlgorithm(placeObjects);
-        if(!placeObjects.isEmpty()) {
-            for (int i = 0; i < 5; i++) {
-                list.add(placeObjects.get(i));
-            }
-        }
-        loadPlace.onPostExecute(list);
     }
 
     public void placeFinderAlgorithm(List<MyPlace> placeObjects){
@@ -279,68 +326,18 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         });
     }
 
-//    public void showProgressDialog(String message){
-//        progressDialog = new ProgressDialog(HomeActivity.this);
-//        progressDialog.setMessage(message);
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-//    }
-//
-//    public void dismissProgressDialog(){
-//        progressDialog.dismiss();
-//    }
-}
-
-class LoadPlacesData extends AsyncTask<Void, List<ParseObject>, ArrayList<MyPlace>> {
-    public  ProgressDialog progressDialog;
-
-    public LoadPlacesData(Activity act){
-        progressDialog=new ProgressDialog(act);
-    }
-
-    protected void onPreExecute(){
-        progressDialog.setMessage("Loading Suggestions");
+    public void showProgressDialog(String message){
+        progressDialog = new ProgressDialog(HomeActivity.this);
+        progressDialog.setMessage(message);
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
-    protected ArrayList<MyPlace> doInBackground(Void... params){
-        List<ParseObject> objects=null;
-        ArrayList<MyPlace> places = new ArrayList<MyPlace>();
-
-        ParseObject temp=null;
-        ParseQuery<ParseObject> findAllPlaceObjectsQuery = ParseQuery.getQuery("Place");
-        try {
-            objects = findAllPlaceObjectsQuery.find();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        if(objects!=null){
-            for (ParseObject obj : objects){
-                try {
-                    temp = findAllPlaceObjectsQuery.get(obj.getObjectId());
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                }
-
-                String name = obj.getString("Name");
-                String area = obj.getString("Area");
-                int recreationalAns = obj.getInt("Recreation");
-                int educationalAns = obj.getInt("Educational");
-                int religiousAns = obj.getInt("Religious");
-                int remoteAns = obj.getInt("Remote");
-                double lat = temp.getParseGeoPoint("locationLatLong").getLatitude();
-                double lng = temp.getParseGeoPoint("locationLatLong").getLongitude();
-
-                places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns));
-            }
-        }
-        return places;
+    public void dismissProgressDialog(){
+        progressDialog.dismiss();
     }
 
-    protected void onPostExecute(ArrayList<MyPlace> places){
-        progressDialog.dismiss();
+    public void onBackPressed(){
+        this.finish();
     }
 }
