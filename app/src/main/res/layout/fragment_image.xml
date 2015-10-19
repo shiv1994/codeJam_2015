@@ -11,7 +11,7 @@
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/notfound"
+        android:src="@drawable/filenotfound"
         android:scaleType="centerInside"/>
 
 </RelativeLayout>
