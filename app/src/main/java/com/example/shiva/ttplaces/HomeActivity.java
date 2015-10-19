@@ -211,18 +211,27 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                     int remoteAns = obj.getInt("Remote");
                     double lat = temp.getParseGeoPoint("locationLatLong").getLatitude();
                     double lng = temp.getParseGeoPoint("locationLatLong").getLongitude();
+                    boolean place = temp.getBoolean("Place");
 
-                    places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns));
+                    places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns,place));
                 }
             }
             return places;
         }
 
         protected void onPostExecute(ArrayList<MyPlace> placeObjects){
-            if(placeObjects!=null) {
+            if(placeObjects.size()!=0) {
                 placeFinderAlgorithm(placeObjects);
                 for (int i = 0; i < 5; i++) {
                     list.add(placeObjects.get(i));
+                    Log.i("Inserting Into List",""+placeObjects.get(i).getName());
+                }
+            }
+            else
+            {
+                MyPlace mp = new MyPlace("Suggestions Not Loaded","Please Answer Questions","NIL", new LatLng(10.0,10.0),false);
+                for (int i = 0; i < 5; i++) {
+                    list.add(mp);
                     Log.i("Inserting Into List",""+placeObjects.get(i).getName());
                 }
             }
@@ -291,9 +300,12 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         boolean preferencesSet = sharedPreferences.getBoolean(sharedPrefExistKey, false);
         if(preferencesSet){
             loadSuggestionPlaces();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(sharedPrefExistKey,false);
+            editor.apply();
         }
         else{
-            loadSuggestionPlaces();
+//            loadSuggestionPlaces();
         }
     }
 

@@ -3,11 +3,16 @@ package com.example.shiva.ttplaces;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ParseException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import com.example.shiva.ttplaces.pojo.NavDrawer;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
 import java.util.*;
 
 
@@ -166,6 +171,7 @@ public class SuggestionActivity extends NavDrawer {
         ansReligious = Integer.parseInt(Integer.toString(answer4.getSelectedItemPosition()));
         ansRemote = Integer.parseInt(Integer.toString(answer5.getSelectedItemPosition()));
 
+        updateUserCountry(ansCountry);
 
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
 
@@ -202,5 +208,12 @@ public class SuggestionActivity extends NavDrawer {
 
     }
 
+    private void updateUserCountry(String country){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            currentUser.put("country",country);
+            currentUser.saveInBackground();
+        }
+    }
 }
 

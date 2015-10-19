@@ -17,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -102,11 +103,19 @@ public class MapsActivity extends FragmentActivity{
     private void showMarkers(ArrayList<MyPlace> markers){
         for(int i=0; i<markers.size(); i++){
             MyPlace place = markers.get(i);
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(place.getPosition());
-            markerOptions.title(place.getName());
-//            TODO: customise marker based on place.type
-            mMap.addMarker(markerOptions);
+            if(place.getPlace()) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(place.getPosition());
+                markerOptions.title(place.getName());
+                mMap.addMarker(markerOptions);
+            }
+            else{
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(place.getPosition());
+                markerOptions.title(place.getName());
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                mMap.addMarker(markerOptions);
+            }
         }
     }
 
@@ -208,8 +217,10 @@ class LoadPlacesData2 extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
                 int remoteAns = obj.getInt("Remote");
                 double lat = temp.getParseGeoPoint("locationLatLong").getLatitude();
                 double lng = temp.getParseGeoPoint("locationLatLong").getLongitude();
+                boolean place = temp.getBoolean("Place");
 
-                places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns));
+
+                places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns,place));
             }
         }
         return places;

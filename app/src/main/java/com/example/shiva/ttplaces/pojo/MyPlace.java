@@ -15,9 +15,10 @@ public class MyPlace {
     private int religiousVal = 0;
     private int remoteVal = 0;
     private double diff;
+    boolean place;
     //private double rating = 0;
 
-    public MyPlace(String name, String type, String area, LatLng position, int recreationVal, int educationalVal, int religiousVal, int remoteVal) {
+    public MyPlace(String name, String type, String area, LatLng position, int recreationVal, int educationalVal, int religiousVal, int remoteVal, boolean place) {
         this.name = name;
         this.type = type;
         this.area = area;
@@ -27,14 +28,16 @@ public class MyPlace {
         this.religiousVal = religiousVal;
         this.remoteVal = remoteVal;
         this.diff=0.0;
+        this.place=place;
     }
 
-    public MyPlace(String name, String type, String area, LatLng position){
+    public MyPlace(String name, String type, String area, LatLng position, boolean place){
         this.name=name;
         this.type=type;
         this.area=area;
         this.position=position;
         this.diff=0.0;
+        this.place=place;
     }
 
     public LatLng getPosition() {
@@ -107,5 +110,12 @@ public class MyPlace {
 
     public void setDiff(int diff){
         this.diff=diff;
+    }
+
+    public boolean getPlace(){
+        return place;
+    }
+    public void setPlace(boolean place){
+        this.place=place;
     }
 }
