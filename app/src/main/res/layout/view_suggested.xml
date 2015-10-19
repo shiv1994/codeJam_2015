@@ -11,7 +11,7 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E0F7FA"
+        android:background="#ffffff"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="4dp"
         android:layout_margin="5dp">
@@ -19,8 +19,8 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:orientation="vertical">
 
             <TextView
@@ -42,8 +42,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
                 android:orientation="horizontal">
 
                 <TextView

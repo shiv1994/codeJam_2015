@@ -13,6 +13,13 @@ import android.widget.TextView;
 
 import com.example.shiva.ttplaces.R;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
 
 public class TextFragment extends Fragment {
 
@@ -57,14 +64,37 @@ public class TextFragment extends Fragment {
         protected void onPostExecute(String text) {
             updateUI(text);
         }
+
         protected String doInBackground(String... args) {
-            String info=null;
+            StringBuilder content = new StringBuilder(5000);
 
+            URL url = null;
+            try {
+                url = new URL("http://mas-health.com/ttplaces/zoology.txt");
 
+                // Get the response
+                BufferedReader buffer = new BufferedReader(new InputStreamReader(url.openStream()));
 
-            return info;
+                String s = "";
+                while ((s = buffer.readLine()) != null) {
+                    content.append(s).append("\n");
+                }
+
+                buffer.close();
+            }
+
+            catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return content.toString();
         }
     }
+
     public void updateUI(String text){
         txt.setText(text);
         dismissProgressDialog();
