@@ -45,21 +45,22 @@
         android:text="Launch Tour"
         android:onClick="runTours"
         android:layout_below="@+id/relativeLayout"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="42dp" />
 
-    <!--<Button
+    <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"
         android:text="Stop Service"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="#80DEEA"
         android:clickable="true"
-        android:onClick="stopService"/>-->
+        android:onClick="stopService"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="42dp" />
 
 
 
