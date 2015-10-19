@@ -1,7 +1,5 @@
 package com.example.shiva.ttplaces.pojo;
 
-
-import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,15 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.example.shiva.ttplaces.R;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
+
+import com.example.shiva.ttplaces.R;
 
 
 public class TextFragment extends Fragment {
@@ -27,7 +23,6 @@ public class TextFragment extends Fragment {
 	Bundle bundle;
     View rootView;
     TextView txt;
-    ProgressDialog progressDialog;
     URL url;
 
 	@Override
@@ -48,7 +43,7 @@ public class TextFragment extends Fragment {
             txt.setText(text);
             System.out.println("Url is invalid");
         }
-        else {//Extract text information from url to text file and store in string text   <----------------------------
+        else {
             (new LoadText()).execute(link);
         }
 		return rootView;
@@ -59,7 +54,6 @@ public class TextFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showProgressDialog("Recreating text fragments from history");
         }
 
         protected void onPostExecute(String text) {
@@ -97,17 +91,6 @@ public class TextFragment extends Fragment {
 
     public void updateUI(String text){
         txt.setText(text);
-        dismissProgressDialog();
-    }
-    public void showProgressDialog(String message){
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage(message);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    public void dismissProgressDialog(){
-        progressDialog.dismiss();
     }
 
 }

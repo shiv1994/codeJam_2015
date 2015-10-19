@@ -1,6 +1,7 @@
 package com.example.shiva.ttplaces.pojo;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -10,7 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.shiva.ttplaces.R;
 
@@ -21,55 +23,65 @@ public class AudioFragment extends Fragment {
 	String url=null;
 	Bundle bundle;
 	//begin
-	private Button btn;
-	private boolean playPause;
-	private MediaPlayer mediaPlayer;
-	private  boolean intialStage = true;
+	public ImageButton btn;
+	public boolean isActive;
+	public MediaPlayer mediaPlayer;
+	public  boolean initialState = true;
+	public TextView txt;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        bundle=getArguments();
-        if(bundle!=null) {
-            url = bundle.getString("url");
-        }
-        View rootView = inflater.inflate(R.layout.fragment_audio, container, false);
+		bundle=getArguments();
+		if(bundle!=null) {
+			url = bundle.getString("url");
+		}
+		View rootView = inflater.inflate(R.layout.fragment_audio, container, false);
 
-        btn = (Button) rootView.findViewById(R.id.button1);
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        btn.setOnClickListener(pausePlay);
+		txt=(TextView)rootView.findViewById(R.id.txt);
+		txt.setText("CLICK TO PLAY");
+		txt.setTextColor(Color.parseColor("#000000"));
 
-        return rootView;
-    }
+		btn = (ImageButton) rootView.findViewById(R.id.button1);
+		mediaPlayer = new MediaPlayer();
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		btn.setOnClickListener(audioState);
 
-	private View.OnClickListener pausePlay = new View.OnClickListener() {
+		return rootView;
+	}
+
+	private View.OnClickListener audioState = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 
-			if (!playPause) {
+			if (!isActive) {
+
 				btn.setBackgroundResource(R.drawable.button_pause);
-				if (intialStage)
+				if (initialState)
 					new Player().execute(url);
+
 				else {
 					if (!mediaPlayer.isPlaying()){
 						try {
-							mediaPlayer.prepare();
+							mediaPlayer.prepareAsync();
 						}
-						catch (IOException e) {
+						catch (Exception e) {
 							e.printStackTrace();
 						}
 						mediaPlayer.start();
 					}
 				}
-				playPause = true;
+				isActive = true;
+				txt.setText("CLICK TO PAUSE");
+				btn.setBackgroundResource(R.drawable.pause);
 			}
 			else {
-				btn.setBackgroundResource(R.drawable.button_play);
+				txt.setText("CLICK TO PLAY");
+				btn.setBackgroundResource(R.drawable.play);
 				if (mediaPlayer.isPlaying())
 					mediaPlayer.pause();
-				playPause = false;
+				isActive = false;
 			}
 		}
 	};
@@ -88,8 +100,8 @@ public class AudioFragment extends Fragment {
 
 					@Override
 					public void onCompletion(MediaPlayer mp) {
-						intialStage = true;
-						playPause=false;
+						initialState = true;
+						isActive =false;
 						btn.setBackgroundResource(R.drawable.button_play);
 						mediaPlayer.stop();
 						mediaPlayer.reset();
@@ -99,20 +111,12 @@ public class AudioFragment extends Fragment {
 				prepared = true;
 
 			}
-            catch (IllegalArgumentException e) {
+			catch (IllegalArgumentException e) {
 				Log.d("IllegalArgument", e.getMessage());
 				prepared = false;
 				e.printStackTrace();
 			}
-            catch (SecurityException e) {
-				prepared = false;
-				e.printStackTrace();
-			}
-            catch (IllegalStateException e) {
-				prepared = false;
-				e.printStackTrace();
-			}
-            catch (IOException e) {
+			catch (SecurityException  | IllegalStateException | IOException e) {
 				prepared = false;
 				e.printStackTrace();
 			}
@@ -128,7 +132,10 @@ public class AudioFragment extends Fragment {
 			Log.d("Prepared", "//" + result);
 			mediaPlayer.start();
 
-			intialStage = false;
+			txt.setText("CLICK TO PAUSE");
+			btn.setBackgroundResource(R.drawable.pause);
+
+			initialState = false;
 		}
 
 		public Player() {
@@ -147,10 +154,11 @@ public class AudioFragment extends Fragment {
 		super.onPause();
 		if (mediaPlayer != null) {
 			mediaPlayer.pause();
-
-			//mediaPlayer.reset();
-			//mediaPlayer.release();
-			//mediaPlayer = null;
+			mediaPlayer.reset();
+			mediaPlayer.release();
+			mediaPlayer = null;
+			txt.setText("CLICK TO PLAY");
+			btn.setBackgroundResource(R.drawable.play);
 		}
 	}
 }

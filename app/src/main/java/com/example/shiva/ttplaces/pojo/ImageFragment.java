@@ -1,6 +1,5 @@
 package com.example.shiva.ttplaces.pojo;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -20,7 +19,6 @@ public class ImageFragment extends Fragment {
     public ImageView iv=null;
     String url=null;
     Bundle bundle;
-    ProgressDialog progressDialog;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -42,9 +40,7 @@ public class ImageFragment extends Fragment {
         }
         else{
             iv.setImageBitmap(bp);
-
         }
-
         return rootView;
     }
 
@@ -74,18 +70,6 @@ public class ImageFragment extends Fragment {
             }
             return bp;
         }
-    }
-    public void showProgressDialog(String message){
-
-
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage(message);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    public void dismissProgressDialog(){
-        progressDialog.dismiss();
     }
 }
 
