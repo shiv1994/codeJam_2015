@@ -1,5 +1,6 @@
 package com.example.shiva.ttplaces.pojo;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ public class ImageFragment extends Fragment {
     public ImageView iv=null;
     String url=null;
     Bundle bundle;
+    ProgressDialog progressDialog;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -36,22 +38,7 @@ public class ImageFragment extends Fragment {
         }
         else if(bp == null) {
 
-            new LoadImage() {
-                @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                }
-
-                protected void onPostExecute(Bitmap image) {
-                    bp = image;
-                    if (bp != null) {
-                        iv.setImageBitmap(bp);
-                    }
-                    else {
-                        System.out.println("error acquiring image");
-                    }
-                }
-            }.execute(url);
+            (new LoadImage()).execute(url);
         }
         else{
             iv.setImageBitmap(bp);
@@ -60,18 +47,44 @@ public class ImageFragment extends Fragment {
 
         return rootView;
     }
-}
 
-class LoadImage extends AsyncTask<String, String, Bitmap> {
+    class LoadImage extends AsyncTask<String, String, Bitmap> {
 
-    protected Bitmap doInBackground(String... args) {
-        Bitmap bp=null;
-        try {
-            bp = BitmapFactory.decodeStream((InputStream)new URL(args[0]).getContent());
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
-        return bp;
+
+        protected void onPostExecute(Bitmap image) {
+            bp = image;
+            if (bp != null) {
+                iv.setImageBitmap(bp);
+            }
+            else {
+                System.out.println("error acquiring image");
+            }
+        }
+        protected Bitmap doInBackground(String... args) {
+            Bitmap bp=null;
+            try {
+                bp = BitmapFactory.decodeStream((InputStream)new URL(args[0]).getContent());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bp;
+        }
+    }
+    public void showProgressDialog(String message){
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void dismissProgressDialog(){
+        progressDialog.dismiss();
     }
 }
+
+
