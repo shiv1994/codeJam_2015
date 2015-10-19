@@ -70,7 +70,7 @@ public class TextFragment extends Fragment {
             StringBuilder content = new StringBuilder(5000);
             String error="Sorry, this text is UNAVAILABLE";
             try {
-                url=new URL("link");
+                url=new URL(link);
                 // Get the response
                 BufferedReader buffer = new BufferedReader(new InputStreamReader(url.openStream()));
 

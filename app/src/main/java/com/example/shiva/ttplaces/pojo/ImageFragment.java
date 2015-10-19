@@ -76,6 +76,8 @@ public class ImageFragment extends Fragment {
         }
     }
     public void showProgressDialog(String message){
+
+
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(message);
         progressDialog.setCancelable(false);
