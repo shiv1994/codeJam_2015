@@ -68,7 +68,7 @@ public class TextFragment extends Fragment {
 
         protected String doInBackground(String... args) {
             StringBuilder content = new StringBuilder(5000);
-            String error="Sorry this text is Unavailable";
+            String error="Sorry, this text is UNAVAILABLE";
             try {
                 url=new URL("link");
                 // Get the response
