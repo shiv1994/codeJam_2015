@@ -22,7 +22,7 @@
         android:layout_height="100dp"
         android:text="Play/Pause"
         android:textStyle="bold"
-        android:background="@drawable/play"
+        android:background="@drawable/playbutton"
         android:scaleType="centerInside"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>

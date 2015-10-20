@@ -167,7 +167,7 @@ public class AudioFragment extends Fragment {
 			mediaPlayer.release();
 			mediaPlayer = null;
 			txt.setText("CLICK TO PLAY");
-			btn.setBackgroundResource(R.drawable.play);
+			btn.setBackgroundResource(R.drawable.playbutton);
 		}
 	}
 }
