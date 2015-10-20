@@ -27,13 +27,16 @@ import java.nio.ByteBuffer;
 /**
  * Created by Shiva on 10/12/2015.
  */
+
+    //This class is used to perform scanning in the background in order to locate beacons.
+    //It is implemented by the main activity.
 public class BeaconScannerService extends Service {
     private static final String sharedPreferenceName="userAnswers";
     private GoogleApiClient mGoogleApiClient;
     private MessageListener mMessageListener;
     private static final Strategy PUB_SUB_STRATEGY = new Strategy.Builder()
             .setTtlSeconds(3 * 60).build();
-    public Context ctx;
+    private Context ctx;
 
     public BeaconScannerService(){
 
@@ -42,6 +45,7 @@ public class BeaconScannerService extends Service {
     public BeaconScannerService(GoogleApiClient mGoogleApiClient, Context ctx) {
         this.mGoogleApiClient=mGoogleApiClient;
         this.ctx=ctx;
+        //This listener awaits a beacon being found and executes the relevant functions.
         mMessageListener = new MessageListener() {
             // Called each time a new message is discovered nearby.
             @Override
@@ -166,6 +170,8 @@ public class BeaconScannerService extends Service {
         }
     }
 
+    //We have found a beacon and store its id in the shared preferences which will be used in the tour activity
+    //to reference the particular beacon we are at.
     public void insertSharedPref(Message message){
         int id=-1;
         if(message.getNamespace().equals("codejam2015-1075")&&message.getType().equals("Zoology UWI"))
