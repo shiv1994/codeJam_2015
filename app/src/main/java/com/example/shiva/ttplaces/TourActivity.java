@@ -119,7 +119,7 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
     //This async task allows us to retrieve data from the Parse system on a background thread.
 	class LoadContentData extends AsyncTask<Void, Void, ArrayList<TourItem> > {
 
-        //Loading the content from the parse database with the idof the beacon.
+        //Loading the content from the parse database with the id of the beacon.
 		protected ArrayList<TourItem> doInBackground(Void ... params){
 
             List<ParseObject> objects = null;
