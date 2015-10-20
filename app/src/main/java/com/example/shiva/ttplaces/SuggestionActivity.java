@@ -19,7 +19,7 @@ import java.util.*;
 public class SuggestionActivity extends NavDrawer {
 
     private SharedPreferences sharedPreferences;
-    private static final String sharedPreferenceName="userAnswers";
+    private static final String sharedPreferenceName="userAnswers"; //the user answers are stored in the shared preferences file named userAnswers
     private static final String ANSWER1="ansKey1";
 
     private static final String ANSWER2="ansKey2";
@@ -38,6 +38,8 @@ public class SuggestionActivity extends NavDrawer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggestion);
 
+        //answer id from spinners in xml stored in spinners answer1 - answer5
+
         answer1 = (Spinner) findViewById(R.id.answer1);
         answer2 = (Spinner) findViewById(R.id.answer2);
         answer3 = (Spinner) findViewById(R.id.answer3);
@@ -45,7 +47,7 @@ public class SuggestionActivity extends NavDrawer {
         answer5 = (Spinner) findViewById(R.id.answer5);
 
 
-        //creates 5 arrays to hold answer values for each of the 4 spinners
+        //creates 5 arrays to hold answer values for each of the 5 spinners
         List<String> decision1 = new ArrayList<>();
         decision1.add("Antigua and Barbuda");
         decision1.add("Argentina");
@@ -97,7 +99,6 @@ public class SuggestionActivity extends NavDrawer {
         decision2.add("A lot");
         decision2.add("Very much");
 
-
         List<String> decision3 = new ArrayList<>(); //recreational environment
         decision3.add("N/A");
         decision3.add("Not at all");
@@ -105,7 +106,6 @@ public class SuggestionActivity extends NavDrawer {
         decision3.add("Somewhat");
         decision3.add("A lot");
         decision3.add("Very much");
-
 
         List<String> decision4 = new ArrayList<>(); //religious environment
         decision4.add("N/A");
@@ -115,7 +115,6 @@ public class SuggestionActivity extends NavDrawer {
         decision4.add("A lot");
         decision4.add("Very much");
 
-
         List<String> decision5 = new ArrayList<>(); //remote environment
         decision5.add("N/A");
         decision5.add("Not at all");
@@ -123,7 +122,6 @@ public class SuggestionActivity extends NavDrawer {
         decision5.add("Somewhat");
         decision5.add("A lot");
         decision5.add("Very much");
-
 
         //spinners for each of the questions
 
@@ -151,13 +149,14 @@ public class SuggestionActivity extends NavDrawer {
 
     }
 
-    public void runMainActivity(){
+    public void runMainActivity(){ //runs HomeActivity after finishing SuggestionActivity
         Intent i = new Intent(this , HomeActivity.class);
         startActivity(i);
         this.finish();
     }
 
-    public void notNow(View view){
+    public void notNow(View view){ //user has the option to not answer the questions immediately, whereby not now is selected and user goes to HomeActivity
+
         runMainActivity();
     }
 
@@ -165,13 +164,13 @@ public class SuggestionActivity extends NavDrawer {
 
         //stores the choices the user selected
         ansCountry = answer1.getSelectedItem().toString();
-        //stores the rating (1-5) for each environment type
+        //stores the rating for each environment type
         ansEducational = answer2.getSelectedItemPosition();
-        ansRecreational = Integer.parseInt(Integer.toString(answer3.getSelectedItemPosition()));
-        ansReligious = Integer.parseInt(Integer.toString(answer4.getSelectedItemPosition()));
-        ansRemote = Integer.parseInt(Integer.toString(answer5.getSelectedItemPosition()));
+        ansRecreational = answer3.getSelectedItemPosition();
+        ansReligious = answer4.getSelectedItemPosition();
+        ansRemote = answer5.getSelectedItemPosition();
 
-        updateUserCountry(ansCountry);
+        updateUserCountry(ansCountry); //updates the user country in the database for analytics use
 
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
 
@@ -179,6 +178,9 @@ public class SuggestionActivity extends NavDrawer {
 
         //stores the user's answers in the shared preferences file userAnswers
         editor.putString(ANSWER1, ansCountry);
+
+
+        //-1 indicates the question was nit answered
 
         if(ansEducational==0)
             editor.putInt(ANSWER2, -1);
@@ -202,11 +204,14 @@ public class SuggestionActivity extends NavDrawer {
 
         //sets to true when user clicks finish
         editor.putBoolean(sharedPrefExistKey, true);
-        editor.apply();
 
-        runMainActivity();
+        editor.apply(); //saves the changes to shared prefs file
+
+        runMainActivity(); //runs HomeActivity
 
     }
+
+    //updates user's country of origin: default is set to Trinidad & Tobago
 
     private void updateUserCountry(String country){
         ParseUser currentUser = ParseUser.getCurrentUser();
