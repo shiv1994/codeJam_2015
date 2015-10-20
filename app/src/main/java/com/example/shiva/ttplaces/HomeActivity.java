@@ -160,16 +160,13 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             if(temp.getType()==null) type.setText("Unknown");
             else   type.setText("Type:" + temp.getType());
 
-//           TODO: calculate distance from current location using latlng in MyPlace object
             if(temp.getDist()==0)
                 distance.setText("Distance: "+ "Location Not Yet Found" + "km");
             else
                 distance.setText("Distance: "+ temp.getDist()/1000 + "km");
 
-            if(temp.getArea()==null) area.setText("Area");
-            else   area.setText(temp.getArea());
-
-
+            if(temp.getArea()==null) area.setText("Area: Area unavailable");
+            else   area.setText("Area: "+ temp.getArea());
 
             return convertView;
         }
