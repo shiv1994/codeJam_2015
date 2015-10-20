@@ -23,19 +23,19 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 public class TourActivity extends FragmentActivity implements ActionBar.TabListener {
-	public SharedPreferences sharedPreferences;
-	public static final String sharedPreferenceName="userAnswers";
-	public ViewPager viewPager=null;
-	public TabsPagerAdapter mAdapter=null;
-	public ActionBar actionBar;
-	public ArrayList<TourItem> ti = new ArrayList<>();
-	public int beaconId;
-	ProgressDialog progressDialog;
+    public SharedPreferences sharedPreferences;
+    public static final String sharedPreferenceName = "userAnswers";
+    public ViewPager viewPager = null;
+    public TabsPagerAdapter mAdapter = null;
+    public ActionBar actionBar;
+    public ArrayList<TourItem> ti = new ArrayList<>();
+    public int beaconId;
+    ProgressDialog progressDialog;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_tour);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tour);
 
 		getBeaconID();
 
@@ -83,25 +83,24 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            Intent i = new Intent(this , HomeActivity.class);
-            startActivity(i);
-            this.finish();
-        }
+            onBackPressed();
+       }
         return super.onOptionsItemSelected(item);
     }
 
+    
 	public void getBeaconID(){
 		sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
 		beaconId = sharedPreferences.getInt("BeaconID", 1);
 		Log.i("BEACON ID", "" + beaconId);
 	}
 
-	public void showProgressDialog(String message){
-		progressDialog = new ProgressDialog(TourActivity.this);
-		progressDialog.setMessage(message);
-		progressDialog.setCancelable(false);
-		progressDialog.show();
-	}
+    public void showProgressDialog(String message) {
+        progressDialog = new ProgressDialog(TourActivity.this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
 
 	public void dismissProgressDialog(){
 		progressDialog.dismiss();
@@ -110,25 +109,30 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 		(new LoadContentData()).execute();
 	}
 
-	public void updateUI(){
-		for (TourItem t : ti) {
-			actionBar.addTab(actionBar.newTab().setText(t.getName()).setTabListener(this));
-		}
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(),ti);
-		viewPager.setAdapter(mAdapter);
-		actionBar.setHomeButtonEnabled(true);
+    void getItemContent() {
+        (new LoadContentData()).execute(Integer.toString(1));// <------ FOR TESTING ONLY ------- remove after testing --->>
+        //(new LoadContentData()).execute(Integer.toString(beaconId));
+    }
+
+    public void updateUI() {
+        for (TourItem t : ti) {
+            actionBar.addTab(actionBar.newTab().setText(t.getName()).setTabListener(this));
+        }
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), ti);
+        viewPager.setAdapter(mAdapter);
+        actionBar.setHomeButtonEnabled(true);
         actionBar.setIcon(R.drawable.touricon2);
         actionBar.setTitle("LEAVE TOUR");
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-	}
+    }
 
 	class LoadContentData extends AsyncTask<Void, Void, ArrayList<TourItem> > {
 
 		protected ArrayList<TourItem> doInBackground(Void ... params){
 
-			List<ParseObject> objects =null;
-			ArrayList<TourItem> tours = new ArrayList<>();
-			ParseQuery<ParseObject> findAllBeaconContent = ParseQuery.getQuery("BeaconContent");
+            List<ParseObject> objects = null;
+            ArrayList<TourItem> tours = new ArrayList<>();
+            ParseQuery<ParseObject> findAllBeaconContent = ParseQuery.getQuery("BeaconContent");
 
 			findAllBeaconContent.whereEqualTo("ID", beaconId);
 			//Log.d("LoadContentDataTask",(params[0]));
@@ -141,37 +145,42 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 				e.printStackTrace();
 			}
 
-			if(objects!=null){
-				ParseObject temp=null;
-				for(ParseObject obj : objects){
-					try {
-						temp = findAllBeaconContent.get(obj.getObjectId());
-					}
-					catch(Exception e){
-						e.printStackTrace();
-					}
-					if(temp!=null) {
-						tours.add(new TourItem(temp.getString("Name"), temp.getInt("Type"), temp.getString("ContentLink")));
-					}
-				}
-			}
-			return tours;
-		}
+            if (objects != null) {
+                ParseObject temp = null;
+                for (ParseObject obj : objects) {
+                    try {
+                        temp = findAllBeaconContent.get(obj.getObjectId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (temp != null) {
+                        tours.add(new TourItem(temp.getString("Name"), temp.getInt("Type"), temp.getString("ContentLink")));
+                    }
+                }
+            }
+            return tours;
+        }
 
-		protected void onPreExecute(){
-			showProgressDialog("Loading Content");
-		}
-		protected void onPostExecute(ArrayList<TourItem> tourItems){
-			//Log.d("LoadContentDataTask", "From the DoInBackground We received: " + tourItems.size());
+        protected void onPreExecute() {
+            showProgressDialog("Loading Content");
+        }
 
-				for(TourItem t:tourItems){
-					ti.add(t);
-					//Log.d("LoadContentDataTask", "Name: " + t.getName() + " ToString: " + t.toString());
-				}
-			dismissProgressDialog();
-			updateUI();
-		}
-	}
+        protected void onPostExecute(ArrayList<TourItem> tourItems) {
+            //Log.d("LoadContentDataTask", "From the DoInBackground We received: " + tourItems.size());
+
+            for (TourItem t : tourItems) {
+                ti.add(t);
+                //Log.d("LoadContentDataTask", "Name: " + t.getName() + " ToString: " + t.toString());
+            }
+            dismissProgressDialog();
+            updateUI();
+        }
+    }
+
+    public void onBackPressed() {
+        Intent i = new Intent(this, HomeActivity.class);
+        startActivity(i);
+        this.finish();
+    }
 }
-
 

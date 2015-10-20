@@ -1,3 +1,7 @@
+/*
+This fragment is used to load and display Video contents for the interactive tour Activity
+
+ */
 package com.example.shiva.ttplaces.pojo;
 
 import android.content.Intent;
@@ -13,9 +17,10 @@ import android.widget.Toast;
 
 import com.example.shiva.ttplaces.R;
 
+//Video Fragment utilizes the onClickListener to get selection from user
 public class VideoFragment extends Fragment implements View.OnClickListener {
 
-    String url = null;
+    String url = null; //url
     Bundle bundle;
 
     @Override
