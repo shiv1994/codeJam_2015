@@ -31,18 +31,17 @@ public class NavDrawer extends AppCompatActivity {
 
     @Override
     public void setContentView(int layoutResID) {
-        //Base layout here
+        //Base layout of the activity i.e the navigation menu and the the template to hold the activity content
         baseLayout= (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_nav_drawer, null);
+
+        //Activity content relevant to the specific activity that uses the navigation drawer
         activityContent= (FrameLayout) baseLayout.findViewById(R.id.activityContent);
 
-        // Setting the content of layout your provided to the act_content frame
+        //Sets the content of activity layout to the template holder in base layout
         getLayoutInflater().inflate(layoutResID, activityContent, true);
         super.setContentView(baseLayout);
 
-        // here you can get your drawer buttons and define how they
-        // should behave and what must they do, so you won't be
-        // needing to repeat it in every activity class
-
+        //Gets the list of navigation items, the navigation drawer layout and the activity title
         DrawerList = (ListView)findViewById(R.id.navList);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         ActivityTitle = getTitle().toString();
@@ -83,7 +82,6 @@ public class NavDrawer extends AppCompatActivity {
         Integer[] icons = {R.drawable.home2,R.drawable.settings2,R.drawable.view2,R.drawable.logout2};
 
         CustomListAdapter Adapter= new CustomListAdapter(this, menuList, icons);
-        //Adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menuList);//R.layout.drawer_list_item
         DrawerList.setAdapter(Adapter);
     }
 

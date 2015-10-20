@@ -376,7 +376,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     public void dismissProgressDialog(){
         progressDialog.dismiss();
     }
-
+    @Override
     public void onBackPressed(){
         this.finish();
     }
