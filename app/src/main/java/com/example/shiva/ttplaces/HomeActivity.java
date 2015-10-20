@@ -44,10 +44,9 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     private GoogleApiClient mLastLocation;
     private boolean mResolvingError=false;
     private static ArrayList<MyPlace> list;
-
     private BeaconScannerService scannerService;
     private Context ctx;
-    Location location;
+    private Location location;
 
     private SharedPreferences sharedPreferences;
     private static final String sharedPreferenceName="userAnswers";

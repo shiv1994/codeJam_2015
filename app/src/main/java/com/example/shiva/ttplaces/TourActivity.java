@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
@@ -23,27 +22,24 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 public class TourActivity extends FragmentActivity implements ActionBar.TabListener {
-    public SharedPreferences sharedPreferences;
-    public static final String sharedPreferenceName = "userAnswers";
-    public ViewPager viewPager = null;
-    public TabsPagerAdapter mAdapter = null;
-    public ActionBar actionBar;
-    public ArrayList<TourItem> ti = new ArrayList<>();
-    public int beaconId;
-    ProgressDialog progressDialog;
+    private SharedPreferences sharedPreferences;
+    private static final String sharedPreferenceName = "userAnswers";
+    private ViewPager viewPager = null;
+    private TabsPagerAdapter mAdapter = null;
+    private ActionBar actionBar;
+    private ArrayList<TourItem> ti = new ArrayList<>();
+    private int beaconId;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tour);
-
+        //We attempt to obtain the beacon id upon running the activity so we know which items in the database to reference.
 		getBeaconID();
-
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();
-
         getItemContent();
-
 		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
 			@Override
@@ -92,7 +88,7 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 	public void getBeaconID(){
 		sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
 		beaconId = sharedPreferences.getInt("BeaconID", 1);
-		Log.i("BEACON ID", "" + beaconId);
+		//Log.i("BEACON ID", "" + beaconId);
 	}
 
     public void showProgressDialog(String message) {
@@ -121,8 +117,10 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
     }
 
+    //This async task allows us to retrieve data from the Parse system on a background thread.
 	class LoadContentData extends AsyncTask<Void, Void, ArrayList<TourItem> > {
 
+        //Loading the content from the parse database with the idof the beacon.
 		protected ArrayList<TourItem> doInBackground(Void ... params){
 
             List<ParseObject> objects = null;
@@ -130,13 +128,10 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
             ParseQuery<ParseObject> findAllBeaconContent = ParseQuery.getQuery("BeaconContent");
 
 			findAllBeaconContent.whereEqualTo("ID", beaconId);
-			//Log.d("LoadContentDataTask",(params[0]));
 			try {
 				objects=findAllBeaconContent.find();
-				//Log.d("LoadContentDataTask", "Found " + objects.size() + " Items");
 			}
 			catch(Exception e){
-				//Log.e("LoadContentDataTask", "Error In receiving object occurred: " + e.getLocalizedMessage());
 				e.printStackTrace();
 			}
 
@@ -156,16 +151,15 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
             return tours;
         }
 
+        //We would like ot show a loading screen while the content is being downloaded to the device.
         protected void onPreExecute() {
             showProgressDialog("Loading Content");
         }
 
+        //After the content has been loaded, we can now dismiss the dialog and update the UI with the items obtained for that specific beacon.
         protected void onPostExecute(ArrayList<TourItem> tourItems) {
-            //Log.d("LoadContentDataTask", "From the DoInBackground We received: " + tourItems.size());
-
             for (TourItem t : tourItems) {
-                ti.add(t);
-                //Log.d("LoadContentDataTask", "Name: " + t.getName() + " ToString: " + t.toString());
+                ti.add(t);;
             }
             dismissProgressDialog();
             updateUI();

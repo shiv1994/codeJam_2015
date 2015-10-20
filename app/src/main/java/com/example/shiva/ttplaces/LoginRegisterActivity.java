@@ -16,6 +16,11 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+//This class is run on the first execution of the application. It presents the user a login page where they input their email(while will be used as the username)
+//and a desired password.
+//Upon pressing the register button, the user will be logged in automatically.
+//
+
 public class LoginRegisterActivity extends AppCompatActivity {
     EditText pass,email;
     String userName;
@@ -27,9 +32,9 @@ public class LoginRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginregister);
-        //Parse.initialize(this, "4SkJs9vZM7ev0Hpj02ZaC4fnQ6Sy6yyQEkJdnwsK", "ZmvXXAkbYBCdrzP8iAx5nqUUvuUIPHwgOmXhIbyC");
+        //This function check to see whether a user has already logged in.
+        //If so, the user will be taken to the home activity instead of the login page.
         checkUser();
-
         sharedPreferences = getSharedPreferences(USEREMAIL, Context.MODE_PRIVATE);
         String emailUser = sharedPreferences.getString(USEREMAIL,"");
 
@@ -63,6 +68,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Function to add a user to the system.
     public void addUser(View view){
 
         if(!email.getText().toString().equals("") && email.getText().toString().contains("@")){
@@ -87,6 +93,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                             dismissProgressDialog();
                             Toast toast = Toast.makeText(getApplicationContext(), "User Account Created Successfully!", Toast.LENGTH_SHORT);
                             toast.show();
+                            //Once a user account has been created successfully, they are logged automatically.
                             login(userName,pass.getText().toString());
                         } else {
                             dismissProgressDialog();
@@ -100,6 +107,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                     }
                 });
             }
+            //If fields are not filled out, we display an error message.
             else{
                 Toast toast = Toast.makeText(getApplicationContext(), "Please Ensure all fields are filled out.", Toast.LENGTH_SHORT);
                 toast.show();
@@ -127,6 +135,10 @@ public class LoginRegisterActivity extends AppCompatActivity {
             return;
         }
     }
+
+    //Method overloading in the following functions and the first login function is used via a user pressing the login button
+    //after entering his/her credentials.
+    //The second function is used within the registration context and will be run automatically upon pressing the register button.
 
     public void login(View view){
         if(!email.getText().toString().equals("") && !pass.getText().toString().equals("")){
@@ -171,6 +183,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
             });
     }
 
+    //This function runs the main activity in addition to the preferences page once the preferenced have not been filled out.
     public void runMainActivity(){
         Intent i;
         SharedPreferences preferences = getSharedPreferences("userAnswers", 0);

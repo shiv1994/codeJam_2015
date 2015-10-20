@@ -15,6 +15,7 @@ import com.parse.SaveCallback;
 
 import java.util.*;
 
+//This class makes used of the shared preferences features of android and stores the users preferences which will be used to determine locations to visit.
 
 public class SuggestionActivity extends NavDrawer {
 
@@ -155,8 +156,8 @@ public class SuggestionActivity extends NavDrawer {
         this.finish();
     }
 
-    public void notNow(View view){ //user has the option to not answer the questions immediately, whereby not now is selected and user goes to HomeActivity
-
+    //user has the option to not answer the questions immediately, whereby not now is selected and user goes to HomeActivity
+    public void notNow(View view){
         runMainActivity();
     }
 
@@ -213,6 +214,8 @@ public class SuggestionActivity extends NavDrawer {
 
     //updates user's country of origin: default is set to Trinidad & Tobago
 
+    //Once the user had entered data, the user account on the parse will be updated.
+    //This will be used ofr analytics.
     private void updateUserCountry(String country){
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
