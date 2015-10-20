@@ -109,11 +109,6 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 		(new LoadContentData()).execute();
 	}
 
-    void getItemContent() {
-        (new LoadContentData()).execute(Integer.toString(1));// <------ FOR TESTING ONLY ------- remove after testing --->>
-        //(new LoadContentData()).execute(Integer.toString(beaconId));
-    }
-
     public void updateUI() {
         for (TourItem t : ti) {
             actionBar.addTab(actionBar.newTab().setText(t.getName()).setTabListener(this));
