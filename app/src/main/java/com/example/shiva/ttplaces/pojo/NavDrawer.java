@@ -49,12 +49,15 @@ public class NavDrawer extends AppCompatActivity {
         addDrawerItems();
         setupDrawer();
 
-       assert getSupportActionBar() != null;
+        //This gets and sets up the action bar for the navigation drawer
+        assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        //Listener for user item selection in menu
         DrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
+            //On item click transfer to next activity and close the previous activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i= new Intent();
                 if (position == 0){
@@ -77,6 +80,7 @@ public class NavDrawer extends AppCompatActivity {
         });
     }
 
+    //Adds the menu items to the navigation menu list
     private void addDrawerItems(){
         String[] menuList = { "HOME", "PREFERENCES", "VIEW MAP","LOG OUT"};
         Integer[] icons = {R.drawable.home2,R.drawable.settings2,R.drawable.view2,R.drawable.logout2};
@@ -85,19 +89,20 @@ public class NavDrawer extends AppCompatActivity {
         DrawerList.setAdapter(Adapter);
     }
 
+   // Sets up the navigation drawer
     private void setupDrawer() {
        assert getSupportActionBar() != null;
-        DrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
-            /** Called when a drawer has settled in a completely open state. */
+        DrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+
+            //When the drawer is opened shows opened drawer and  sets title of action bar
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getSupportActionBar().setTitle("Menu");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
-            /** Called when a drawer has settled in a completely closed state. */
+            //When the drawer is closed shows the current activity as normal sets title of action bar
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 getSupportActionBar().setTitle(ActivityTitle);
@@ -129,6 +134,7 @@ public class NavDrawer extends AppCompatActivity {
     }
 
     @Override
+    //Sets action for configuration changed
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         DrawerToggle.onConfigurationChanged(newConfig);
