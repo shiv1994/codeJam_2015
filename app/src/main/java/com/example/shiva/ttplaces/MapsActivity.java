@@ -30,13 +30,14 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+    //Tis class is used to show a map containing all the places we have in the parse system as well as beacons.
 public class MapsActivity extends FragmentActivity{
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private LatLng myLoc;
     private boolean locSet = false;
     private CameraUpdate myLocation;
-    ProgressDialog progressDialog;
-    ArrayList<MyPlace> placeObjects;
+    private ProgressDialog progressDialog;
+    protected ArrayList<MyPlace> placeObjects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,9 @@ public class MapsActivity extends FragmentActivity{
         setContentView(R.layout.activity_maps);
 //      runAlertDialog();
         setUpMapIfNeeded();
+        //The function to pull data from the parse system and populate the map.
         loadPlaces();
     }
-
-
 
     @Override
     protected void onResume() {
@@ -66,14 +66,14 @@ public class MapsActivity extends FragmentActivity{
     }
 
 
-    //Used to automatically animate the camera on map load
+    //Used to automatically animate the camera on map load and zoom into out particular preset location.
     private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
             myLoc = new LatLng(location.getLatitude(), location.getLongitude());
             if(!locSet){
                 if (mMap != null) {
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLoc, 8));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLoc, 6));
                 }
                 locSet = true;
                 myLocationChangeListener = null;
@@ -101,6 +101,7 @@ public class MapsActivity extends FragmentActivity{
     }
 
     private void showMarkers(ArrayList<MyPlace> markers){
+        //Depending on the type of place we have, we display a blue icon for the beacon and red for a place .
         for(int i=0; i<markers.size(); i++){
             MyPlace place = markers.get(i);
             if(place.getPlace()) {
@@ -130,25 +131,7 @@ public class MapsActivity extends FragmentActivity{
         progressDialog.dismiss();
     }
 
-//    public void runAlertDialog(){
-//        AlertDialog alert = new AlertDialog.Builder(MapsActivity.this).create();
-//        alert.setTitle("Do You Want To View Beacons Or Places?");
-//        alert.setMessage("Select A Button");
-//        alert.setButton(Dialog.BUTTON_POSITIVE, "View Beacons", new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int which) {
-//                classToPull = "Beacon";
-//                loadTestPlaces();
-//            }
-//        });
-//        alert.setButton(Dialog.BUTTON_NEGATIVE, "View Places", new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int which) {
-//                classToPull = "Place";
-//                loadTestPlaces();
-//            }
-//        });
-//        alert.show();
-//    }
-
+    //This function makes use of the async task class and retrieves places from the parse system and loads it into the map.
     private void loadPlaces() {
 
         new LoadPlacesData2(){
@@ -185,8 +168,8 @@ public class MapsActivity extends FragmentActivity{
 
 }
 
-
-class LoadPlacesData2 extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
+    //Class which uses the async task properties to load the places using a background thread.
+    class LoadPlacesData2 extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
 
     protected ArrayList<MyPlace> doInBackground(Void... params){
         List<ParseObject> objects=null;
