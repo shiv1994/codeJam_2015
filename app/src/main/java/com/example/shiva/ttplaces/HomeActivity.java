@@ -287,10 +287,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         }
     }
 
-    public void stopService(View view) {
-        scannerService.stopSubscription();
-        stopService(new Intent(getBaseContext(), HomeActivity.class));
-    }
+//    public void stopService(View view) {
+//        scannerService.stopSubscription();
+//        stopService(new Intent(getBaseContext(), HomeActivity.class));
+//    }
 
     public void checkPrefsSetSuggest(){
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);

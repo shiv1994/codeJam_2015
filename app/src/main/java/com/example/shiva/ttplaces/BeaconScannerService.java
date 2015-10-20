@@ -175,5 +175,6 @@ public class BeaconScannerService extends Service {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("BeaconID",id);
         editor.apply();
+        stopSubscription();
     }
 }
