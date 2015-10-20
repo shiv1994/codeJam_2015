@@ -1,3 +1,5 @@
+//this activity is used to load and display text contents for the interactive tour activity
+
 package com.example.shiva.ttplaces.pojo;
 
 import android.app.ProgressDialog;

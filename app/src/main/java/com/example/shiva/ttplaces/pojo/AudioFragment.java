@@ -1,3 +1,5 @@
+//this activity is used to load and display audio contents for the interactive tour activity
+
 package com.example.shiva.ttplaces.pojo;
 
 import android.app.ProgressDialog;
@@ -74,11 +76,11 @@ public class AudioFragment extends Fragment {
 				}
 				isActive = true;
 				txt.setText("CLICK TO PAUSE");
-				btn.setBackgroundResource(R.drawable.pause);
+				btn.setBackgroundResource(R.drawable.pausebutton);
 			}
 			else {
 				txt.setText("CLICK TO PLAY");
-				btn.setBackgroundResource(R.drawable.play);
+				btn.setBackgroundResource(R.drawable.playbutton);
 				if (mediaPlayer.isPlaying())
 					mediaPlayer.pause();
 				isActive = false;
