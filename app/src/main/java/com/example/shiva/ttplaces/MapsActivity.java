@@ -207,6 +207,5 @@ public class MapsActivity extends FragmentActivity{
             }
         }
         return places;
-
     }
 }
