@@ -21,6 +21,9 @@ import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeCallback;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+
 /**
  * Created by Shiva on 10/12/2015.
  */
@@ -33,6 +36,7 @@ public class BeaconScannerService extends Service {
     public Context ctx;
 
     public BeaconScannerService(){
+
     }
 
     public BeaconScannerService(GoogleApiClient mGoogleApiClient, Context ctx) {
@@ -44,7 +48,7 @@ public class BeaconScannerService extends Service {
             public void onFound(Message message) {
                 Log.i("ON CREATE FUNCTION", "" + message);
                 notificationToUser(message);
-                insertSharedPref(message.getContent().toString());
+                insertSharedPref(message);
             }
 
             // Called when a message is no longer nearby.
@@ -162,9 +166,12 @@ public class BeaconScannerService extends Service {
         }
     }
 
-    public void insertSharedPref(String idMess){
-        int id = Integer.parseInt(idMess.toString());
-        SharedPreferences sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+    public void insertSharedPref(Message message){
+        int id=-1;
+        if(message.getNamespace().equals("codejam2015-1075")&&message.getType().equals("Zoology UWI"))
+            id=1;
+        Log.i("HELLO",">>>"+id);
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("BeaconID",id);
         editor.apply();
