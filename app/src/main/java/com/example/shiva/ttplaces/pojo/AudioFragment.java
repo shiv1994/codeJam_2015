@@ -22,48 +22,51 @@ import java.io.IOException;
 
 public class AudioFragment extends Fragment {
 
-	String url=null;
-	Bundle bundle;
-	//begin
-	public ImageButton btn;
-	public boolean isActive;
-	public MediaPlayer mediaPlayer;
+	String url=null; //link to store url in database
+	Bundle bundle; //bundle containing the url loaded by the tour activity
+	public ImageButton btn; //Audio button to play/pause audio
+	public boolean isActive; //Audio is active
+	public MediaPlayer mediaPlayer; //Media player
 	public  boolean initialState = true;
 	public TextView txt;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-
+		//gets content of bundle
 		bundle=getArguments();
 		if(bundle!=null) {
 			url = bundle.getString("url");
 		}
 		View rootView = inflater.inflate(R.layout.fragment_audio, container, false);
 
+		//Text view stating play or pause state
 		txt=(TextView)rootView.findViewById(R.id.txt);
 		txt.setText("CLICK TO PLAY");
 		txt.setTextColor(Color.parseColor("#000000"));
 
-		btn = (ImageButton) rootView.findViewById(R.id.button1);
+		btn = (ImageButton) rootView.findViewById(R.id.button1);// Play/Pause button
 		mediaPlayer = new MediaPlayer();
-		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		btn.setOnClickListener(audioState);
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC); //Stream type of audio
+		btn.setOnClickListener(audioState);//sets listener for play/pause
 
 		return rootView;
 	}
 
+
 	private View.OnClickListener audioState = new View.OnClickListener() {
 
 		@Override
+		//responds to click play/pause button
 		public void onClick(View v) {
 
 			if (!isActive) {
-
-				btn.setBackgroundResource(R.drawable.button_pause);
-				if (initialState)
+				//If audio is not active change state
+				btn.setBackgroundResource(R.drawable.pausebutton);
+				if (initialState)//Creates a new player for audio if audio play hasn't started
 					new Player().execute(url);
 
 				else {
+					//If audio is paused get and play audio
 					if (!mediaPlayer.isPlaying()){
 						try {
 							mediaPlayer.prepareAsync();
@@ -76,11 +79,11 @@ public class AudioFragment extends Fragment {
 				}
 				isActive = true;
 				txt.setText("CLICK TO PAUSE");
-				btn.setBackgroundResource(R.drawable.pausebutton);
+				btn.setBackgroundResource(R.drawable.pausebutton); //sets pause image
 			}
 			else {
 				txt.setText("CLICK TO PLAY");
-				btn.setBackgroundResource(R.drawable.playbutton);
+				btn.setBackgroundResource(R.drawable.playbutton);//sets play image
 				if (mediaPlayer.isPlaying())
 					mediaPlayer.pause();
 				isActive = false;
@@ -92,11 +95,11 @@ public class AudioFragment extends Fragment {
 		private ProgressDialog progress;
 
 		@Override
+		//Gets the media player content and sets it up for playing
 		protected Boolean doInBackground(String... params) {
 			Boolean prepared;
 			try {
-
-				mediaPlayer.setDataSource(params[0]);
+				mediaPlayer.setDataSource(params[0]); //Data resource of audio
 
 				mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
@@ -104,7 +107,7 @@ public class AudioFragment extends Fragment {
 					public void onCompletion(MediaPlayer mp) {
 						initialState = true;
 						isActive =false;
-						btn.setBackgroundResource(R.drawable.button_play);
+						btn.setBackgroundResource(R.drawable.playbutton);
 						mediaPlayer.stop();
 						mediaPlayer.reset();
 					}
@@ -113,6 +116,7 @@ public class AudioFragment extends Fragment {
 				prepared = true;
 
 			}
+			//Handles errors thrown
 			catch (IllegalArgumentException e) {
 				Log.d("IllegalArgument", e.getMessage());
 				prepared = false;
@@ -126,6 +130,7 @@ public class AudioFragment extends Fragment {
 		}
 
 		@Override
+		//removes buffering item and starts media play
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if (progress.isShowing()) {
@@ -134,8 +139,8 @@ public class AudioFragment extends Fragment {
 			Log.d("Prepared", "//" + result);
 			mediaPlayer.start();
 
-			txt.setText("CLICK TO PAUSE");
-			btn.setBackgroundResource(R.drawable.pause);
+			txt.setText("CLICK TO PAUSE"); //pauses
+			btn.setBackgroundResource(R.drawable.pausebutton);
 
 			initialState = false;
 		}
@@ -145,6 +150,7 @@ public class AudioFragment extends Fragment {
 		}
 
 		@Override
+		//Displays progress dialog
 		protected void onPreExecute() {
 			super.onPreExecute();
 			this.progress.setMessage("Buffering...");
@@ -152,6 +158,7 @@ public class AudioFragment extends Fragment {
 		}
 	}
 	@Override
+	//Hnadles pausing the audio
 	public void onPause() {
 		super.onPause();
 		if (mediaPlayer != null) {

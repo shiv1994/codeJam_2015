@@ -88,24 +88,23 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 	public void getBeaconID(){
 		sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
 		beaconId = sharedPreferences.getInt("BeaconID", 1);
-		//Log.i("BEACON ID", "" + beaconId);
-	}
+    }
 
-    public void showProgressDialog(String message) {
+    public void showProgressDialog(String message) { //loads content to put in tour activity
         progressDialog = new ProgressDialog(TourActivity.this);
         progressDialog.setMessage(message);
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
-	public void dismissProgressDialog(){
+	public void dismissProgressDialog(){  //when the content is finished loaded the dialog is dismissed
 		progressDialog.dismiss();
 	}
-	void getItemContent(){
+	void getItemContent(){ //gets the content and loads it
 		(new LoadContentData()).execute();
 	}
 
-    public void updateUI() {
+    public void updateUI() { //updates the ui with the necessary content fo te tabs and icons
         for (TourItem t : ti) {
             actionBar.addTab(actionBar.newTab().setText(t.getName()).setTabListener(this));
         }
@@ -159,14 +158,14 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
         //After the content has been loaded, we can now dismiss the dialog and update the UI with the items obtained for that specific beacon.
         protected void onPostExecute(ArrayList<TourItem> tourItems) {
             for (TourItem t : tourItems) {
-                ti.add(t);;
+                ti.add(t);
             }
             dismissProgressDialog();
             updateUI();
         }
     }
 
-    public void onBackPressed() {
+    public void onBackPressed() { //when you leave the tour activity you go back to the home page
         Intent i = new Intent(this, HomeActivity.class);
         startActivity(i);
         this.finish();

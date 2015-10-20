@@ -3,15 +3,12 @@ package com.example.shiva.ttplaces;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ParseException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import com.example.shiva.ttplaces.pojo.NavDrawer;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.*;
 
