@@ -1,10 +1,9 @@
+//pojo class for the place objects, containing the constructor, accessors and mutators
+
 package com.example.shiva.ttplaces.pojo;
 
 import com.google.android.gms.maps.model.LatLng;
 
-/**
- * Created by jevon on 29-Sep-15.
- */
 public class MyPlace {
     private LatLng position;
     private String name = "";
@@ -17,7 +16,6 @@ public class MyPlace {
     private double diff;
     boolean place;
     double dist;
-    //private double rating = 0;
 
     public MyPlace(String name, String type, String area, LatLng position, int recreationVal, int educationalVal, int religiousVal, int remoteVal, boolean place, double dist) {
         this.name = name;
