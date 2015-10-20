@@ -345,6 +345,12 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         });
     }
 
+    public void runMaps(){
+        Intent i = new Intent(this,MapsActivity.class);
+        startActivity(i);
+        this.finish();
+    }
+
     public void showProgressDialog(String message){
         progressDialog = new ProgressDialog(HomeActivity.this);
         progressDialog.setMessage(message);

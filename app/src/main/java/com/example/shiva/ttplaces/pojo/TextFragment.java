@@ -2,7 +2,6 @@
 
 package com.example.shiva.ttplaces.pojo;
 
-import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,8 +22,9 @@ import com.example.shiva.ttplaces.R;
 
 public class TextFragment extends Fragment {
 
-	String link=null,text;
-	Bundle bundle;
+	String link=null; //link to store url in database
+    String text= null;
+	Bundle bundle; //bundle containing the url loaded by the tour activity
     View rootView;
     TextView txt;
     URL url;
@@ -33,6 +33,7 @@ public class TextFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //gets content of bundle
         bundle=getArguments();
         if(bundle!=null) {
             link = bundle.getString("url");
@@ -72,17 +73,18 @@ public class TextFragment extends Fragment {
             StringBuilder content = new StringBuilder(5000);
             String error="Sorry, this text is UNAVAILABLE";
             try {
-                url=new URL(link);
+                url=new URL(link); //stores the link from db in url
                 // Get the response
-                BufferedReader buffer = new BufferedReader(new InputStreamReader(url.openStream()));
+                BufferedReader buffer = new BufferedReader(new InputStreamReader(url.openStream())); //gets the text from the url
 
                 String s="";
-                while ((s = buffer.readLine()) != null) {
+                while ((s = buffer.readLine()) != null) { //builds the text to display in app
                     content.append(s).append("\n");
                 }
 
                 buffer.close();
             }
+
 
             catch (MalformedURLException e) {
                 e.printStackTrace();

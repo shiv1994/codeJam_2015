@@ -37,17 +37,16 @@
 
             </RelativeLayout>
 
-    <!--<Button
+    <Button
         android:id="@+id/button4"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_design2"
-        android:text="Launch Tour"
-        android:onClick="runTours"
+        android:text="View Maps"
+        android:onClick="runMaps"
         android:layout_below="@+id/relativeLayout"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="42dp" />
--->
+        android:layout_centerHorizontal="true" />
+
     <!--<Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
