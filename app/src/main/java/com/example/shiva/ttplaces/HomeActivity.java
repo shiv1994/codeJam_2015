@@ -162,7 +162,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
 //           TODO: calculate distance from current location using latlng in MyPlace object
             if(temp.getDist()==0)
-                distance.setText("Distance: "+ "Location Not Yet Found" + "km");
+                distance.setText("Distance: No Location");
             else
                 distance.setText("Distance: "+ temp.getDist()/1000 + "km");
 
@@ -228,15 +228,15 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                 placeFinderAlgorithm(placeObjects);
                 for (int i = 0; i < 5; i++) {
                     list.add(placeObjects.get(i));
-                    Log.i("Inserting Into List",""+placeObjects.get(i).getName());
+                    //Log.i("Inserting Into List",""+placeObjects.get(i).getName());
                 }
             }
             else
             {
-                MyPlace mp = new MyPlace("Suggestions Not Loaded","Please Answer Questions","NIL", new LatLng(10.0,10.0),false);
+                MyPlace mp = new MyPlace("Suggestions Not Loaded","NIL","NIL", new LatLng(10.0,10.0),false);
                 for (int i = 0; i < 5; i++) {
                     list.add(mp);
-                    Log.i("Inserting Into List",""+placeObjects.get(i).getName());
+                    //Log.i("Inserting Into List",""+placeObjects.get(i).getName());
                 }
             }
             listView = (ListView) findViewById(R.id.lv_suggestions);
@@ -249,10 +249,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     private class ErrorCheckingCallback implements ResultCallback<Status> {
         private final String method;
         private final Runnable runOnSuccess;
-
-//        private ErrorCheckingCallback(String method) {
-//            this(method, null);
-//        }
 
         private ErrorCheckingCallback(String method, @Nullable Runnable runOnSuccess) {
             this.method = method;
@@ -304,19 +300,20 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         boolean preferencesSet = sharedPreferences.getBoolean(sharedPrefExistKey, false);
         if(preferencesSet){
             loadSuggestionPlaces();
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(sharedPrefExistKey,false);
-            editor.apply();
         }
         else{
-//            loadSuggestionPlaces();
+            MyPlace mp = new MyPlace("Preferences Not Answered","NIL","NIL", new LatLng(10.0,10.0),false);
+            for (int i = 0; i < 5; i++) {
+                list.add(mp);
+            }
         }
     }
 
     public void placeFinderAlgorithm(List<MyPlace> placeObjects){
-        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
         int recreationAns,educationalAns,religiousAns,remoteAns;
         int getAns;
+
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
 
         getAns = sharedPreferences.getInt(ANSWER3, -1);
         recreationAns= getAns;
@@ -353,7 +350,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     public void showProgressDialog(String message){
         progressDialog = new ProgressDialog(HomeActivity.this);
-           progressDialog.setMessage(message);
+        progressDialog.setMessage(message);
         progressDialog.setCancelable(false);
         progressDialog.show();
     }

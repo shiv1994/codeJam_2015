@@ -44,7 +44,7 @@ public class BeaconScannerService extends Service {
             public void onFound(Message message) {
                 Log.i("ON CREATE FUNCTION", "" + message);
                 notificationToUser(message);
-                insertSharedPref(message);
+                insertSharedPref(message.getContent().toString());
             }
 
             // Called when a message is no longer nearby.
@@ -88,7 +88,7 @@ public class BeaconScannerService extends Service {
         // no need to create an artificial back stack.
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx);
         mBuilder.setSmallIcon(R.drawable.common_signin_btn_icon_dark)
-                .setContentTitle("You are at "+message.getContent().toString())
+                .setContentTitle("You are at "+message.getType().toString())
                 .setContentText("Click to start the interactive tour.")
                 .setAutoCancel(true)
                 .setContentIntent(PendingIntent.getActivity(ctx, 0, resultIntent, 0));
@@ -103,7 +103,7 @@ public class BeaconScannerService extends Service {
         if (!mGoogleApiClient.isConnected()) {
             Log.i("ON SUBSCRIBE FUNCTION", "WE NEVER CONNECTED");
             if (!mGoogleApiClient.isConnecting()) {
-                Log.i("OI", "WE ARE CONNECTING");
+                Log.i("HI", "WE ARE CONNECTING");
                 mGoogleApiClient.connect();
             }
         }
@@ -162,8 +162,8 @@ public class BeaconScannerService extends Service {
         }
     }
 
-    public void insertSharedPref(Message message){
-        int id = Integer.parseInt(message.toString());
+    public void insertSharedPref(String idMess){
+        int id = Integer.parseInt(idMess.toString());
         SharedPreferences sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("BeaconID",id);

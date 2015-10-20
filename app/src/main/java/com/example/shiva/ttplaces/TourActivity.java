@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
@@ -91,7 +92,8 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 
 	public void getBeaconID(){
 		sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
-		beaconId = sharedPreferences.getInt("BeaconID",-1);
+		beaconId = sharedPreferences.getInt("BeaconID", 1);
+		Log.i("BEACON ID", "" + beaconId);
 	}
 
 	public void showProgressDialog(String message){
@@ -105,8 +107,7 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
 		progressDialog.dismiss();
 	}
 	void getItemContent(){
-		(new LoadContentData()).execute(Integer.toString(1));// <------ FOR TESTING ONLY ------- remove after testing --->>
-		//(new LoadContentData()).execute(Integer.toString(beaconId));
+		(new LoadContentData()).execute();
 	}
 
 	public void updateUI(){
@@ -121,15 +122,15 @@ public class TourActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	}
 
-	class LoadContentData extends AsyncTask<String, Void, ArrayList<TourItem> > {
+	class LoadContentData extends AsyncTask<Void, Void, ArrayList<TourItem> > {
 
-		protected ArrayList<TourItem> doInBackground(String ... params){
+		protected ArrayList<TourItem> doInBackground(Void ... params){
 
 			List<ParseObject> objects =null;
 			ArrayList<TourItem> tours = new ArrayList<>();
 			ParseQuery<ParseObject> findAllBeaconContent = ParseQuery.getQuery("BeaconContent");
 
-			findAllBeaconContent.whereEqualTo("ID", Integer.parseInt(params[0]));
+			findAllBeaconContent.whereEqualTo("ID", beaconId);
 			//Log.d("LoadContentDataTask",(params[0]));
 			try {
 				objects=findAllBeaconContent.find();
