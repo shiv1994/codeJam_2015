@@ -36,18 +36,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+//This class is used throughout the application to present the base functionality to the user.
+//It firstly begins by checking to see whether the user has entered his/her preferences into the app.
+//If so, the suggestions would be used and the suggestions will be calculated and presented to the user.
+
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
     private ListView listView;
     static final int REQUEST_RESOLVE_ERROR = 1001;
     private GoogleApiClient mGoogleApiClient;
-    private GoogleApiClient mLastLocation;
     private boolean mResolvingError=false;
     private static ArrayList<MyPlace> list;
     private BeaconScannerService scannerService;
     private Context ctx;
     private Location location;
-
     private SharedPreferences sharedPreferences;
     private static final String sharedPreferenceName="userAnswers";
     private static final String ANSWER1="ansKey1";
@@ -63,6 +65,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
         super.onCreate(savedInstanceState);
         ctx=this.getApplicationContext();
+
+        //Setting up the api client to access the nearby api.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
                 .addApi(LocationServices.API)
@@ -72,7 +76,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         mGoogleApiClient.connect();
 
         setContentView(R.layout.activity_home);
+        //The following line of code is used to upload use history to the parse database.
+        //It will be used for analytics in the future.
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
+        //Checking to see whether the user has answered his questions.
         checkPrefsSetSuggest();
 
     }
@@ -94,6 +101,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         super.onStop();
     }
 
+    //If the connectio nis established to the API, we can start the service.
     public void onConnected(Bundle connectionHint) {
         Nearby.Messages.getPermissionStatus(mGoogleApiClient).setResultCallback(
                 new ErrorCheckingCallback("getPermissionStatus", new Runnable() {
@@ -109,66 +117,64 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
     }
 
+    //If the connection fails.
     public void onConnectionFailed(ConnectionResult result){
-
+//        Log.i("Error",""+result.getErrorMessage());
     }
 
     public void onConnectionSuspended(int cause){
 
     }
 
-    public void runTours(View view) {
-        Intent i = new Intent(this, TourActivity.class);
-        startActivity(i);
-    }
-
+    //This adapter is attached to the page and is populated with the suggested places once the algorithm is ran.
     class myAdapter extends BaseAdapter {
-        ArrayList<MyPlace> list;
-        Context ctx;
-        myAdapter(Context context,ArrayList<MyPlace> list) {
-            ctx=context;
-            this.list=list;
-        }
+            ArrayList<MyPlace> list;
+            Context ctx;
+            myAdapter(Context context,ArrayList<MyPlace> list) {
+                ctx=context;
+                this.list=list;
+            }
 
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-        @Override
-        public Object getItem(int position) {
-            return list.get(position);
-        }
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater= (LayoutInflater) ctx.getSystemService(LAYOUT_INFLATER_SERVICE);
-            if(convertView == null)
-                convertView = inflater.inflate(R.layout.view_suggested,parent,false);
-            TextView name=(TextView) convertView.findViewById(R.id.tv_name);
-            TextView type=(TextView) convertView.findViewById(R.id.tv_type);
-            TextView distance=(TextView) convertView.findViewById(R.id.tv_distance);
-            TextView area=(TextView) convertView.findViewById(R.id.tv_area);
-            MyPlace temp= list.get(position);
+            @Override
+            public int getCount() {
+                return list.size();
+            }
+            @Override
+            public Object getItem(int position) {
+                return list.get(position);
+            }
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                LayoutInflater inflater= (LayoutInflater) ctx.getSystemService(LAYOUT_INFLATER_SERVICE);
+                if(convertView == null)
+                    convertView = inflater.inflate(R.layout.view_suggested,parent,false);
+                TextView name=(TextView) convertView.findViewById(R.id.tv_name);
+                TextView type=(TextView) convertView.findViewById(R.id.tv_type);
+                TextView distance=(TextView) convertView.findViewById(R.id.tv_distance);
+                TextView area=(TextView) convertView.findViewById(R.id.tv_area);
+                MyPlace temp= list.get(position);
 
-            if(temp.getName()==null) name.setText("Place");
-            else   name.setText("Name: " + temp.getName());
+                if(temp.getName()==null) name.setText("Place");
+                else   name.setText("Name: " + temp.getName());
 
-            if(temp.getType()==null) type.setText("Unknown");
-            else   type.setText("Type:" + temp.getType());
+                if(temp.getType()==null) type.setText("Unknown");
+                else   type.setText("Type:" + temp.getType());
 
-            if(temp.getDist()==0)
-                distance.setText("Distance: No Location");
-            else
-                distance.setText("Distance: "+ temp.getDist()/1000 + "km");
+                //If the current location is not found, we display no distance meaning that the location has not been computed.
+                if(temp.getDist()==0)
+                    distance.setText("Distance: No Distance");
+                else
+                    distance.setText("Distance: "+ temp.getDist()/1000 + "km");
 
-            if(temp.getArea()==null) area.setText("Area: Area unavailable");
-            else   area.setText("Area: "+ temp.getArea());
+                if(temp.getArea()==null) area.setText("Area: Area unavailable");
+                else   area.setText("Area: "+ temp.getArea());
 
-            return convertView;
-        }
+                return convertView;
+            }
     }
 
     public void loadSuggestionPlaces() {
@@ -176,8 +182,11 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     }
 
+    //This class is used to pull the places from the parse database and based on the places that exist in
+    //the system, we load them into an array and use the user preferences to determine the best places to visit.
     class LoadPlacesData extends AsyncTask<Void, List<ParseObject>, ArrayList<MyPlace>> {
 
+        //Showing a dialog to indicate that the operations are being performed.
         protected void onPreExecute(){
             showProgressDialog("Determining Suggestions");
         }
@@ -221,16 +230,17 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
         protected void onPostExecute(ArrayList<MyPlace> placeObjects){
             if(placeObjects.size()!=0) {
+                //The algorithm used to determine the best places to be suggested to the user based upon their suggestions.
                 placeFinderAlgorithm(placeObjects);
                 for (int i = 0; i < 5; i++) {
                     list.add(placeObjects.get(i));
-                    //Log.i("Inserting Into List",""+placeObjects.get(i).getName());
                 }
             }
             else
             {
                 MyPlace mp = new MyPlace("Suggestions Not Loaded","NIL","NIL", new LatLng(10.0,10.0),false);
                 for (int i = 0; i < 5; i++) {
+                    //Adding the top 5 places to the list in the adapter.
                     list.add(mp);
                     //Log.i("Inserting Into List",""+placeObjects.get(i).getName());
                 }
@@ -238,10 +248,12 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             listView = (ListView) findViewById(R.id.lv_suggestions);
             myAdapter adapter = new myAdapter(ctx,list);
             listView.setAdapter(adapter);
-            progressDialog.dismiss();
+            //Dismiss the dialog indicating that the operations have been performed.
+            dismissProgressDialog();
         }
     }
 
+    //This class is used to ask the user to allow the nearby messages API to be accessed on the phone.
     private class ErrorCheckingCallback implements ResultCallback<Status> {
         private final String method;
         private final Runnable runOnSuccess;
@@ -291,6 +303,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 //        stopService(new Intent(getBaseContext(), HomeActivity.class));
 //    }
 
+    //If preferences have ben set we can load suggestion else we load filler items into the adapter.
     public void checkPrefsSetSuggest(){
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
         boolean preferencesSet = sharedPreferences.getBoolean(sharedPrefExistKey, false);
@@ -305,6 +318,9 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         }
     }
 
+    //This is the algorithm which will be used to compute the best suggestions depending on the user's preferences.
+    //Essentially the user selects choices and they are assigned numbers.
+    //Each place in the parse system also has number assigned to them based upon the aspects of being remote, educational, recreational and religious.
     public void placeFinderAlgorithm(List<MyPlace> placeObjects){
         int recreationAns,educationalAns,religiousAns,remoteAns;
         int getAns;
