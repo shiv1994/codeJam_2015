@@ -360,7 +360,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         });
     }
 
-    public void runMaps(){
+    public void runMaps(){ // runs the map activity when the view map button is selected on the home page
         Intent i = new Intent(this,MapsActivity.class);
         startActivity(i);
         this.finish();

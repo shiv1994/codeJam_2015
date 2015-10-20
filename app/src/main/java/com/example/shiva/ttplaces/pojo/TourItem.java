@@ -1,3 +1,6 @@
+//a pojo class containing tour items for the tour activity.
+//it contains the constructor, accessors and mutators
+
 package com.example.shiva.ttplaces.pojo;
 
 public class TourItem {
