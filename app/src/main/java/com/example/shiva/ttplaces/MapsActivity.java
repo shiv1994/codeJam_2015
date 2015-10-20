@@ -220,7 +220,7 @@ class LoadPlacesData2 extends AsyncTask<Void, Void, ArrayList<MyPlace> > {
                 boolean place = temp.getBoolean("Place");
 
 
-                places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns,place));
+                places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns,place,0));
             }
         }
         return places;

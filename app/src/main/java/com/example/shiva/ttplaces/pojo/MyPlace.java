@@ -16,9 +16,10 @@ public class MyPlace {
     private int remoteVal = 0;
     private double diff;
     boolean place;
+    double dist;
     //private double rating = 0;
 
-    public MyPlace(String name, String type, String area, LatLng position, int recreationVal, int educationalVal, int religiousVal, int remoteVal, boolean place) {
+    public MyPlace(String name, String type, String area, LatLng position, int recreationVal, int educationalVal, int religiousVal, int remoteVal, boolean place, double dist) {
         this.name = name;
         this.type = type;
         this.area = area;
@@ -29,6 +30,7 @@ public class MyPlace {
         this.remoteVal = remoteVal;
         this.diff=0.0;
         this.place=place;
+        this.dist=dist;
     }
 
     public MyPlace(String name, String type, String area, LatLng position, boolean place){
@@ -115,7 +117,16 @@ public class MyPlace {
     public boolean getPlace(){
         return place;
     }
+
     public void setPlace(boolean place){
         this.place=place;
+    }
+
+    public double getDist(){
+        return dist;
+    }
+
+    public void setDist(double dist){
+        this.dist=dist;
     }
 }

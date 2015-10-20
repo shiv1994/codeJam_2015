@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +28,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.nearby.Nearby;
 import com.parse.ParseAnalytics;
@@ -42,11 +45,13 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     private ListView listView;
     static final int REQUEST_RESOLVE_ERROR = 1001;
     private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mLastLocation;
     private boolean mResolvingError=false;
     private static ArrayList<MyPlace> list;
 
     private BeaconScannerService scannerService;
     private Context ctx;
+    Location location;
 
     private SharedPreferences sharedPreferences;
     private static final String sharedPreferenceName="userAnswers";
@@ -65,6 +70,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         ctx=this.getApplicationContext();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
+                .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
@@ -72,9 +78,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
         setContentView(R.layout.activity_home);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
-//        listView = (ListView) findViewById(R.id.lv_suggestions);
-//        myAdapter adapter = new myAdapter(this,list);
-//        listView.setAdapter(adapter);
         checkPrefsSetSuggest();
 
     }
@@ -84,6 +87,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
+
     }
 
     @Override
@@ -107,6 +111,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                     }
                 })
         );
+        location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
     }
 
     public void onConnectionFailed(ConnectionResult result){
@@ -160,7 +165,10 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             else   type.setText("Type:" + temp.getType());
 
 //           TODO: calculate distance from current location using latlng in MyPlace object
-              distance.setText("Distance: "+ (position+1) + "km");
+            if(temp.getDist()==0)
+                distance.setText("Distance: "+ "Location Not Yet Found" + "km");
+            else
+                distance.setText("Distance: "+ temp.getDist()/1000 + "km");
 
             if(temp.getArea()==null) area.setText("Area");
             else   area.setText(temp.getArea());
@@ -185,7 +193,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         protected ArrayList<MyPlace> doInBackground(Void... params){
             List<ParseObject> objects=null;
             ArrayList<MyPlace> places = new ArrayList<MyPlace>();
-
             ParseObject temp=null;
             ParseQuery<ParseObject> findAllPlaceObjectsQuery = ParseQuery.getQuery("Place");
             try {
@@ -202,7 +209,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                     catch(Exception e){
                         e.printStackTrace();
                     }
-
+                    Location tempLoc = new Location("Local");
                     String name = obj.getString("Name");
                     String area = obj.getString("Area");
                     int recreationalAns = obj.getInt("Recreation");
@@ -213,7 +220,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                     double lng = temp.getParseGeoPoint("locationLatLong").getLongitude();
                     boolean place = temp.getBoolean("Place");
 
-                    places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns,place));
+                    places.add(new MyPlace(name,"",area,new LatLng(lat,lng),recreationalAns,educationalAns,religiousAns,remoteAns,place,0.0));
                 }
             }
             return places;
@@ -328,6 +335,15 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
         for(MyPlace place : placeObjects){
             place.setDiff(Math.abs((place.getRemoteVal() - remoteAns) + (place.getEducationalVal() - educationalAns) + (place.getRecreationVal() - recreationAns) + (place.getReligiousVal() - religiousAns)));
+            Location temp = new Location("Local");
+            temp.setLongitude(place.getPosition().longitude);
+            temp.setLatitude(place.getPosition().latitude);
+            if(location==null){
+                place.setDist(0.00);
+            }
+            else {
+                place.setDist(location.distanceTo(temp));
+            }
         }
 
         Collections.sort(placeObjects, new Comparator<MyPlace>() {
