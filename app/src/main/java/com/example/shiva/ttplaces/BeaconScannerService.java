@@ -46,25 +46,60 @@ public class BeaconScannerService extends Service {
         this.mGoogleApiClient=mGoogleApiClient;
         this.ctx=ctx;
         //This listener awaits a beacon being found and executes the relevant functions.
-        mMessageListener = new MessageListener() {
-            // Called each time a new message is discovered nearby.
-            @Override
-            public void onFound(Message message) {
-                Log.i("ON CREATE FUNCTION", "" + message);
-                notificationToUser(message);
-                insertSharedPref(message);
-            }
-
-            // Called when a message is no longer nearby.
-            @Override
-            public void onLost(Message message) {
-                Log.i("ON CREATE FUNCTION", "Lost message: " + message);
-            }
-        };
+//        mMessageListener = new MessageListener() {
+//            // Called each time a new message is discovered nearby.
+//            @Override
+//            public void onFound(Message message) {
+//                Log.i("ON CREATE FUNCTION", "" + message);
+//                notificationToUser(message);
+//                insertSharedPref(message);
+//            }
+//
+//            // Called when a message is no longer nearby.
+//            @Override
+//            public void onLost(Message message) {
+//                Log.i("ON CREATE FUNCTION", "Lost message: " + message);
+//            }
+//        };
     }
 
     public void onStartCommand(){
-        subscribe();
+        new Thread(new Runnable() {
+            public void run() {
+                mMessageListener = new MessageListener() {
+                    // Called each time a new message is discovered nearby.
+                    @Override
+                    public void onFound(Message message) {
+                        Log.i("ON CREATE FUNCTION", "" + message);
+                        notificationToUser(message);
+                        insertSharedPref(message);
+                    }
+
+                    // Called when a message is no longer nearby.
+                    @Override
+                    public void onLost(Message message) {
+                        Log.i("ON CREATE FUNCTION", "Lost message: " + message);
+                    }
+                };
+                subscribe();
+            }
+        }).start();
+//        mMessageListener = new MessageListener() {
+//            // Called each time a new message is discovered nearby.
+//            @Override
+//            public void onFound(Message message) {
+//                Log.i("ON CREATE FUNCTION", "" + message);
+//                notificationToUser(message);
+//                insertSharedPref(message);
+//            }
+//
+//            // Called when a message is no longer nearby.
+//            @Override
+//            public void onLost(Message message) {
+//                Log.i("ON CREATE FUNCTION", "Lost message: " + message);
+//            }
+//        };
+//        subscribe();
     }
 
     @Override
@@ -89,8 +124,8 @@ public class BeaconScannerService extends Service {
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
     }
 
-    public void notificationToUser(Message message)
-    {
+    public void notificationToUser(Message message) {
+
         Intent resultIntent = new Intent(ctx,TourActivity.class);
         // Because clicking the notification opens a new ("special") activity, there's
         // no need to create an artificial back stack.
