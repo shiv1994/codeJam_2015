@@ -55,9 +55,9 @@
         android:background="@drawable/btn_design2"
         android:text="Recalculate Suggestions"
         android:onClick="loadSuggestionPlaces"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/button4"
-        android:layout_alignParentBottom="true" />
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"  />
 
     <!--<Button
         android:id="@+id/button5"
