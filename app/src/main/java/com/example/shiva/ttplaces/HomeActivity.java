@@ -1,7 +1,10 @@
 package com.example.shiva.ttplaces;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -45,6 +48,7 @@ import java.util.List;
 //If so, the suggestions would be used and the suggestions will be calculated and presented to the user.
 
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+    private int SUGGESTIONFINISHED =1002;
     private ProgressDialog progressDialog;
     private ListView listView;
     static final int REQUEST_RESOLVE_ERROR = 1001;
@@ -194,7 +198,21 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     }
 
     public void loadSuggestionPlaces(View view) {
-        new LoadPlacesData().execute();
+        AlertDialog alert = new AlertDialog.Builder(HomeActivity.this).create();
+        alert.setTitle("Important Note:");
+        alert.setMessage("Would you like to re-enter your preferences?");
+        alert.setButton(Dialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                new LoadPlacesData().execute();
+            }
+        });
+        alert.setButton(Dialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                runSuggestionActivity();
+
+            }
+        });
+        alert.show();
     }
 
 
@@ -272,7 +290,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             listView.setAdapter(adapter);
             //Dismiss the dialog indicating that the operations have been performed.
             dismissProgressDialog();
-            Log.i("LOCATION", ">>" + location.toString());
         }
     }
 
@@ -332,8 +349,15 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         loadSharedPrefsPlaces();
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
         boolean preferencesSet = sharedPreferences.getBoolean(sharedPrefExistKey, false);
+        boolean preferencesReset = sharedPreferences.getBoolean("RESETPREFS",false);
         if(preferencesSet){
             if(storedPlaces.size()==0){
+                loadSuggestionPlaces();
+            }
+            else if(preferencesReset){
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("RESETPREFS",false);
+                editor.apply();
                 loadSuggestionPlaces();
             }
             else{
@@ -426,7 +450,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         Gson gson = new Gson();
         String jsonPlaces = gson.toJson(list);
         editor.remove("PLACE_SUGGESTIONS");
-        editor.putString("PLACE_SUGGESTIONS",jsonPlaces);
+        editor.putString("PLACE_SUGGESTIONS", jsonPlaces);
         editor.commit();
     }
 
@@ -445,6 +469,15 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             editor.remove("PLACE_SUGGESTIONS");
             editor.commit();
         }
+    }
+
+    public void runSuggestionActivity(){
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("RESETPREFS",true);
+        editor.apply();
+        Intent i = new Intent(this, SuggestionActivity.class);
+        startActivity(i);
     }
 
 }
