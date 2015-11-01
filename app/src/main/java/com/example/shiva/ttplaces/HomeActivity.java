@@ -27,12 +27,15 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.nearby.Nearby;
+import com.google.gson.Gson;
 import com.parse.ParseAnalytics;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -48,6 +51,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     private GoogleApiClient mGoogleApiClient;
     private boolean mResolvingError=false;
     private static ArrayList<MyPlace> list;
+    private static List<MyPlace> storedPlaces;
+
     private BeaconScannerService scannerService;
     private Context ctx;
     private Location location;
@@ -63,6 +68,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         list = new ArrayList<MyPlace>();
+        storedPlaces = new ArrayList<MyPlace>();
 
         super.onCreate(savedInstanceState);
         ctx=this.getApplicationContext();
@@ -187,9 +193,13 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
             }
     }
 
+    public void loadSuggestionPlaces(View view) {
+        new LoadPlacesData().execute();
+    }
+
+
     public void loadSuggestionPlaces() {
         new LoadPlacesData().execute();
-
     }
 
     //This class is used to pull the places from the parse database and based on the places that exist in
@@ -199,6 +209,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         //Showing a dialog to indicate that the operations are being performed.
         protected void onPreExecute(){
             showProgressDialog("Determining Suggestions");
+            list.clear();
         }
 
         protected ArrayList<MyPlace> doInBackground(Void... params){
@@ -317,10 +328,23 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
     //If preferences have ben set we can load suggestion else we load filler items into the adapter.
     public void checkPrefsSetSuggest(){
+        Log.i("CHECK SUGG","CHECKSUGG");
+        loadSharedPrefsPlaces();
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
         boolean preferencesSet = sharedPreferences.getBoolean(sharedPrefExistKey, false);
         if(preferencesSet){
-            loadSuggestionPlaces();
+            if(storedPlaces.size()==0){
+                loadSuggestionPlaces();
+            }
+            else{
+                for(MyPlace temp: storedPlaces){
+                    Log.i("EHHHH",">>>"+temp.getName()+temp.getArea()+temp.getDist()+temp.getDiff()+temp.getEducationalVal());
+                    list.add(temp);
+                }
+                listView = (ListView) findViewById(R.id.lv_suggestions);
+                myAdapter adapter = new myAdapter(ctx,list);
+                listView.setAdapter(adapter);
+            }
         }
         else{
             MyPlace mp = new MyPlace("Preferences Not Answered","NIL","NIL", new LatLng(10.0,10.0),false);
@@ -392,4 +416,35 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
     public void onBackPressed(){
         this.finish();
     }
+
+    public void onPause(){
+        super.onPause();
+        Log.i("PAUSE", "PAUSED");
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+        String jsonPlaces = gson.toJson(list);
+        editor.remove("PLACE_SUGGESTIONS");
+        editor.putString("PLACE_SUGGESTIONS",jsonPlaces);
+        editor.commit();
+    }
+
+    public void loadSharedPrefsPlaces(){
+        Log.i("RESUMED", "RESUMED");
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        if(sharedPreferences.contains("PLACE_SUGGESTIONS")){
+            String placesSugg = sharedPreferences.getString("PLACE_SUGGESTIONS", null);
+            Gson gson = new Gson();
+            MyPlace[] favoriteItems = gson.fromJson(placesSugg,
+                    MyPlace[].class);
+
+            storedPlaces = Arrays.asList(favoriteItems);
+            storedPlaces = new ArrayList<MyPlace>(storedPlaces);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("PLACE_SUGGESTIONS");
+            editor.commit();
+        }
+    }
+
 }

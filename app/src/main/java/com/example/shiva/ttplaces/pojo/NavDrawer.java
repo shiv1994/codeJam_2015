@@ -82,8 +82,8 @@ public class NavDrawer extends AppCompatActivity {
 
     //Adds the menu items to the navigation menu list
     private void addDrawerItems(){
-        String[] menuList = { "HOME", "PREFERENCES", "VIEW MAP","LOG OUT"};
-        Integer[] icons = {R.drawable.home2,R.drawable.settings2,R.drawable.view2,R.drawable.logout2};
+        String[] menuList = {"PREFERENCES", "VIEW MAP","LOG OUT"};
+        Integer[] icons = {R.drawable.settings2,R.drawable.view2,R.drawable.logout2};
 
         CustomListAdapter Adapter= new CustomListAdapter(this, menuList, icons);
         DrawerList.setAdapter(Adapter);
