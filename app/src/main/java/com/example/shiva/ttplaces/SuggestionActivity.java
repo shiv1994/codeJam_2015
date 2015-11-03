@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import com.example.shiva.ttplaces.pojo.NavDrawer;
 import com.parse.ParseUser;
 
@@ -28,8 +30,8 @@ public class SuggestionActivity extends NavDrawer {
 
     String ansCountry="";
     int ansEducational=-1, ansRecreational=-1, ansReligious=-1, ansRemote=-1;
-
     Spinner answer1, answer2, answer3, answer4, answer5;
+    TextView txtView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,51 +45,10 @@ public class SuggestionActivity extends NavDrawer {
         answer3 = (Spinner) findViewById(R.id.answer3);
         answer4 = (Spinner) findViewById(R.id.answer4);
         answer5 = (Spinner) findViewById(R.id.answer5);
+        txtView = (TextView) findViewById(R.id.question1);
 
 
         //creates 5 arrays to hold answer values for each of the 5 spinners
-        List<String> decision1 = new ArrayList<>();
-        decision1.add("Antigua and Barbuda");
-        decision1.add("Argentina");
-        decision1.add("Australia");
-        decision1.add("Bahamas");
-        decision1.add("Barbados");
-        decision1.add("Belize");
-        decision1.add("Canada");
-        decision1.add("Cuba");
-        decision1.add("Dominica");
-        decision1.add("Dominican Republic");
-        decision1.add("France");
-        decision1.add("Germany");
-        decision1.add("Grenada");
-        decision1.add("Guyana");
-        decision1.add("Haiti");
-        decision1.add("India");
-        decision1.add("Italy");
-        decision1.add("Jamaica");
-        decision1.add("Japan");
-        decision1.add("Maldives");
-        decision1.add("Mexico");
-        decision1.add("Netherlands");
-        decision1.add("New Zealand");
-        decision1.add("Panama");
-        decision1.add("Peru");
-        decision1.add("Portugal");
-        decision1.add("Russia");
-        decision1.add("St. Kitts and Nevis");
-        decision1.add("St. Lucia");
-        decision1.add("St. Vincent and The Grenadines");
-        decision1.add("Spain");
-        decision1.add("Suriname");
-        decision1.add("Switzerland");
-        decision1.add("Trinidad and Tobago");
-        decision1.add("Turkey");
-        decision1.add("United Arab Emirates");
-        decision1.add("United Kingdom");
-        decision1.add("United States of America");
-        decision1.add("Venezuela");
-        decision1.add("Vietnam");
-        decision1.add("Not Listed");
 
         List<String> decision2 = new ArrayList<>(); //educational environment
         decision2.add("N/A");
@@ -123,9 +84,67 @@ public class SuggestionActivity extends NavDrawer {
 
         //spinners for each of the questions
 
-        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(this, R.layout.spinner_item,decision1);
-        dataAdapter1.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
-        answer1.setAdapter(dataAdapter1);
+//        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(this, R.layout.spinner_item,decision1);
+//        dataAdapter1.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+//        answer1.setAdapter(dataAdapter1);
+
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        Boolean firstRun = sharedPreferences.getBoolean("FIRSTRUN",true);
+        if(firstRun){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("FIRSTRUN",false);
+            editor.apply();
+            List<String> decision1 = new ArrayList<>();
+            decision1.add("Antigua and Barbuda");
+            decision1.add("Argentina");
+            decision1.add("Australia");
+            decision1.add("Bahamas");
+            decision1.add("Barbados");
+            decision1.add("Belize");
+            decision1.add("Canada");
+            decision1.add("Cuba");
+            decision1.add("Dominica");
+            decision1.add("Dominican Republic");
+            decision1.add("France");
+            decision1.add("Germany");
+            decision1.add("Grenada");
+            decision1.add("Guyana");
+            decision1.add("Haiti");
+            decision1.add("India");
+            decision1.add("Italy");
+            decision1.add("Jamaica");
+            decision1.add("Japan");
+            decision1.add("Maldives");
+            decision1.add("Mexico");
+            decision1.add("Netherlands");
+            decision1.add("New Zealand");
+            decision1.add("Panama");
+            decision1.add("Peru");
+            decision1.add("Portugal");
+            decision1.add("Russia");
+            decision1.add("St. Kitts and Nevis");
+            decision1.add("St. Lucia");
+            decision1.add("St. Vincent and The Grenadines");
+            decision1.add("Spain");
+            decision1.add("Suriname");
+            decision1.add("Switzerland");
+            decision1.add("Trinidad and Tobago");
+            decision1.add("Turkey");
+            decision1.add("United Arab Emirates");
+            decision1.add("United Kingdom");
+            decision1.add("United States of America");
+            decision1.add("Venezuela");
+            decision1.add("Vietnam");
+            decision1.add("Not Listed");
+
+            ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(this, R.layout.spinner_item,decision1);
+            dataAdapter1.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+            answer1.setAdapter(dataAdapter1);
+        }
+        else{
+            answer1.setVisibility(View.GONE);
+            txtView.setVisibility(View.GONE);
+        }
 
 
         ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<>(this, R.layout.spinner_item,decision2);
