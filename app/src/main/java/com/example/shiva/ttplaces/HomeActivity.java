@@ -114,7 +114,7 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         super.onStop();
     }
 
-    //If the connectio nis established to the API, we can start the service.
+    //If the connection is established to the API, we can start the service.
     public void onConnected(Bundle connectionHint) {
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         Nearby.Messages.getPermissionStatus(mGoogleApiClient).setResultCallback(
@@ -123,8 +123,8 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
                     public void run() {
                         //subscribe();
                         scannerService = new BeaconScannerService(mGoogleApiClient, ctx);
-                        scannerService.onStartCommand();
-                        //scannerService.subscribe();
+//                        scannerService.onStartCommand();
+                        scannerService.subscribe();
 //                        Intent i = new Intent(ctx, scannerService.getClass());
 //                        startService(i);
                     }

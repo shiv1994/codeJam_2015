@@ -46,44 +46,24 @@ public class BeaconScannerService extends Service {
         this.mGoogleApiClient=mGoogleApiClient;
         this.ctx=ctx;
         //This listener awaits a beacon being found and executes the relevant functions.
-//        mMessageListener = new MessageListener() {
-//            // Called each time a new message is discovered nearby.
-//            @Override
-//            public void onFound(Message message) {
-//                Log.i("ON CREATE FUNCTION", "" + message);
-//                notificationToUser(message);
-//                insertSharedPref(message);
-//            }
-//
-//            // Called when a message is no longer nearby.
-//            @Override
-//            public void onLost(Message message) {
-//                Log.i("ON CREATE FUNCTION", "Lost message: " + message);
-//            }
-//        };
+        mMessageListener = new MessageListener() {
+            // Called each time a new message is discovered nearby.
+            @Override
+            public void onFound(Message message) {
+                Log.i("ON CREATE FUNCTION", "" + message);
+                notificationToUser(message);
+                insertSharedPref(message);
+            }
+
+            // Called when a message is no longer nearby.
+            @Override
+            public void onLost(Message message) {
+                Log.i("ON CREATE FUNCTION", "Lost message: " + message);
+            }
+        };
     }
 
     public void onStartCommand(){
-        new Thread(new Runnable() {
-            public void run() {
-                mMessageListener = new MessageListener() {
-                    // Called each time a new message is discovered nearby.
-                    @Override
-                    public void onFound(Message message) {
-                        Log.i("ON CREATE FUNCTION", "" + message);
-                        notificationToUser(message);
-                        insertSharedPref(message);
-                    }
-
-                    // Called when a message is no longer nearby.
-                    @Override
-                    public void onLost(Message message) {
-                        Log.i("ON CREATE FUNCTION", "Lost message: " + message);
-                    }
-                };
-                subscribe();
-            }
-        }).start();
 //        mMessageListener = new MessageListener() {
 //            // Called each time a new message is discovered nearby.
 //            @Override
@@ -99,7 +79,7 @@ public class BeaconScannerService extends Service {
 //                Log.i("ON CREATE FUNCTION", "Lost message: " + message);
 //            }
 //        };
-//        subscribe();
+        subscribe();
     }
 
     @Override
@@ -153,7 +133,8 @@ public class BeaconScannerService extends Service {
         else {
             Log.i("ON SUBSCRIBE FUNCTION", "trying to subscribe");
             SubscribeOptions options = new SubscribeOptions.Builder()
-                    .setStrategy(PUB_SUB_STRATEGY)
+//                    .setStrategy(PUB_SUB_STRATEGY)
+                    .setStrategy(Strategy.BLE_ONLY)
                     .setCallback(new SubscribeCallback() {
                         @Override
                         public void onExpired() {
@@ -171,7 +152,7 @@ public class BeaconScannerService extends Service {
                         public void onResult(Status status) {
 
                             if (status.isSuccess()) {
-                                Log.i("ON SUBSCRIBE FUNCTION", "subscribed successfully");
+                                Log.i("ON SUBSCRIBE FUNCTION", "subscribed successfully" +status.getStatusMessage());
                             } else {
                                 Log.i("ON SUBSCRIBE FUNCTION", "could not subscribe:" + status.getStatusMessage());
                             }
