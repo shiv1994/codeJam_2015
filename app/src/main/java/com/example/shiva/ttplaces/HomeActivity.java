@@ -52,7 +52,6 @@ import java.util.List;
 //If so, the suggestions would be used and the suggestions will be calculated and presented to the user.
 
 public class HomeActivity extends NavDrawer implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
-    private int SUGGESTIONFINISHED =1002;
     private ProgressDialog progressDialog;
     private ListView listView;
     static final int REQUEST_RESOLVE_ERROR = 1001;
@@ -101,9 +100,6 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
 
 
     }
-
-//
-
 
     public void onStart() {
         super.onStart();
@@ -485,6 +481,11 @@ public class HomeActivity extends NavDrawer implements GoogleApiClient.Connectio
         editor.putBoolean("RESETPREFS",true);
         editor.apply();
         Intent i = new Intent(this, SuggestionActivity.class);
+        startActivity(i);
+    }
+
+    public void Tour(View view){
+        Intent i = new Intent(this, TourActivity.class);
         startActivity(i);
     }
 

@@ -23,13 +23,13 @@
     <!--Suggestions String-->
     <string name="suggestions">SUGGESTIONS</string>
     <string name="question1">Country of Origin</string>
-    <string name="subtitle">How much do you prefer each environment:</string>
+    <string name="subtitle">Select your environmental interests:</string>
     <string name="question2">Educational</string>
     <string name="question3">Recreational</string>
     <string name="question4">Religious</string>
     <string name="question5">Remote</string>
 
-    <string name="title">Help us suggest tours for you..</string>
+    <string name="title">Help us suggest tours for you...</string>
     <string name="btn">FINISH</string>
     <string name="btn1">NOT NOW</string>
     <string name="title_activity_nav_drawer">NavDrawer</string>

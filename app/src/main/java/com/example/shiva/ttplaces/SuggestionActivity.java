@@ -219,7 +219,13 @@ public class SuggestionActivity extends NavDrawer {
         //sets to true when user clicks finish
         editor.putBoolean(sharedPrefExistKey, true);
         editor.apply(); //saves the changes to shared prefs file
-        runMainActivity(); //runs HomeActivity
+
+        if(firstRun) {
+            runMainActivity(); //runs HomeActivity
+        }
+        else{
+            this.finish();
+        }
     }
 
     //updates user's country of origin: default is set to Trinidad & Tobago
