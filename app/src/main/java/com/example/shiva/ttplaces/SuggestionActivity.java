@@ -32,6 +32,7 @@ public class SuggestionActivity extends NavDrawer {
     int ansEducational=-1, ansRecreational=-1, ansReligious=-1, ansRemote=-1;
     Spinner answer1, answer2, answer3, answer4, answer5;
     TextView txtView;
+    Boolean firstRun;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class SuggestionActivity extends NavDrawer {
 //        answer1.setAdapter(dataAdapter1);
 
         sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
-        Boolean firstRun = sharedPreferences.getBoolean("FIRSTRUN",true);
+        firstRun = sharedPreferences.getBoolean("FIRSTRUN", true);
         if(firstRun){
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("FIRSTRUN",false);
@@ -178,58 +179,50 @@ public class SuggestionActivity extends NavDrawer {
     }
 
     public void finish(View view) {
+        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
 
         //stores the choices the user selected
-        ansCountry = answer1.getSelectedItem().toString();
+        if(firstRun){
+            ansCountry = answer1.getSelectedItem().toString();
+            updateUserCountry(ansCountry); //updates the user country in the database for analytics use
+            //stores the user's answers in the shared preferences file userAnswers
+            editor.putString(ANSWER1, ansCountry);
+        }
+
         //stores the rating for each environment type
         ansEducational = answer2.getSelectedItemPosition();
         ansRecreational = answer3.getSelectedItemPosition();
         ansReligious = answer4.getSelectedItemPosition();
         ansRemote = answer5.getSelectedItemPosition();
 
-        updateUserCountry(ansCountry); //updates the user country in the database for analytics use
-
-        sharedPreferences = getSharedPreferences(sharedPreferenceName, Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        //stores the user's answers in the shared preferences file userAnswers
-        editor.putString(ANSWER1, ansCountry);
-
 
         //-1 indicates the question was nit answered
 
         if(ansEducational==0)
             editor.putInt(ANSWER2, -1);
-
         editor.putInt(ANSWER2, ansEducational);
 
         if(ansRecreational == 0)
             editor.putInt(ANSWER3, -1);
-
         editor.putInt(ANSWER3, ansRecreational);
 
         if(ansReligious == 0)
             editor.putInt(ANSWER4, -1);
-
         editor.putInt(ANSWER4, ansReligious);
 
         if(ansRemote == 0)
             editor.putInt(ANSWER5, -1);
-
         editor.putInt(ANSWER5, ansRemote);
 
         //sets to true when user clicks finish
         editor.putBoolean(sharedPrefExistKey, true);
-
         editor.apply(); //saves the changes to shared prefs file
-
         runMainActivity(); //runs HomeActivity
-
     }
 
     //updates user's country of origin: default is set to Trinidad & Tobago
-
     //Once the user had entered data, the user account on the parse will be updated.
     //This will be used ofr analytics.
     private void updateUserCountry(String country){

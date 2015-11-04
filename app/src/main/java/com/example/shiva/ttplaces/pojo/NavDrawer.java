@@ -2,6 +2,8 @@ package com.example.shiva.ttplaces.pojo;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -53,6 +55,7 @@ public class NavDrawer extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1565C0")));
 
         //Listener for user item selection in menu
         DrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
